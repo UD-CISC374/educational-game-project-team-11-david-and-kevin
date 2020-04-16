@@ -4,7 +4,7 @@ waltz:
 meta:
   version: 0.0.2
   gdd authors:
-    - Your name goes here
+    - Kevin Mason and David Olaoye
   template authors:
     - Austin Cory Bart <acbart@udel.edu>
     - Mark Sheriff
@@ -12,7 +12,7 @@ meta:
     - Benjamin Stanley
 ---
 
-# Game Name
+# Space Farm
 
 ## Elevator Pitch
 
