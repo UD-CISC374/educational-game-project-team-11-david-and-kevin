@@ -32,12 +32,15 @@ export default class MainScene extends Phaser.Scene {
     this.CS = this.physics.add.sprite(704,416,"CS");
     this.CS.setCollideWorldBounds(true);
 
+    this.Keys = this.input.keyboard.createCursorKeys();
+
 
     
 
   }
 
   update() {
+    //cant get them to move
     this.movePlayerManager();
   }
   createFarm(x,y){
@@ -60,15 +63,20 @@ export default class MainScene extends Phaser.Scene {
       this.AE.setVelocityX(32);
      
     }
+    else{
+      this.AE.setVelocityX(0);
+    }
   
   
     if(this.Keys.up?.isDown){
       this.AE.setVelocityY(-32);
-
     }
     else if(this.Keys.down?.isDown){
       this.AE.setVelocityY(32);
 
+    }
+    else{
+      this.AE.setVelocityY(0);
     }
     }
   
