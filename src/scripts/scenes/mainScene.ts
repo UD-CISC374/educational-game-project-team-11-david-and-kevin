@@ -18,10 +18,12 @@ export default class MainScene extends Phaser.Scene {
   private cornSeedsStart: integer;
   private hempSeedsStart: integer;
   private Corn
-  private Wheat
+  private Wheat;
 
-  private Hemp
-
+  private Hemp;
+  private mCount: integer;
+  private tCount: integer;
+  private TreesAndMountains;
 
   
 
@@ -54,6 +56,9 @@ export default class MainScene extends Phaser.Scene {
     this.AE.setCollideWorldBounds(true);
     this.CS = this.physics.add.sprite(704,416,"CS");
     this.CS.setCollideWorldBounds(true);
+
+    this.physics.add.overlap(this.AE, this.trees, this.harvestTree);
+    this.physics.add.overlap(this.AE, this.mountain, this.harvestMoutain);
 
     this.Keys = this.input.keyboard.createCursorKeys();
 
@@ -99,6 +104,16 @@ export default class MainScene extends Phaser.Scene {
     }
 
   }
+  harvestTree(AE,tree){
+    tree.destroy(true);
+
+
+  }
+  harvestMoutain(AE,mount){
+    mount.destroy(true);
+
+  }
+
 
   movePlayerManager(){
 
