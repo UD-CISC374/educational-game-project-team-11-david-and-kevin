@@ -5,7 +5,7 @@ export default class MainScene extends Phaser.Scene {
   private background: Phaser.GameObjects.TileSprite;
   private CS: Phaser.Physics.Arcade.Sprite;
   private AE: Phaser.Physics.Arcade.Sprite;
-  private planttiles: Phaser.GameObjects.TileSprite;
+  private planttiles: Phaser.Physics.Arcade.Group;
   private watertiles: Phaser.GameObjects.TileSprite;
   private trees: Phaser.Physics.Arcade.Group;
   private mountain: Phaser.Physics.Arcade.Group;
@@ -23,8 +23,13 @@ export default class MainScene extends Phaser.Scene {
   }
 
   create() {
-    this.background = this.add.tileSprite(0, 0, this.scale.width, this.scale.height, "background");
+    this.background = this.add.tileSprite(0, 0, this.scale.width, this.scale.height - 10, "background");
     this.background.setOrigin(0, 0);
+    this.planttiles = this.physics.add.group();
+    this.trees = this.physics.add.group();
+    this.mountain = this.physics.add.group();
+    this.generateMountainsAndTrees(this.scale.width,this.scale.height);
+
     this.createFarm(544,160);
     
     this.AE = this.physics.add.sprite(768,416,"AE");
@@ -35,12 +40,14 @@ export default class MainScene extends Phaser.Scene {
     this.Keys = this.input.keyboard.createCursorKeys();
 
 
+
+
     
 
   }
 
   update() {
-    //cant get them to move
+    
     this.movePlayerManager();
   }
   createFarm(x,y){
@@ -52,33 +59,48 @@ export default class MainScene extends Phaser.Scene {
       var farmTileRow5 = this.add.tileSprite(x,y + 128,32,32,"growarea");
       var farmTileRow6 = this.add.tileSprite(x,y + 160,32,32,"growarea");
       x += 32;
+      this.planttiles.add(farmTileRow1);
+      this.planttiles.add(farmTileRow2);
+      this.planttiles.add(farmTileRow3);
+      this.planttiles.add(farmTileRow4);
+      this.planttiles.add(farmTileRow5);
+      this.planttiles.add(farmTileRow6);
     }
+
   }
+  generateMountainsAndTrees(x,y){
+    for(let i = 0; i < 50; i++){
+      var newTree = this.add.sprite((Math.random() * 500) , (Math.random() * y - 10),"Tree");
+      this.trees.add(newTree); 
+    }
+    for(let i = 0; i < 50; i++){
+      var newMountain = this.add.sprite((Math.random() * 500), (Math.random() * y - 10),"Mountain");
+      this.mountain.add(newMountain); 
+    }
+
+  }
+
   movePlayerManager(){
     if(this.Keys.left?.isDown){
-      this.AE.setVelocityX(-32);
+      this.AE.x = this.AE.x - 4;
     }
   
     else if(this.Keys.right?.isDown) {
-      this.AE.setVelocityX(32);
+      this.AE.x = this.AE.x + 4;
      
-    }
-    else{
-      this.AE.setVelocityX(0);
     }
   
   
     if(this.Keys.up?.isDown){
-      this.AE.setVelocityY(-32);
+      this.AE.y = this.AE.y - 4;
     }
     else if(this.Keys.down?.isDown){
-      this.AE.setVelocityY(32);
+      this.AE.y = this.AE.y + 4;
 
     }
-    else{
-      this.AE.setVelocityY(0);
+    
     }
-    }
+    
   
 }
 
