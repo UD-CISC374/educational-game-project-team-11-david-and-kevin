@@ -1,5 +1,9 @@
 import ExampleObject from '../objects/exampleObject';
 
+var isAE: boolean = true;
+var seed = 0;
+var count = 0; 
+
 export default class MainScene extends Phaser.Scene {
   private exampleObject: ExampleObject;
   private background: Phaser.GameObjects.TileSprite;
@@ -97,25 +101,87 @@ export default class MainScene extends Phaser.Scene {
   }
 
   movePlayerManager(){
-    if(this.Keys.left?.isDown){
-      this.AE.x = this.AE.x - 4;
+
+    if(this.Keys.space?.isDown && isAE == true){
+      isAE = false; 
+      alert('Switched to Computer Scientist');
+      console.log(isAE);
     }
-  
-    else if(this.Keys.right?.isDown) {
-      this.AE.x = this.AE.x + 4;
-     
+
+    else if(this.Keys.space?.isDown && isAE == false){
+      isAE = true; 
+      alert('Switched to Agricultural Engineer');
+      console.log(isAE); 
     }
-  
-  
-    if(this.Keys.up?.isDown){
-      this.AE.y = this.AE.y - 4;
+
+    if(this.Keys.shift?.isDown){
+      if(count < 9){
+        var newTree = this.add.sprite(544 + seed, 160, "Tree");
+        this.trees.add(newTree); 
+        seed += 32;
+        count++;
+
+        /*
+        if(this.cornSeedsStart > 0){
+          this.cornSeedsStart--
+        }
+        else if(this.hempSeedsStart > 0){
+          this.hempSeedsStart--
+        }
+        else if(this.wheatSeedsStart > 0){
+          this.hempSeedsStart--
+        }
+        */
+      }
     }
-    else if(this.Keys.down?.isDown){
-      this.AE.y = this.AE.y + 4;
+
+
+    if(isAE == true){
+      if(this.Keys.left?.isDown){
+        this.AE.x = this.AE.x - 4;
+      }
+    
+      else if(this.Keys.right?.isDown) {
+        this.AE.x = this.AE.x + 4;
+       
+      }
+    
+    
+      if(this.Keys.up?.isDown){
+        this.AE.y = this.AE.y - 4;
+      }
+      else if(this.Keys.down?.isDown){
+        this.AE.y = this.AE.y + 4;
+  
+      }
 
     }
+    else{
+      if(this.Keys.left?.isDown){
+        this.CS.x = this.CS.x - 4;
+      }
+    
+      else if(this.Keys.right?.isDown) {
+        this.CS.x = this.CS.x + 4;
+       
+      }
+    
+    
+      if(this.Keys.up?.isDown){
+        this.CS.y = this.CS.y - 4;
+      }
+      else if(this.Keys.down?.isDown){
+        this.CS.y = this.CS.y + 4;
+  
+      }
+
+    }
+
+
+
     
     }
+
     
   
 }
