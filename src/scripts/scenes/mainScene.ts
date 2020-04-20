@@ -10,9 +10,14 @@ export default class MainScene extends Phaser.Scene {
   private trees: Phaser.Physics.Arcade.Group;
   private mountain: Phaser.Physics.Arcade.Group;
   private Keys: Phaser.Types.Input.Keyboard.CursorKeys;
-  private wheatSeedsStart: integer
-  private cornSeedsStart: integer
-  private hempSeedsStart: integer
+  private wheatSeedsStart: integer;
+  private cornSeedsStart: integer;
+  private hempSeedsStart: integer;
+  private Corn
+  private Wheat
+
+  private Hemp
+
 
   
 
@@ -38,9 +43,9 @@ export default class MainScene extends Phaser.Scene {
     this.generateMountainsAndTrees(this.scale.width,this.scale.height);
 
     this.createFarm(544,160);
-    this.add.text(10,10,"6.8pH Corn Seed Count= " + this.cornSeedsStart.toString())
-    this.add.text(400,10,"7.5pH Hemp Seed Count= " + this.hempSeedsStart.toString())
-    this.add.text(750,10,"6pH Wheat Seed Count= " + this.wheatSeedsStart.toString())
+    this.Corn = this.add.text(10,10,"6.8pH Corn Seed Count= " + this.cornSeedsStart.toString())
+    this.Hemp = this.add.text(400,10,"7.5pH Hemp Seed Count= " + this.hempSeedsStart.toString())
+    this.Wheat = this.add.text(750,10,"6pH Wheat Seed Count= " + this.wheatSeedsStart.toString())
     this.AE = this.physics.add.sprite(768,416,"AE");
     this.AE.setCollideWorldBounds(true);
     this.CS = this.physics.add.sprite(704,416,"CS");
@@ -59,6 +64,7 @@ export default class MainScene extends Phaser.Scene {
     
     this.movePlayerManager();
     this.cornSeedsStart = 10;
+    this.Corn.text = "6.8pH Corn Seed Count= " + this.cornSeedsStart.toString();
   }
   createFarm(x,y){
     for(let i = 0; i < 9; i++){
