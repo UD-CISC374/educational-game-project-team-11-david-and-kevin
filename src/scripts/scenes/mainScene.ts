@@ -1,6 +1,7 @@
 import ExampleObject from '../objects/exampleObject';
 
 var isAE: boolean = true;
+var test: boolean = false; 
 var seed = 0;
 var count = 0; 
 
