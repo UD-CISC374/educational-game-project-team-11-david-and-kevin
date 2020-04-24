@@ -84,6 +84,14 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/educational-game-project-team-11-david-and-kevin/alphaassets/images/tiles11.png"
   },
   {
+    "revision": "cf053af14504ca694cc78b106f9def53",
+    "url": "/educational-game-project-team-11-david-and-kevin/alphaassets/images/updatebackground.png"
+  },
+  {
+    "revision": "dcdd1bd9377c2c80a170c42207c4e905",
+    "url": "/educational-game-project-team-11-david-and-kevin/alphaassets/images/updatebackground.xcf"
+  },
+  {
     "revision": "426c64762368c2e78f65f511ad0edbb8",
     "url": "/educational-game-project-team-11-david-and-kevin/alphaassets/spritesheets/AE.png"
   },
@@ -104,15 +112,15 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/educational-game-project-team-11-david-and-kevin/alphafavicon.ico"
   },
   {
-    "revision": "0e84e13f32f19377e8f1",
-    "url": "/educational-game-project-team-11-david-and-kevin/alphagen.main.4969d49fe9ad4a2e4c1f.bundle.js"
+    "revision": "de2107a7c17f41ba6a6f",
+    "url": "/educational-game-project-team-11-david-and-kevin/alphagen.main.4a8bdd20662e0be47af7.bundle.js"
   },
   {
     "revision": "5e69403aa42e950fedff",
     "url": "/educational-game-project-team-11-david-and-kevin/alphagen.vendors.0805bb80903235d40eaf.bundle.js"
   },
   {
-    "revision": "39127a485bccae07ff602868c927f4f2",
+    "revision": "cf2a6f422dfbc67b8f951986e36b7866",
     "url": "/educational-game-project-team-11-david-and-kevin/alphaindex.html"
   },
   {
