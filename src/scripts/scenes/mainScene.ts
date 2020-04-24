@@ -63,12 +63,17 @@ export default class MainScene extends Phaser.Scene {
     this.physics.world.setBounds(0,0,1024,1024,true,true);
 
     this.planttiles = this.physics.add.group();
+    
     this.trees = this.physics.add.group();
     this.mountain = this.physics.add.group();
     this.generateMountainsAndTrees(this.scale.width,this.scale.height);
+    
     this.generateInventory();
 
     this.createFarm(544,160);
+    //Check farm size
+    //this.add.text(128,1184,this.planttiles.getLength().toString(),{ fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' });
+       
     this.AE = this.physics.add.sprite(768,416,"AE");
     this.AE.setCollideWorldBounds(true);
     this.CS = this.physics.add.sprite(704,416,"CS");
@@ -93,7 +98,7 @@ export default class MainScene extends Phaser.Scene {
     
   }
   createFarm(x,y){
-    for(let i = 0; i < 9; i++){
+    for(let i = 0; i < 8; i++){
       var farmTileRow1 = this.add.tileSprite(x,y,32,32,"growarea");
       var farmTileRow2 = this.add.tileSprite(x,y + 32,32,32,"growarea");
       var farmTileRow3 = this.add.tileSprite(x,y + 64,32,32,"growarea");
@@ -147,24 +152,24 @@ export default class MainScene extends Phaser.Scene {
         for(let i= 3; i < this.inventory.length;i++){
           this.inventory[i] = 0;
         }
-       this.add.tileSprite(32,1248, 64, 64, "seedsandplants", 0);
-        this.hempSeedsCount = this.add.text(64,1248,this.inventory[0].toString());
-       this.hempSeedsCount.height = 300;
-        this.add.tileSprite(32,1280,64, 64,"seedsandplants", 1);
-       this.cornSeedsCount = this.add.text(64,1280,this.inventory[1].toString());
-      this.cornSeedsCount.height = 64;
-       this.add.tileSprite(32,1312,64, 64,"seedsandplants", 2);
-       this.wheatSeedsCount = this.add.text(64,1312,this.inventory[2].toString());
-      this.wheatSeedsCount.height = 64;
-       this.add.tileSprite(1248,32,64, 64,"seedsandplants", 3);
-       this.HempCount = this.add.text(1248,64,this.inventory[3].toString());
-      this.HempCount.height = 64;
-       this.add.tileSprite(1280,32,64, 64,"seedsandplants", 4);
-       this.CornCount = this.add.text(1280,64,this.inventory[4].toString());
-      this.CornCount.height = 64;
-       this.add.tileSprite(1312,32,64, 64,"seedsandplants", 5);
-       this.WheatCount = this.add.text(1312,64,this.inventory[5].toString());
-      this.WheatCount.height = 64;
+       this.add.tileSprite(32,1216, 32, 32, "seedsandplants", 0).setScale(2);
+        this.hempSeedsCount = this.add.text(64,1184,this.inventory[0].toString(),{ fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' });
+       
+        this.add.tileSprite(32,1280,32, 32,"seedsandplants", 1).setScale(2);
+       this.cornSeedsCount = this.add.text(64,1248,this.inventory[1].toString(),{ fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' });
+    
+       this.add.tileSprite(32,1344,32, 32,"seedsandplants", 2).setScale(2);
+       this.wheatSeedsCount = this.add.text(64,1312,this.inventory[2].toString(),{ fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' });
+     
+       this.add.tileSprite(1216,32,32, 32,"seedsandplants", 3).setScale(4);
+       this.HempCount = this.add.text(1184,64,this.inventory[3].toString(),{ fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' });
+      
+       this.add.tileSprite(1280,32,32, 32,"seedsandplants", 4).setScale(4);
+       this.CornCount = this.add.text(1248,64,this.inventory[4].toString(),{ fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' });
+      
+       this.add.tileSprite(1344,32,32, 32,"seedsandplants", 5).setScale(4);
+       this.WheatCount = this.add.text(1312,64,this.inventory[5].toString(),{ fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' });
+     
 
   }
   harvestTree(AE,tree){
