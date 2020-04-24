@@ -7,6 +7,7 @@ var count = 0;
 export default class MainScene extends Phaser.Scene {
   private exampleObject: ExampleObject;
   private background: Phaser.GameObjects.TileSprite;
+  private board: Phaser.GameObjects.TileSprite;
   private CS: Phaser.Physics.Arcade.Sprite;
   private AE: Phaser.Physics.Arcade.Sprite;
   private planttiles: Phaser.Physics.Arcade.Group;
@@ -14,16 +15,24 @@ export default class MainScene extends Phaser.Scene {
   private trees: Phaser.Physics.Arcade.Group;
   private mountain: Phaser.Physics.Arcade.Group;
   private Keys: Phaser.Types.Input.Keyboard.CursorKeys;
-  private wheatSeedsStart: integer;
-  private cornSeedsStart: integer;
-  private hempSeedsStart: integer;
-  private Corn
-  private Wheat;
+  
+  private wheatSeedsCount;
+  private cornSeedsCount;
+  private hempSeedsCount;
+  
+  private CornCount;
+  private WheatCount;
+  private HempCount;
 
-  private Hemp;
-  private mCount: integer;
-  private tCount: integer;
+  private TubeCount;
+  private TubesXCount;
+
+  private mCount;
+  private tCount;
   private TreesAndMountains;
+
+ 
+  private inventory: Array<integer>;
 
   
 
@@ -37,21 +46,29 @@ export default class MainScene extends Phaser.Scene {
   }
 
   create() {
-    //hemp 200 nitro corn 
-    this.background = this.add.tileSprite(0, 0, this.scale.width, this.scale.height, "background");
-    this.background.setOrigin(0, 0);
-    this.cornSeedsStart = Math.floor(Math.random() * (5 - 1 + 1)) + 1;
-    this.hempSeedsStart = Math.floor(Math.random() * (5 - 1 + 1)) + 1;
-    this.wheatSeedsStart = Math.floor(Math.random() * (5 - 1 + 1)) + 1;;
+    this.wheatSeedsCount = this.add.text;
+    this.WheatCount = this.add.text;
+    this.hempSeedsCount = this.add.text;
+    this.HempCount = this.add.text;
+    this.cornSeedsCount = this.add.text;
+    this.CornCount = this.add.text;
+    
+  
+
+    this.inventory = new Array<integer>(11);
+    
+    this.board = this.add.tileSprite(0, 0, this.scale.width, this.scale.height, "board")
+    this.board.setOrigin(0, 0);
+    this.background = this.add.tileSprite(512, 512, 1024, 1024, "background");
+    this.physics.world.setBounds(0,0,1024,1024,true,true);
+
     this.planttiles = this.physics.add.group();
     this.trees = this.physics.add.group();
     this.mountain = this.physics.add.group();
     this.generateMountainsAndTrees(this.scale.width,this.scale.height);
+    this.generateInventory();
 
     this.createFarm(544,160);
-    this.Corn = this.add.text(10,10,"6.8pH Corn Seed Count= " + this.cornSeedsStart.toString())
-    this.Hemp = this.add.text(400,10,"7.5pH Hemp Seed Count= " + this.hempSeedsStart.toString())
-    this.Wheat = this.add.text(750,10,"6pH Wheat Seed Count= " + this.wheatSeedsStart.toString())
     this.AE = this.physics.add.sprite(768,416,"AE");
     this.AE.setCollideWorldBounds(true);
     this.CS = this.physics.add.sprite(704,416,"CS");
@@ -72,8 +89,8 @@ export default class MainScene extends Phaser.Scene {
   update() {
     
     this.movePlayerManager();
-    this.cornSeedsStart = 10;
-    this.Corn.text = "6.8pH Corn Seed Count= " + this.cornSeedsStart.toString();
+    
+    
   }
   createFarm(x,y){
     for(let i = 0; i < 9; i++){
@@ -95,13 +112,59 @@ export default class MainScene extends Phaser.Scene {
   }
   generateMountainsAndTrees(x,y){
     for(let i = 0; i < 50; i++){
-      var newTree = this.add.sprite((Math.random() * 500) , (Math.random() * y - 10),"Tree");
+      var newTree = this.add.sprite((Math.random() * 500) , (Math.random() * 1024),"Tree");
       this.trees.add(newTree); 
     }
     for(let i = 0; i < 50; i++){
-      var newMountain = this.add.sprite((Math.random() * 500), (Math.random() * y - 10),"Mountain");
+      var newMountain = this.add.sprite((Math.random() * 500), (Math.random() * 1024),"Mountain");
       this.mountain.add(newMountain); 
     }
+
+  }
+  /*
+    0: Hemp Seeds
+    1: Corn Seeds
+    2: Wheat Seeds
+    3: Hemp(7.5pH)
+    4: Corn(6.8pH)
+    5: Wheat(6pH)
+    6: Trees(+pH)
+    7: Mountains(-pH)
+    8: Plastic
+    9: Tubes(Straight)
+    10: Tubes(Crossed)
+
+    generate inventory icons at 40,1280
+
+  */
+  generateInventory(){
+        //hemp seeds
+        this.inventory[0] = Math.floor(Math.random() * (5 - 1 + 1)) + 1;
+        //corn seeds
+        this.inventory[1] = Math.floor(Math.random() * (5 - 1 + 1)) + 1;
+        //wheat seeds
+        this.inventory[2] = Math.floor(Math.random() * (5 - 1 + 1)) + 1;
+        for(let i= 3; i < this.inventory.length;i++){
+          this.inventory[i] = 0;
+        }
+       this.add.tileSprite(32,1248, 64, 64, "seedsandplants", 0);
+        this.hempSeedsCount = this.add.text(64,1248,this.inventory[0].toString());
+       this.hempSeedsCount.height = 300;
+        this.add.tileSprite(32,1280,64, 64,"seedsandplants", 1);
+       this.cornSeedsCount = this.add.text(64,1280,this.inventory[1].toString());
+      this.cornSeedsCount.height = 64;
+       this.add.tileSprite(32,1312,64, 64,"seedsandplants", 2);
+       this.wheatSeedsCount = this.add.text(64,1312,this.inventory[2].toString());
+      this.wheatSeedsCount.height = 64;
+       this.add.tileSprite(1248,32,64, 64,"seedsandplants", 3);
+       this.HempCount = this.add.text(1248,64,this.inventory[3].toString());
+      this.HempCount.height = 64;
+       this.add.tileSprite(1280,32,64, 64,"seedsandplants", 4);
+       this.CornCount = this.add.text(1280,64,this.inventory[4].toString());
+      this.CornCount.height = 64;
+       this.add.tileSprite(1312,32,64, 64,"seedsandplants", 5);
+       this.WheatCount = this.add.text(1312,64,this.inventory[5].toString());
+      this.WheatCount.height = 64;
 
   }
   harvestTree(AE,tree){
