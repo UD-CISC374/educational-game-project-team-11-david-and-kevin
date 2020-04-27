@@ -185,7 +185,7 @@ export default class MainScene extends Phaser.Scene {
       seed4 += 32;
       count++;
     }
-    else if(count >= 36 && count <  45){
+    else if(count >= 36 && count < 45){
       var newTree = this.add.sprite(544 + seed5, farmY + 128, "Tree");
       this.trees.add(newTree); 
       seed5 += 32;
