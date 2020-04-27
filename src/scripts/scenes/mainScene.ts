@@ -10,7 +10,7 @@ export default class MainScene extends Phaser.Scene {
   private board: Phaser.GameObjects.TileSprite;
   private CS: Phaser.Physics.Arcade.Sprite;
   private AE: Phaser.Physics.Arcade.Sprite;
-  private planttiles: Phaser.Physics.Arcade.Group;
+  private planttiles: Array<Phaser.GameObjects.TileSprite>;
   private watertiles: Phaser.GameObjects.TileSprite;
   private trees: Phaser.Physics.Arcade.Group;
   private mountain: Phaser.Physics.Arcade.Group;
@@ -32,12 +32,20 @@ export default class MainScene extends Phaser.Scene {
   private TreesAndMountains;
   private curInvHeight: integer;
   private curInvLength: integer;
+  private curFarmHeight: integer;
+  private curFarmLength: integer;
+  private forrLocX: integer;
+  private forrLocY: integer;
+
   
 
 
  
-  private inventory: Phaser.Physics.Arcade.Group;
+  private inventory: Array<Phaser.GameObjects.TileSprite>;
+  private timers: Array<Phaser.Time.TimerEvent>;
   private pollution: Phaser.Physics.Arcade.Group;
+  private currentItem: string;
+  private invSize: integer;
 
   
 
@@ -51,6 +59,7 @@ export default class MainScene extends Phaser.Scene {
   }
 
   create() {
+    this.currentItem = "";
     this.wheatSeedsCount = this.add.text;
     this.WheatCount = this.add.text;
     this.hempSeedsCount = this.add.text;
@@ -60,26 +69,31 @@ export default class MainScene extends Phaser.Scene {
 
     this.curInvHeight = 1088;
     this.curInvLength = 64;
-    
+    this.curFarmHeight = 160;
+    this.curFarmLength = 544;
+    this.forrLocY =  0;
+    this.forrLocX = 0;
+    this.timers = new Array<Phaser.Time.TimerEvent>();
   
 
-    this.inventory = this.physics.add.group();
+    this.inventory = new Array<Phaser.GameObjects.TileSprite>();
+    this.invSize = 0;
     
     this.board = this.add.tileSprite(0, 0, this.scale.width, this.scale.height, "board")
     this.board.setOrigin(0, 0);
     this.background = this.add.tileSprite(512, 512, 1024, 1024, "background");
     this.physics.world.setBounds(0,0,1024,1024,true,true);
 
-    this.planttiles = this.physics.add.group();
+    this.planttiles = new Array<Phaser.GameObjects.TileSprite>();
     
     this.trees = this.physics.add.group();
     this.mountain = this.physics.add.group();
     this.pollution = this.physics.add.group();
-    this.generateMountainsAndTrees(this.scale.width,this.scale.height);
-    
-    this.generateInventory(this.curInvLength,this.curInvHeight);
+    //this.generateMountainsAndTrees(this.scale.width,this.scale.height);
+    this.forrestGen();
+    this.generateInventory();
 
-    this.createFarm(544,160);
+    this.createFarm();
     //Check farm size
     //this.add.text(128,1184,this.planttiles.getLength().toString(),{ fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' });
        
@@ -103,36 +117,90 @@ export default class MainScene extends Phaser.Scene {
   update() {
     
     this.movePlayerManager();
+    this.addInvItem(this.currentItem)
     
     
   }
-  createFarm(x,y){
-    for(let i = 0; i < 8; i++){
-      var farmTileRow1 = this.add.tileSprite(x,y,32,32,"growarea");
-      var farmTileRow2 = this.add.tileSprite(x,y + 32,32,32,"growarea");
-      var farmTileRow3 = this.add.tileSprite(x,y + 64,32,32,"growarea");
-      var farmTileRow4 = this.add.tileSprite(x,y + 96,32,32,"growarea");
-      var farmTileRow5 = this.add.tileSprite(x,y + 128,32,32,"growarea");
-      var farmTileRow6 = this.add.tileSprite(x,y + 160,32,32,"growarea");
-      x += 32;
-      this.planttiles.add(farmTileRow1);
-      this.planttiles.add(farmTileRow2);
-      this.planttiles.add(farmTileRow3);
-      this.planttiles.add(farmTileRow4);
-      this.planttiles.add(farmTileRow5);
-      this.planttiles.add(farmTileRow6);
+  createFarm(){
+    var farmtile = this.add.tileSprite(this.curFarmLength,this.curFarmHeight,32,32,"growarea");
+    this.planttiles[0] = farmtile;
+    this.curFarmLength += 32;
+    for(let i = 1; i < 48; i++){
+      
+    var starterSeed = this.add.tileSprite(this.curFarmLength,this.curFarmHeight,32,32,"growarea");
+    this.planttiles[i] = starterSeed;
+    this.curFarmLength += 32;
+
+    if(this.curFarmLength >= 800){
+      this.curFarmLength = 544;
+      this.curFarmHeight += 32;
+    }
+
     }
 
   }
-  generateMountainsAndTrees(x,y){
-    for(let i = 0; i < 50; i++){
-      var newTree = this.add.sprite(Math.floor(((Math.random() * 32) + 1) * 32) , Math.floor(((Math.random() * 32) + 0) * 32),"Tree");
-      this.trees.add(newTree); 
+  mountainRiverGen(){
+
+
+
+
+  }
+  generateInventory(){
+
+    for(let i = 0; i < 4; i++){
+      if(i == 0){
+      var starterSeed = this.add.tileSprite(this.curInvLength,this.curInvHeight,32,32,"seedsandplants", 1).setScale(2);
+      this.inventory[0] = starterSeed;
+      
+      }
+      else{
+        this.inventory[i] = this.add.tileSprite(this.curInvLength,this.curInvHeight,32,32,"seedsandplants", 1).setScale(2);
+      }
+      this.curInvLength += 64;
+      
     }
-    for(let i = 0; i < 50; i++){
-      var newMountain = this.add.sprite(Math.floor(((Math.random() * 32) + 1) * 32), Math.floor(((Math.random() * 32) + 0) * 32),"Mountain");
-      this.mountain.add(newMountain); 
+    this.invSize = this.inventory.length;
+
+  }
+  forrestGen(){
+    
+ 
+    
+    this.forrLocY = Math.floor(((Math.random() * (1024 - 0 + 1) + 0)));
+    this.forrLocY = Math.round(this.forrLocY / 32);
+    
+ 
+    this.forrLocX = Math.floor(((Math.random() * (1024 - 0 + 1) + 0)));
+    this.forrLocX = Math.round(this.forrLocX / 32);
+    if(this.forrLocX >= 16 && this.forrLocY <= 16){
+      this.forrLocX = 1;
     }
+
+    
+    for(let i = 0; i<256;i++){
+    var yesNo = Math.floor(((Math.random() * 6) + 1 ));
+    if(yesNo == 1 || yesNo == 3 ||yesNo == 5){
+      var newTree = this.add.sprite(this.forrLocX * 32 , this.forrLocY * 32, "Tree");
+      this.trees.add(newTree);
+      
+    }
+    this.forrLocX +=1;
+    if(this.forrLocX >= 16 && this.forrLocY <= 16){
+      this.forrLocX = 1;
+      this.forrLocY += 1;
+    }
+    else if(this.forrLocX >= 16 && this.forrLocY >= 16 ){
+      if(this.forrLocX >= 32){
+        this.forrLocX = 1;
+        this.forrLocY += 1;
+      }
+    this.timers[i] = this.time.addEvent({ delay: 30000, loop: false, paused: true })
+
+    }
+
+    }
+    
+
 
   }
   /*
@@ -151,27 +219,68 @@ export default class MainScene extends Phaser.Scene {
     generate inventory icons at 40,1280
 
   */
-  generateInventory(x,y){
-    var starterSeed = this.add.tileSprite(x,y,32,32,"seedsandplants", 1).setScale(2);
-    this.inventory.add(starterSeed);
-    x += 64;
-    for(let i = 0; i < 9; i++){
+  addInvItem(){
+    if(this.currentItem == ""){
+      //this.currentItem = "";
+    };
+    if(this.currentItem == "corn seed"){
+      var starterSeed = this.add.tileSprite(this.curInvLength,this.curInvHeight,32,32,"seedsandplants", 1).setScale(2);
       
-    var starterSeed = this.add.tileSprite(x,y,32,32,"seedsandplants", 1).setScale(2);
-    this.inventory.add(starterSeed);
-    x += 64;
-
+      this.inventory[this.invSize - 1] = starterSeed;
+      //this.currentItem = "";
+    }
+    else if(this.currentItem == "hemp seed"){
+      var starterSeed = this.add.tileSprite(this.curInvLength,this.curInvHeight,32,32,"seedsandplants", 0).setScale(2);
+      this.inventory[this.invSize - 1] = starterSeed;
+     // this.currentItem = "";
+      
+    }
+    else if(this.currentItem == "wheat seed"){
+      var starterSeed = this.add.tileSprite(this.curInvLength,this.curInvHeight,32,32,"seedsandplants", 2).setScale(2);
+      this.inventory[this.invSize - 1] = starterSeed;
+     // this.currentItem = "";
+    }
+    else if(this.currentItem == "wood"){
+      var starterSeed = this.add.tileSprite(this.curInvLength,this.curInvHeight,32,32,"icons", 2).setScale(2);
+      this.inventory[this.invSize - 1] = starterSeed;
+     // this.currentItem = "";
+      
+    }
+    else if(this.currentItem == "rock"){
+      var starterSeed = this.add.tileSprite(this.curInvLength,this.curInvHeight,32,32,"icons", 1).setScale(2);
+      this.inventory[this.invSize - 1] = starterSeed;
+      //this.currentItem = "";
+    }
+    this.invSize = this.inventory.length;
+    
+    this.curInvLength += 64;
+    if(this.curInvLength == 512){
+      this.curInvLength = 64;
+      this.curInvHeight += 64;
 
     }
+    this.currentItem = "";
+
 
 
 
   }
   harvestTree(AE,tree){
+    
+    
     tree.destroy(true);
+    this.currentItem = "wood";
+    
+    //var sapling = this.add.sprite(x,y,"icons",3);
+    //this.time.addEvent({ delay: 200, callback: myfunction, callbackScope: this, loop: false })
 
 
   }
+
+  
+
+
+
   harvestMoutain(AE,mount){
     mount.destroy(true);
 
