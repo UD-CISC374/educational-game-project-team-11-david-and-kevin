@@ -3,7 +3,14 @@ import ExampleObject from '../objects/exampleObject';
 var isAE: boolean = true;
 var test: boolean = false; 
 var seed = 0;
+var seed2 = 0;
+var seed3 = 0; 
+var seed4 = 0;
+var seed5 = 0;
+var seed6 = 0;
 var count = 0; 
+var farmX = 544;
+var farmY = 160;
 
 export default class MainScene extends Phaser.Scene {
   private exampleObject: ExampleObject;
@@ -52,7 +59,7 @@ export default class MainScene extends Phaser.Scene {
     this.mountain = this.physics.add.group();
     this.generateMountainsAndTrees(this.scale.width,this.scale.height);
 
-    this.createFarm(544,160);
+    this.createFarm(farmX,farmY);
     this.Corn = this.add.text(10,10,"6.8pH Corn Seed Count= " + this.cornSeedsStart.toString())
     this.Hemp = this.add.text(400,10,"7.5pH Hemp Seed Count= " + this.hempSeedsStart.toString())
     this.Wheat = this.add.text(750,10,"6pH Wheat Seed Count= " + this.wheatSeedsStart.toString())
@@ -153,24 +160,45 @@ export default class MainScene extends Phaser.Scene {
 
   if(this.Keys.shift?.isDown){
     if(count < 9){
-      var newTree = this.add.sprite(544 + seed, 160, "Tree");
+      var newTree = this.add.sprite(farmX + seed, farmY, "Tree");
       this.trees.add(newTree); 
       seed += 32;
       count++;
-
-      /*
-      if(this.cornSeedsStart > 0){
-        this.cornSeedsStart--
-      }
-      else if(this.hempSeedsStart > 0){
-        this.hempSeedsStart--
-      }
-      else if(this.wheatSeedsStart > 0){
-        this.hempSeedsStart--
-      }
-      */
     }
-  }
+    else if(count >= 9 && count < 18){
+      var newTree = this.add.sprite(farmX + seed2, farmY + 32, "Tree");
+      this.trees.add(newTree); 
+      seed2 += 32;
+      count++;
+
+    }
+    else if(count >= 18 && count < 27){
+      var newTree = this.add.sprite(544 + seed3, farmY + 64, "Tree");
+      this.trees.add(newTree); 
+      seed3 += 32;
+      count++;
+
+    }
+    else if(count >= 27 && count < 36){
+      var newTree = this.add.sprite(544 + seed4, farmY + 96, "Tree");
+      this.trees.add(newTree); 
+      seed4 += 32;
+      count++;
+    }
+    else if(count >= 36 && count <  45){
+      var newTree = this.add.sprite(544 + seed5, farmY + 128, "Tree");
+      this.trees.add(newTree); 
+      seed5 += 32;
+      count++;
+    }
+    else if(count >= 45 && count < 54){
+      var newTree = this.add.sprite(544 + seed6, farmY + 160, "Tree");
+      this.trees.add(newTree); 
+      seed6 += 32;
+      count++;
+    }
+    }
+  
 
 
   if(isAE == true){
