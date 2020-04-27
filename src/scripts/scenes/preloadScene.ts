@@ -20,6 +20,8 @@ export default class PreloadScene extends Phaser.Scene {
     this.load.image("growarea", "assets/images/tiles11.png");
     this.load.image("AE", "assets/spritesheets/AE.png");
     this.load.image("CS", "assets/spritesheets/CS.png");
+    this.load.image("AE_left", "assets/spritesheets/AE_left.png");
+    this.load.image("CS_left", "assets/spritesheets/CS_left.png");
 
     this.load.spritesheet("seedsandplants", "assets/spritesheets/seedsandplants.png",{
       frameWidth: 32,
