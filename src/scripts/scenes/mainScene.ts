@@ -1,18 +1,23 @@
 //import AEItems from '../objects/aeitems';
 
-var isAE: boolean = true;
-var seed = 0;
-var count = 0; 
 
 export default class MainScene extends Phaser.Scene {
+  private isHarvestCrop: boolean;
+  private isHarvestTree: boolean;
+  private isPlantSeed: boolean;
+  private isPlantTree: boolean;
+  private isTubeSet: boolean;
+  private isSeedSet: boolean;
+  private isIterate: boolean;
   
+
   private background: Phaser.GameObjects.TileSprite;
   private board: Phaser.GameObjects.TileSprite;
   private CS: Phaser.Physics.Arcade.Sprite;
   private AE: Phaser.Physics.Arcade.Sprite;
   private planttiles: Array<Phaser.GameObjects.TileSprite>;
   private watertiles: Phaser.GameObjects.TileSprite;
-  private trees: Phaser.Physics.Arcade.Group;
+  private trees: Array<Phaser.GameObjects.TileSprite>;
   private mountain: Phaser.Physics.Arcade.Group;
   private Keys: Phaser.Types.Input.Keyboard.CursorKeys;
   
@@ -28,7 +33,7 @@ export default class MainScene extends Phaser.Scene {
   private TubesXCount;
 
   private mCount;
-  private tCount;
+  private wCount;
   private TreesAndMountains;
   private curInvHeight: integer;
   private curInvLength: integer;
@@ -36,16 +41,35 @@ export default class MainScene extends Phaser.Scene {
   private curFarmLength: integer;
   private forrLocX: integer;
   private forrLocY: integer;
+  private iteration: integer;
+  private selector: Phaser.GameObjects.TileSprite; 
+
 
   
 
 
  
   private inventory: Array<Phaser.GameObjects.TileSprite>;
+  private countArray: Array<Phaser.GameObjects.Text>;
+  private plantInventory: Array<Phaser.GameObjects.TileSprite>;
+  private cornTubes: Array<Phaser.GameObjects.TileSprite>;
+  private hempTubes: Array<Phaser.GameObjects.TileSprite>;
+  private wheatTubes: Array<Phaser.GameObjects.TileSprite>;
+ 
+  private forrest: Array<Phaser.GameObjects.TileSprite>;
+  private treeCount;
+  private forrestCount;
+  private saplingCount;
+  private plasticCount;
   private timers: Array<Phaser.Time.TimerEvent>;
-  private pollution: Phaser.Physics.Arcade.Group;
-  private currentItem: string;
+  private pollution: Array<Phaser.GameObjects.TileSprite>;
+  private currentFarmIndex: integer;
   private invSize: integer;
+  private isTaking: boolean;
+  private plantsize: integer;
+  private state: string;
+  private stateText: Phaser.GameObjects.Text;
+  
 
   
 
@@ -59,40 +83,76 @@ export default class MainScene extends Phaser.Scene {
   }
 
   create() {
-    this.currentItem = "";
-    this.wheatSeedsCount = this.add.text;
-    this.WheatCount = this.add.text;
-    this.hempSeedsCount = this.add.text;
-    this.HempCount = this.add.text;
-    this.cornSeedsCount = this.add.text;
-    this.CornCount = this.add.text;
+    
+    //this.selector = this.add.tileSprite(32,32,32,32,"icons",0);
+    //this.selector.visible = false;
+    this.iteration = 0; 
+    this.treeCount = 0;
+    this.plasticCount = 0;
+    this.plantsize = 0;
+    this.state = "tutorial";
+    this.stateText = this.add.text(256,1280,this.state,{ fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' })
 
-    this.curInvHeight = 1088;
-    this.curInvLength = 64;
+
+    this.currentFarmIndex = 0;
+    this.wheatSeedsCount = 0;
+    this.WheatCount = 0;
+    this.hempSeedsCount = 0;
+    this.HempCount = 0;
+    this.cornSeedsCount = 0;
+    this.CornCount = 0;
+    this.mCount = 0;
+    this.wCount = 0;
+    this.forrestCount = 0;
+
+
+    
     this.curFarmHeight = 160;
     this.curFarmLength = 544;
     this.forrLocY =  0;
     this.forrLocX = 0;
-    this.timers = new Array<Phaser.Time.TimerEvent>();
+    
   
 
     this.inventory = new Array<Phaser.GameObjects.TileSprite>();
+    this.trees = new Array<Phaser.GameObjects.TileSprite>();
+    this.plantInventory = new Array<Phaser.GameObjects.TileSprite>();
+    this.cornTubes = new Array<Phaser.GameObjects.TileSprite>();
+    this.hempTubes = new Array<Phaser.GameObjects.TileSprite>();
+    this.wheatTubes = new Array<Phaser.GameObjects.TileSprite>();
+    this.forrest = new Array<Phaser.GameObjects.TileSprite>();
+    this.countArray = new Array<Phaser.GameObjects.Text>();
     this.invSize = 0;
+
+    console.log("generating world");
+    
+    this.selector = this.add.tileSprite(32,32,32,32,"icons", 0).setVisible(false);
     
     this.board = this.add.tileSprite(0, 0, this.scale.width, this.scale.height, "board")
     this.board.setOrigin(0, 0);
-    this.background = this.add.tileSprite(512, 512, 1024, 1024, "background");
+    this.background = this.add.tileSprite(511, 511, 1024, 1024, "forrestTile",1);
     this.physics.world.setBounds(0,0,1024,1024,true,true);
 
     this.planttiles = new Array<Phaser.GameObjects.TileSprite>();
     
-    this.trees = this.physics.add.group();
-    this.mountain = this.physics.add.group();
-    this.pollution = this.physics.add.group();
+   // this.trees = this.physics.add.group();
+    //this.mountain = this.physics.add.group();
+    //this.pollution = new Array<Phaser.GameObjects.TileSprite>();
     //this.generateMountainsAndTrees(this.scale.width,this.scale.height);
+    console.log("forrest gen");
     this.forrestGen();
+    console.log("inv gen");
     this.generateInventory();
-
+    this.addInvItem("corn");
+    this.addInvItem("corn");
+    this.addInvItem("corn");
+    this.addInvItem("hemp");
+    this.addInvItem("hemp");
+    this.addInvItem("hemp");
+    this.addInvItem("wheat");
+    this.addInvItem("wheat");
+    this.addInvItem("wheat");
+    console.log("creating farm");
     this.createFarm();
     //Check farm size
     //this.add.text(128,1184,this.planttiles.getLength().toString(),{ fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' });
@@ -102,8 +162,8 @@ export default class MainScene extends Phaser.Scene {
     this.CS = this.physics.add.sprite(704,416,"CS");
     this.CS.setCollideWorldBounds(true);
 
-    this.physics.add.overlap(this.AE, this.trees, this.harvestTree);
-    this.physics.add.overlap(this.AE, this.mountain, this.harvestMoutain);
+    //this.physics.add.overlap(this.AE, this.trees, this.harvestTree);
+    //this.physics.add.overlap(this.AE, this.mountain, this.harvestMoutain);
 
     this.Keys = this.input.keyboard.createCursorKeys();
 
@@ -115,9 +175,14 @@ export default class MainScene extends Phaser.Scene {
   }
 
   update() {
-    
+    if(this.state == "tutorial"){
+      this.state = "plant mode";
+
+    }
     this.movePlayerManager();
-    this.addInvItem(this.currentItem)
+    this.stateText.text = this.state;
+    this.selector.x = this.planttiles[this.currentFarmIndex].x;
+    this.selector.y = this.planttiles[this.currentFarmIndex].y;
     
     
   }
@@ -145,133 +210,172 @@ export default class MainScene extends Phaser.Scene {
 
 
   }
+   /*
+    0: Corn Seeds
+    1: Corn Seeds
+    2: Hemp Seeds
+    3: Wood(+pH)
+    4: Rock(-pH)
+    5: Sapling
+    6: Plastic
+   
+    generate inventory icons at 64,1088
+
+  */
+
   generateInventory(){
 
-    for(let i = 0; i < 4; i++){
-      if(i == 0){
-      var starterSeed = this.add.tileSprite(this.curInvLength,this.curInvHeight,32,32,"seedsandplants", 1).setScale(2);
-      this.inventory[0] = starterSeed;
+    var cornSeed = this.add.tileSprite(64,1088,32,32,"seedsandplants", 1).setScale(2);
       
-      }
-      else{
-        this.inventory[i] = this.add.tileSprite(this.curInvLength,this.curInvHeight,32,32,"seedsandplants", 1).setScale(2);
-      }
-      this.curInvLength += 64;
+    this.inventory[0] = cornSeed;
+     
+
+  
+    var hempSeed = this.add.tileSprite(64,1152,32,32,"seedsandplants", 0).setScale(2);
+    this.inventory[1] = hempSeed;
+  
       
-    }
-    this.invSize = this.inventory.length;
+
+    
+      var wheatSeed = this.add.tileSprite(64,1216,32,32,"seedsandplants", 2).setScale(2);
+      this.inventory[2] = wheatSeed;
+    
+ 
+    
+      var wood = this.add.tileSprite(64,1280,32,32,"icons", 2).setScale(2);
+      this.inventory[3] = wood;
+
+      var rock = this.add.tileSprite(64,1344,32,32,"icons", 1).setScale(2);
+      this.inventory[4] = rock;
+      
+      var sapling = this.add.tileSprite(64,1408,32,32,"icons", 3).setScale(2);
+      this.inventory[5] = sapling;
+
+      var plastic = this.add.tileSprite(64,1472,32,32,"plastic").setScale(2);
+      this.inventory[6] = plastic;
+
+      for(let i = 0;i<7;i++){
+        this.countArray[i] = this.add.text(this.inventory[i].x + 64,this.inventory[i].y,"0",{ fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' })  
+    
+      }
 
   }
   forrestGen(){
-    
- 
-    
-    this.forrLocY = Math.floor(((Math.random() * (1024 - 0 + 1) + 0)));
-    this.forrLocY = Math.round(this.forrLocY / 32);
-    
- 
-    this.forrLocX = Math.floor(((Math.random() * (1024 - 0 + 1) + 0)));
-    this.forrLocX = Math.round(this.forrLocX / 32);
-    if(this.forrLocX >= 16 && this.forrLocY <= 16){
-      this.forrLocX = 1;
-    }
-
-    
-    for(let i = 0; i<256;i++){
+    for(let i = 0; i<32;i++){
+    while(this.forrLocX < 16){  
+    var newForrestTile = this.add.tileSprite(((this.forrLocX + 1) * 32) - 1 , ((this.forrLocY + 1) * 32) - 1, 32, 32, "forrestTile",1);
+    this.forrest[this.forrestCount] = newForrestTile;
+    this.forrestCount += 1;  
     var yesNo = Math.floor(((Math.random() * 6) + 1 ));
     if(yesNo == 1 || yesNo == 3 ||yesNo == 5){
-      var newTree = this.add.sprite(this.forrLocX * 32 , this.forrLocY * 32, "Tree");
-      this.trees.add(newTree);
-      
+      this.trees[this.treeCount] = this.add.tileSprite(((this.forrLocX + 1) * 32) - 1 , ((this.forrLocY + 1) * 32) - 1, 32, 32, "Tree")
+      this.treeCount += 1;
     }
     this.forrLocX +=1;
-    if(this.forrLocX >= 16 && this.forrLocY <= 16){
-      this.forrLocX = 1;
-      this.forrLocY += 1;
-    }
-    else if(this.forrLocX >= 16 && this.forrLocY >= 16 ){
-      if(this.forrLocX >= 32){
-        this.forrLocX = 1;
-        this.forrLocY += 1;
-      }
-    this.timers[i] = this.time.addEvent({ delay: 30000, loop: false, paused: true })
-
-    }
-
-    }
-    
-
-
   }
-  /*
-    0: Hemp Seeds
-    1: Corn Seeds
-    2: Wheat Seeds
-    3: Hemp(7.5pH)
-    4: Corn(6.8pH)
-    5: Wheat(6pH)
-    6: Trees(+pH)
-    7: Mountains(-pH)
-    8: Plastic
-    9: Tubes(Straight)
-    10: Tubes(Crossed)
-
-    generate inventory icons at 40,1280
-
-  */
-  addInvItem(){
-    if(this.currentItem == ""){
-      //this.currentItem = "";
-    };
-    if(this.currentItem == "corn seed"){
-      var starterSeed = this.add.tileSprite(this.curInvLength,this.curInvHeight,32,32,"seedsandplants", 1).setScale(2);
-      
-      this.inventory[this.invSize - 1] = starterSeed;
-      //this.currentItem = "";
-    }
-    else if(this.currentItem == "hemp seed"){
-      var starterSeed = this.add.tileSprite(this.curInvLength,this.curInvHeight,32,32,"seedsandplants", 0).setScale(2);
-      this.inventory[this.invSize - 1] = starterSeed;
-     // this.currentItem = "";
-      
-    }
-    else if(this.currentItem == "wheat seed"){
-      var starterSeed = this.add.tileSprite(this.curInvLength,this.curInvHeight,32,32,"seedsandplants", 2).setScale(2);
-      this.inventory[this.invSize - 1] = starterSeed;
-     // this.currentItem = "";
-    }
-    else if(this.currentItem == "wood"){
-      var starterSeed = this.add.tileSprite(this.curInvLength,this.curInvHeight,32,32,"icons", 2).setScale(2);
-      this.inventory[this.invSize - 1] = starterSeed;
-     // this.currentItem = "";
-      
-    }
-    else if(this.currentItem == "rock"){
-      var starterSeed = this.add.tileSprite(this.curInvLength,this.curInvHeight,32,32,"icons", 1).setScale(2);
-      this.inventory[this.invSize - 1] = starterSeed;
-      //this.currentItem = "";
-    }
-    this.invSize = this.inventory.length;
+  this.forrLocX = 0;
+  this.forrLocY += 1;
     
-    this.curInvLength += 64;
-    if(this.curInvLength == 512){
-      this.curInvLength = 64;
-      this.curInvHeight += 64;
+    
+   // this.timers[i] = this.time.addEvent({ delay: 30000, loop: false, paused: true })
 
     }
-    this.currentItem = "";
+    
+
+    
+    
+
+
+  
+}
+/*
+0: Corn Seeds
+1: Hemp Seeds
+2: Wheat Seeds
+3: Wood(+pH)
+4: Rock(-pH)
+5: Sapling
+6: Plastic
+*/
+ 
+  addInvItem(type: string){
+    if(type == "corn"){
+     
+      this.cornSeedsCount += 1;
+      this.countArray[0].text = this.cornSeedsCount.toString;
+    }
+    else if(type == "hemp"){
+      this.hempSeedsCount += 1;
+      this.countArray[1].text = this.hempSeedsCount.toString;
+    }
+    else if(type == "wheat"){
+      this.wheatSeedsCount += 1;
+      this.countArray[2].text = this.wheatSeedsCount.toString;
+    }
+    else if(type == "wood"){
+      this.wCount += 1;
+      this.countArray[3].text = this.wCount.toString;
+    }
+    else if(type == "rock"){
+      this.mCount += 1;
+      this.countArray[4].text = this.mCount.toString;
+    }
+    else if(type == "sapling"){
+      this.saplingCount += 1;
+      this.countArray[5].text = this.saplingCount.toString;
+    }
+    else if(type == "plastic"){
+      this.plasticCount += 1;
+      this.countArray[6].text = this.plasticCount.toString;
+    }
+
 
 
 
 
   }
+  plantSeed(x,y,type: string){
+    if(type == "corn"){
+      var  Plant = this.add.tileSprite(x,y,32,32,"seedsandplants", 1);
+      this.plantInventory[this.plantsize] = Plant;
+      this.plantsize += 1;
+      this.cornSeedsCount -= 1;
+      this.countArray[0].text = this.cornSeedsCount.toString;
+    }
+    else if(type == "wheat"){
+      var Plant = this.add.tileSprite(x,y,32,32,"seedsandplants", 2);
+      this.plantInventory[this.plantsize] = Plant;
+      this.plantsize += 1;
+      this.wheatSeedsCount -= 1;
+      this.countArray[0].text = this.wheatSeedsCount.toString;
+    }
+    else if(type == "hemp"){
+      var Plant = this.add.tileSprite(x,y,32,32,"seedsandplants", 0);
+      this.plantInventory[this.plantsize] = Plant;
+      this.plantsize += 1;
+      this.hempSeedsCount -= 1;
+      this.countArray[0].text = this.hempSeedsCount.toString;
+    }
+    
+
+
+  }
+
+  placetubing(x,y,type: string){
+
+
+  }
+
+
+
   harvestTree(AE,tree){
     
+   // this.currentItem = "wood";
+    tree.destroy;
+    this.isTaking = true;
     
-    tree.destroy(true);
-    this.currentItem = "wood";
     
-    //var sapling = this.add.sprite(x,y,"icons",3);
+    
     //this.time.addEvent({ delay: 200, callback: myfunction, callbackScope: this, loop: false })
 
 
@@ -288,38 +392,74 @@ export default class MainScene extends Phaser.Scene {
 
 
   movePlayerManager(){
+    if(this.Keys.shift?.isDown){
+     // if(this.state == "tutorial"){
+      this.state = "plant mode";
+      this.selector.x = this.planttiles[this.currentFarmIndex].x;
+      this.selector.y = this.planttiles[this.currentFarmIndex].y;
+      this.selector.setVisible(true);
 
-    if(this.Keys.space?.isDown && isAE == true){
-      isAE = false; 
-      alert('Switched to Computer Scientist');
-      console.log(isAE);
+     // }
+
+      
+    }
+    else if(this.Keys.space?.isDown){
+      if(this.state == "plant mode"){
+        this.plantSeed(this.selector.x,this.selector.y,"corn");
+        this.currentFarmIndex += 1;
+      }
+
+    }
+    else if(this.Keys.right?.isDown) {
+      if(this.state == "plant mode"){
+        if(this.currentFarmIndex < 47){
+          this.currentFarmIndex += 1;
+        }
+        else{
+          this.currentFarmIndex = 0;
+          this.selector.x = this.planttiles[this.currentFarmIndex].x;
+          this.selector.y = this.planttiles[this.currentFarmIndex].y;
+        }
+
+      }
+     
     }
 
-    else if(this.Keys.space?.isDown && isAE == false){
-      isAE = true; 
-      alert('Switched to Agricultural Engineer');
-      console.log(isAE); 
+
+  /*
+    if(this.isSeedSet == true){
+
+      if(this.Keys.left?.isDown){
+        this.AE.x = this.AE.x - 4;
+      }
+    
+      else if(this.Keys.right?.isDown) {
+        this.AE.x = this.AE.x + 4;
+       
+      }
+    
+    
+      else if(this.Keys.up?.isDown){
+        this.AE.y = this.AE.y - 4;
+      }
+      else if(this.Keys.down?.isDown){
+        this.AE.y = this.AE.y + 4;
+  
+      }
+
+    }
+
+    /*
+    if(this.Keys.space?.isDown){
+      
+    }
+
+    else if(this.Keys.space?.isDown){
+      
     }
 
     if(this.Keys.shift?.isDown){
-      if(count < 9){
-        var newTree = this.add.sprite(544 + seed, 160, "Tree");
-        this.trees.add(newTree); 
-        seed += 32;
-        count++;
-
-        /*
-        if(this.cornSeedsStart > 0){
-          this.cornSeedsStart--
-        }
-        else if(this.hempSeedsStart > 0){
-          this.hempSeedsStart--
-        }
-        else if(this.wheatSeedsStart > 0){
-          this.hempSeedsStart--
-        }
-        */
-      }
+      
     }
 
 
@@ -363,6 +503,7 @@ export default class MainScene extends Phaser.Scene {
       }
 
     }
+    */
 
 
 
