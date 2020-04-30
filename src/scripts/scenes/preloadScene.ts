@@ -15,6 +15,7 @@ export default class PreloadScene extends Phaser.Scene {
     this.load.image("AE", "assets/spritesheets/AE.png");
     this.load.image("CS", "assets/spritesheets/CS.png");
     this.load.image("bucket", "assets/images/bucket.png");
+    this.load.image("pond", "assets/images/pond.png");
     this.load.image("plastic", "assets/images/plastic.png");
     this.load.spritesheet("forrestTile", "assets/spritesheets/forrestTile.png",{
       frameWidth: 32,

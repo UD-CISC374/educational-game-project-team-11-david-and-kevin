@@ -18,23 +18,18 @@ export default class MainScene extends Phaser.Scene {
   private planttiles: Array<Phaser.GameObjects.TileSprite>;
   private watertiles: Phaser.GameObjects.TileSprite;
   private trees: Array<Phaser.GameObjects.TileSprite>;
-  private mountain: Phaser.Physics.Arcade.Group;
+  private mountain: Array<Phaser.GameObjects.TileSprite>;
   private Keys: Phaser.Types.Input.Keyboard.CursorKeys;
-  
   private wheatSeedsCount;
   private cornSeedsCount;
   private hempSeedsCount;
-  
   private CornCount;
   private WheatCount;
   private HempCount;
-
   private TubeCount;
   private TubesXCount;
-
   private mCount;
   private wCount;
-  private TreesAndMountains;
   private curInvHeight: integer;
   private curInvLength: integer;
   private curFarmHeight: integer;
@@ -43,21 +38,15 @@ export default class MainScene extends Phaser.Scene {
   private forrLocY: integer;
   private iteration: integer;
   private selector: Phaser.GameObjects.TileSprite; 
-
-
-  
-
-
- 
   private inventory: Array<Phaser.GameObjects.TileSprite>;
   private countArray: Array<Phaser.GameObjects.Text>;
   private plantInventory: Array<Phaser.GameObjects.TileSprite>;
   private cornTubes: Array<Phaser.GameObjects.TileSprite>;
   private hempTubes: Array<Phaser.GameObjects.TileSprite>;
   private wheatTubes: Array<Phaser.GameObjects.TileSprite>;
- 
   private forrest: Array<Phaser.GameObjects.TileSprite>;
   private treeCount;
+  private mountainCount;
   private forrestCount;
   private saplingCount;
   private plasticCount;
@@ -67,7 +56,8 @@ export default class MainScene extends Phaser.Scene {
   private invSize: integer;
   private isTaking: boolean;
   private plantsize: integer;
-  private state: string;
+  private state: integer;
+  private states: Array<string>;
   private stateText: Phaser.GameObjects.Text;
   
 
@@ -90,9 +80,11 @@ export default class MainScene extends Phaser.Scene {
     this.treeCount = 0;
     this.plasticCount = 0;
     this.plantsize = 0;
-    this.state = "tutorial";
-    this.stateText = this.add.text(256,1280,this.state,{ fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' })
-
+    this.states = new Array<string>();
+    this.states = ["tutorial","plant seeds","plant trees","harvest crop","harvest tree","harvest mountain"]
+    this.state = 0;
+    this.stateText = this.add.text(256,1280,this.state.toString(),{ fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' })
+    
 
     this.currentFarmIndex = 0;
     this.wheatSeedsCount = 0;
@@ -104,18 +96,20 @@ export default class MainScene extends Phaser.Scene {
     this.mCount = 0;
     this.wCount = 0;
     this.forrestCount = 0;
+    this.mountainCount = 0;
 
 
     
     this.curFarmHeight = 160;
     this.curFarmLength = 544;
-    this.forrLocY =  0;
-    this.forrLocX = 0;
+    this.forrLocY =  31;
+    this.forrLocX = 31;
     
   
 
     this.inventory = new Array<Phaser.GameObjects.TileSprite>();
     this.trees = new Array<Phaser.GameObjects.TileSprite>();
+    this.mountain = new Array<Phaser.GameObjects.TileSprite>();
     this.plantInventory = new Array<Phaser.GameObjects.TileSprite>();
     this.cornTubes = new Array<Phaser.GameObjects.TileSprite>();
     this.hempTubes = new Array<Phaser.GameObjects.TileSprite>();
@@ -143,15 +137,7 @@ export default class MainScene extends Phaser.Scene {
     this.forrestGen();
     console.log("inv gen");
     this.generateInventory();
-    this.addInvItem("corn");
-    this.addInvItem("corn");
-    this.addInvItem("corn");
-    this.addInvItem("hemp");
-    this.addInvItem("hemp");
-    this.addInvItem("hemp");
-    this.addInvItem("wheat");
-    this.addInvItem("wheat");
-    this.addInvItem("wheat");
+    
     console.log("creating farm");
     this.createFarm();
     //Check farm size
@@ -175,12 +161,9 @@ export default class MainScene extends Phaser.Scene {
   }
 
   update() {
-    if(this.state == "tutorial"){
-      this.state = "plant mode";
-
-    }
+    
     this.movePlayerManager();
-    this.stateText.text = this.state;
+    this.stateText.text = this.states[this.state];
     this.selector.x = this.planttiles[this.currentFarmIndex].x;
     this.selector.y = this.planttiles[this.currentFarmIndex].y;
     
@@ -261,20 +244,26 @@ export default class MainScene extends Phaser.Scene {
 
   }
   forrestGen(){
-    for(let i = 0; i<32;i++){
-    while(this.forrLocX < 16){  
-    var newForrestTile = this.add.tileSprite(((this.forrLocX + 1) * 32) - 1 , ((this.forrLocY + 1) * 32) - 1, 32, 32, "forrestTile",1);
+    for(let i = 0; i<31;i++){
+    while(this.forrLocX < 511){  
+    var newForrestTile = this.add.tileSprite(this.forrLocX , this.forrLocY, 32, 32, "forrestTile",1);
     this.forrest[this.forrestCount] = newForrestTile;
     this.forrestCount += 1;  
-    var yesNo = Math.floor(((Math.random() * 6) + 1 ));
-    if(yesNo == 1 || yesNo == 3 ||yesNo == 5){
-      this.trees[this.treeCount] = this.add.tileSprite(((this.forrLocX + 1) * 32) - 1 , ((this.forrLocY + 1) * 32) - 1, 32, 32, "Tree")
+    
+    var yesNo = Math.floor(((Math.random() * 10) + 1 ));
+    if(yesNo == 1 || yesNo == 3){
+      this.trees[this.treeCount] = this.add.tileSprite(newForrestTile.x , newForrestTile.y, 32, 32, "Tree")
       this.treeCount += 1;
     }
-    this.forrLocX +=1;
+    else if(yesNo == 2){
+      this.mountain[this.mountainCount] = this.add.tileSprite(newForrestTile.x , newForrestTile.y, 32, 32, "Mountain")
+      this.mountainCount += 1;
+
+    }
+    this.forrLocX +=32;
   }
-  this.forrLocX = 0;
-  this.forrLocY += 1;
+  this.forrLocX = 31;
+  this.forrLocY += 32;
     
     
    // this.timers[i] = this.time.addEvent({ delay: 30000, loop: false, paused: true })
@@ -394,15 +383,13 @@ export default class MainScene extends Phaser.Scene {
   movePlayerManager(){
     if(this.Keys.shift?.isDown){
      // if(this.state == "tutorial"){
-      this.state = "plant mode";
-      this.selector.x = this.planttiles[this.currentFarmIndex].x;
-      this.selector.y = this.planttiles[this.currentFarmIndex].y;
-      this.selector.setVisible(true);
+      this.state += 1;
 
      // }
 
       
     }
+    /*
     else if(this.Keys.space?.isDown){
       if(this.state == "plant mode"){
         this.plantSeed(this.selector.x,this.selector.y,"corn");
@@ -422,93 +409,15 @@ export default class MainScene extends Phaser.Scene {
         }
 
       }
+      */
      
     }
 
 
-  /*
-    if(this.isSeedSet == true){
-
-      if(this.Keys.left?.isDown){
-        this.AE.x = this.AE.x - 4;
-      }
-    
-      else if(this.Keys.right?.isDown) {
-        this.AE.x = this.AE.x + 4;
-       
-      }
-    
-    
-      else if(this.Keys.up?.isDown){
-        this.AE.y = this.AE.y - 4;
-      }
-      else if(this.Keys.down?.isDown){
-        this.AE.y = this.AE.y + 4;
-  
-      }
-
-    }
-
-    /*
-    if(this.Keys.space?.isDown){
-      
-    }
-
-    else if(this.Keys.space?.isDown){
-      
-    }
-
-    if(this.Keys.shift?.isDown){
-      
-    }
-
-
-    if(isAE == true){
-      if(this.Keys.left?.isDown){
-        this.AE.x = this.AE.x - 4;
-      }
-    
-      else if(this.Keys.right?.isDown) {
-        this.AE.x = this.AE.x + 4;
-       
-      }
-    
-    
-      if(this.Keys.up?.isDown){
-        this.AE.y = this.AE.y - 4;
-      }
-      else if(this.Keys.down?.isDown){
-        this.AE.y = this.AE.y + 4;
-  
-      }
-
-    }
-    else{
-      if(this.Keys.left?.isDown){
-        this.CS.x = this.CS.x - 4;
-      }
-    
-      else if(this.Keys.right?.isDown) {
-        this.CS.x = this.CS.x + 4;
-       
-      }
-    
-    
-      if(this.Keys.up?.isDown){
-        this.CS.y = this.CS.y - 4;
-      }
-      else if(this.Keys.down?.isDown){
-        this.CS.y = this.CS.y + 4;
-  
-      }
-
-    }
-    */
-
 
 
     
-    }
+    //}
 
     
   
