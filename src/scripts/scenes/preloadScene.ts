@@ -17,23 +17,20 @@ export default class PreloadScene extends Phaser.Scene {
     this.load.image("bucket", "assets/images/bucket.png");
     this.load.image("pond", "assets/images/pond.png");
     this.load.image("plastic", "assets/images/plastic.png");
-    this.load.spritesheet("forrestTile", "assets/spritesheets/forrestTile.png",{
-      frameWidth: 32,
-      frameHeight: 32
-    });
+    this.load.image("forrestTile", "assets/spritesheets/forrestTile.png");
     
-    this.load.spritesheet("seedsandplants", "assets/spritesheets/seedsandplants.png",{
-      frameWidth: 32,
-      frameHeight: 32
-    });
+    this.load.image("plantsformap", "assets/spritesheets/seedsandplants.png")
     this.load.spritesheet("icons", "assets/spritesheets/icons.png",{
       frameWidth: 32,
       frameHeight: 32
     });
-    this.load.spritesheet("tubing", "assets/spritesheets/tubing.png",{
+    this.load.spritesheet("seedsandplants", "assets/spritesheets/seedsandplants.png",{
       frameWidth: 32,
       frameHeight: 32
     });
+    this.load.image("tubing", "assets/spritesheets/tubing.png");
+    this.load.tilemapTiledJSON("map", "assets/images/autoMap.json");
+    this.load.image("mappedTiles", "assets/images/mappedTiles.png");
 
 
 
