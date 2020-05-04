@@ -104,11 +104,12 @@ export default class MainScene extends Phaser.Scene {
    // this.background = this.add.tileSprite(511, 511, 1024, 1024, "forrestTile",1);
     this.physics.world.setBounds(0,0,1024,1024,true,true);
 
-    this.planttiles = new Array<Phaser.GameObjects.TileSprite>();
+   
     this.groundLayer = this.map.createBlankDynamicLayer("Ground Layer",this.tiles);
     this.forrestLayer = this.map.createBlankDynamicLayer("Forrest",this.tiles);
     this.mountainLayer = this.map.createBlankDynamicLayer("Mountain",this.tiles).setScale(2,2);
-    
+    this.farmLayer = this.map.createBlankDynamicLayer("Farm Layer",this.tiles);
+   
    // this.trees = this.physics.add.group();
     //this.mountain = this.physics.add.group();
     //this.pollution = new Array<Phaser.GameObjects.TileSprite>();
@@ -229,6 +230,7 @@ export default class MainScene extends Phaser.Scene {
       {index: 3, weight: 7},
       {index: 2, weight: 3}
     ]);
+    this.farmLayer.fill(4,17,8,8,6);
     
     for(let i = 0; i<32;){
       var yesNo = Math.floor(((Math.random() * 3) + 1 ));
@@ -237,8 +239,6 @@ export default class MainScene extends Phaser.Scene {
 
         {index: -1, weight: 55},
         {index: 0, weight: 45},
-        
-
 
         ]);
         i+=2;
