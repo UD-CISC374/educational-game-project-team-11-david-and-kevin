@@ -29,7 +29,7 @@ export default class MainScene extends Phaser.Scene {
 
   
   private plantsize: integer;
-  private state: integer;
+  private state: string;
   private states: Array<string>;
   private stateText: Phaser.GameObjects.Text;
   private map: Phaser.Tilemaps.Tilemap;
@@ -37,6 +37,7 @@ export default class MainScene extends Phaser.Scene {
   private forrestLayer: Phaser.Tilemaps.DynamicTilemapLayer;
   private farmLayer: Phaser.Tilemaps.DynamicTilemapLayer;
   private plantLayer: Phaser.Tilemaps.DynamicTilemapLayer;
+  private pondLayer: Phaser.Tilemaps.DynamicTilemapLayer;
   private tubeLayer: Phaser.Tilemaps.DynamicTilemapLayer;
   // private plantLayer: Phaser.Tilemaps.DynamicTilemapLayer;
   private mountainLayer: Phaser.Tilemaps.DynamicTilemapLayer;
@@ -82,9 +83,7 @@ export default class MainScene extends Phaser.Scene {
     this.plasticCount = 0;
     this.plantsize = 0;
     this.states = new Array<string>();
-    this.states = ["tutorial","plant seeds","plant trees","harvest crop","harvest tree","harvest mountain"]
-    this.state = 0;
-    this.stateText = this.add.text(256,1280,this.state.toString(),{ fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' })
+    //this.states = ["tutorial","plant seeds","plant trees","harvest crop","harvest tree","harvest mountain"]
     
 
    
@@ -116,6 +115,8 @@ export default class MainScene extends Phaser.Scene {
     this.farmLayer = this.map.createBlankDynamicLayer("Farm Layer",this.tiles);
     this.plantLayer = this.map.createBlankDynamicLayer("Plant Layer", this.tiles); 
    
+    this.pondLayer = this.map.createBlankDynamicLayer("Pond Layer",this.tiles).setScale(2);
+    
    // this.trees = this.physics.add.group();
     //this.mountain = this.physics.add.group();
     //this.pollution = new Array<Phaser.GameObjects.TileSprite>();
@@ -142,8 +143,11 @@ export default class MainScene extends Phaser.Scene {
 
     //this.physics.add.overlap(this.AE, this.trees, this.harvestTree);
     //this.physics.add.overlap(this.AE, this.mountain, this.harvestMoutain);
-
+      
     this.worldGen();
+    this.state = "paused";
+    this.stateText = this.add.text(256,1280,this.state,{ fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' })
+    
     this.Keys = this.input.keyboard.createCursorKeys();
 
     this.physics.add.overlap(this.AE, this.plantLayer);
@@ -158,7 +162,7 @@ export default class MainScene extends Phaser.Scene {
   update() {
     
     this.movePlayerManager();
-    this.stateText.text = this.states[this.state];
+    this.stateText.text = this.state;
     
     
     
@@ -241,33 +245,44 @@ export default class MainScene extends Phaser.Scene {
     this.farmLayer.fill(4,17,8,8,6);
     this.plantLayer.fill(4,17,8,8,6);
     
-    for(let i = 0; i<32;){
-      var yesNo = Math.floor(((Math.random() * 3) + 1 ));
-      if(yesNo == 1 || yesNo == 2){
-        this.forrestLayer.weightedRandomize(0,i,16,2,[
+    
+
+    var xloc = 0;
+    var yloc = 0;
+
+    while(yloc < 31 && xloc < 31){
+      var yesNo = Math.floor(((Math.random() * 6) + 1 ));
+      if(yesNo == 1 || yesNo == 2 || yesNo == 3){
+        this.forrestLayer.weightedRandomize(xloc,yloc,2,2,[
 
         {index: -1, weight: 55},
         {index: 0, weight: 45},
 
         ]);
-        i+=2;
-
+        xloc +=2;
       }
-      else if(yesNo == 3){
-        this.mountainLayer.putTileAt(27,4,i/2);
-        i+=2;
-
+      else if(yesNo == 4 || yesNo == 5){
+        this.mountainLayer.putTileAt(28,xloc/2,yloc/2);
+        xloc +=2;
+        
       }
+      else if(yesNo == 6){
+        this.pondLayer.putTileAt(38,xloc/2,yloc/2);
+        xloc +=2;
+        
+      }
+      
+      if((xloc >= 15 && yloc < 16) || (xloc >= 32)){
+        xloc = 0;
+        yloc +=2;
+      }
+      
 
-
-    
     }
-    
 
-    
-    
-
-
+    this.forrestLayer.setCollision([0,1]);
+    this.mountainLayer.setCollision(28);
+    this.pondLayer.setCollision(38);
   
 }
 /*
@@ -392,61 +407,43 @@ export default class MainScene extends Phaser.Scene {
 
       
     }
-    if(isAE == true){
-      if(this.Keys.left?.isDown){
-        this.AE.setTexture('AE_left');
-        this.AE.x = this.AE.x - 4;
-      }
     
-      else if(this.Keys.right?.isDown) {
-        this.AE.setTexture('AE');
-        this.AE.x = this.AE.x + 4;
-      }
-    
-    
-      if(this.Keys.up?.isDown){
-        this.AE.y = this.AE.y - 4;
-      }
-      else if(this.Keys.down?.isDown){
-        this.AE.y = this.AE.y + 4;
-  
-      }
-  
-    }
-    else{
-      if(this.Keys.left?.isDown){
-        this.CS.setTexture('CS_left');
-        this.CS.x = this.CS.x - 4;
-      }
-    
-      else if(this.Keys.right?.isDown) {
-        this.CS.setTexture('CS');
-        this.CS.x = this.CS.x + 4;
+   if(this.state == "paused"){
+     if(this.Keys.space?.isDown){
+       this.state = "active";
        
-      }
-    
-    
-      if(this.Keys.up?.isDown){
-        this.CS.y = this.CS.y - 4;
-      }
-      else if(this.Keys.down?.isDown){
-        this.CS.y = this.CS.y + 4;
-  
-      }
-  
+     }
+   }
+   else if(this.state == "active"){
+    if(this.Keys.left?.isDown){
+      this.AE.x-=32;
+      this.state = "paused";
     }
-    
+  
+    else if(this.Keys.right?.isDown) {
+      this.AE.x+=32;
+      this.state = "paused";
      
     }
-
-
-
-
     
-    //}
+  
+  
+    if(this.Keys.up?.isDown){
+      this.AE.y+=32;
+      this.state = "paused";
+    }
+    else if(this.Keys.down?.isDown){
+      this.AE.y-=32;
+      this.state = "paused";
 
+    }
+    
+    
+
+  }
+    
     
   
 }
 
-
+}

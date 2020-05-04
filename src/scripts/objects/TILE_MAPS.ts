@@ -6,7 +6,8 @@ const TILE_MAP = {
     MOUNTAIN: [28, 29],
     BUCKET: 30,
     SEEDS:[31,32,33,34,35,36],
-    PLASTIC: 37
+    PLASTIC: 37,
+    POND: 38
 
 
 
