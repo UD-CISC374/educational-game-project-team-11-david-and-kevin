@@ -103,7 +103,7 @@ export default class MainScene extends Phaser.Scene {
     console.log("generating world");
     
     
-    this.board = this.add.tileSprite(0, 0, this.scale.width, this.scale.height, "board")
+    this.board = this.add.tileSprite(0, 0, this.scale.width - 1, this.scale.height - 1, "board")
     this.board.setOrigin(0, 0);
    // this.background = this.add.tileSprite(511, 511, 1024, 1024, "forrestTile",1);
     this.physics.world.setBounds(0,0,1024,1024,true,true);
