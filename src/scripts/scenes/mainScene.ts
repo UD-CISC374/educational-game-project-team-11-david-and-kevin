@@ -36,6 +36,7 @@ export default class MainScene extends Phaser.Scene {
   private groundLayer: Phaser.Tilemaps.DynamicTilemapLayer;
   private forrestLayer: Phaser.Tilemaps.DynamicTilemapLayer;
   private farmLayer: Phaser.Tilemaps.DynamicTilemapLayer;
+  private pondLayer: Phaser.Tilemaps.DynamicTilemapLayer;
   private tubeLayer: Phaser.Tilemaps.DynamicTilemapLayer;
   private plantsLayer: Phaser.Tilemaps.DynamicTilemapLayer;
   private mountainLayer: Phaser.Tilemaps.DynamicTilemapLayer;
@@ -109,7 +110,8 @@ export default class MainScene extends Phaser.Scene {
     this.forrestLayer = this.map.createBlankDynamicLayer("Forrest",this.tiles);
     this.mountainLayer = this.map.createBlankDynamicLayer("Mountain",this.tiles).setScale(2,2);
     this.farmLayer = this.map.createBlankDynamicLayer("Farm Layer",this.tiles);
-   
+    this.pondLayer = this.map.createBlankDynamicLayer("Pond Layer",this.tiles).setScale(2);
+    
    // this.trees = this.physics.add.group();
     //this.mountain = this.physics.add.group();
     //this.pollution = new Array<Phaser.GameObjects.TileSprite>();
@@ -231,7 +233,41 @@ export default class MainScene extends Phaser.Scene {
       {index: 2, weight: 3}
     ]);
     this.farmLayer.fill(4,17,8,8,6);
-    
+
+    var xloc = 0;
+    var yloc = 0;
+
+    while(yloc < 31 && xloc < 31){
+      var yesNo = Math.floor(((Math.random() * 6) + 1 ));
+      if(yesNo == 1 || yesNo == 2 || yesNo == 3){
+        this.forrestLayer.weightedRandomize(xloc,yloc,2,2,[
+
+        {index: -1, weight: 55},
+        {index: 0, weight: 45},
+
+        ]);
+        xloc +=2;
+      }
+      else if(yesNo == 4 || yesNo == 5){
+        this.mountainLayer.putTileAt(28,xloc/2,yloc/2);
+        xloc +=2;
+        
+      }
+      else if(yesNo == 6){
+        this.pondLayer.putTileAt(38,xloc/2,yloc/2);
+        xloc +=2;
+        
+      }
+      
+      if((xloc >= 15 && yloc < 16) || (xloc >= 32)){
+        xloc = 0;
+        yloc +=2;
+      }
+      
+
+    }
+   /* 
+
     for(let i = 0; i<32;){
       var yesNo = Math.floor(((Math.random() * 3) + 1 ));
       if(yesNo == 1 || yesNo == 2){
@@ -245,7 +281,7 @@ export default class MainScene extends Phaser.Scene {
 
       }
       else if(yesNo == 3){
-        this.mountainLayer.putTileAt(27,4,i/2);
+        this.mountainLayer.putTileAt(28,4,i/2);
         i+=2;
 
       }
@@ -253,6 +289,7 @@ export default class MainScene extends Phaser.Scene {
 
     
     }
+    */
     
 
     
