@@ -60,15 +60,10 @@ export default class MainScene extends Phaser.Scene {
       width: 1024,
       height: 1024});
      this.tiles =this.map.addTilesetImage("mappedTiles");
-    
-   
+
     this.plasticCount = 0;
     this.plantsize = 0;
-    
 
-   
-
-    
     this.curFarmHeight = 160;
     this.curFarmLength = 544;
    
@@ -99,9 +94,9 @@ export default class MainScene extends Phaser.Scene {
     
     console.log("creating farm");
     
-    this.AE = this.physics.add.sprite(768,416,"AE");
+    this.AE = this.physics.add.sprite(543,191,"AE");
     this.AE.setCollideWorldBounds(true);
-    this.CS = this.physics.add.sprite(704,416,"CS");
+    this.CS = this.physics.add.sprite(575,191,"CS");
     this.CS.setCollideWorldBounds(true);
 
     this.worldGen();
@@ -113,6 +108,16 @@ export default class MainScene extends Phaser.Scene {
     this.physics.add.collider(this.pondLayer,this.AE);
     
     this.stateText = this.add.text(256,1280,this.state,{ fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' })
+    
+    this.wheatSeedsCount = 0;
+    
+    this.hempSeedsCount = 0;
+    
+    this.cornSeedsCount = 0;
+   
+    this.mCount = 0;
+    this.wCount = 0;
+   
     
     this.Keys = this.input.keyboard.createCursorKeys();
 
@@ -130,24 +135,6 @@ export default class MainScene extends Phaser.Scene {
     
     
     
-  }
-  createFarm(){
-    var farmtile = this.add.tileSprite(this.curFarmLength,this.curFarmHeight,32,32,"growarea");
-    this.planttiles[0] = farmtile;
-    this.curFarmLength += 32;
-    for(let i = 1; i < 48; i++){
-      
-    var starterSeed = this.add.tileSprite(this.curFarmLength,this.curFarmHeight,32,32,"growarea");
-    this.planttiles[i] = starterSeed;
-    this.curFarmLength += 32;
-
-    if(this.curFarmLength >= 800){
-      this.curFarmLength = 544;
-      this.curFarmHeight += 32;
-    }
-
-    }
-
   }
  
    /*
@@ -206,7 +193,7 @@ export default class MainScene extends Phaser.Scene {
       {index: 3, weight: 7},
       {index: 2, weight: 3}
     ]);
-    this.farmLayer.fill(4,17,8,8,6);
+    this.farmLayer.fill(4,17,4,8,6);
 
     var xloc = 0;
     var yloc = 0;
@@ -242,6 +229,7 @@ export default class MainScene extends Phaser.Scene {
     }
 
     this.forrestLayer.setCollision([0,1]);
+    this.forrestLayer.setTileIndexCallback(0,this.harvestTree,this);
     this.mountainLayer.setCollision(28);
     this.pondLayer.setCollision(38);
 
@@ -337,13 +325,11 @@ export default class MainScene extends Phaser.Scene {
 
 
 
-  harvestTree(AE,tree){
+  harvestTree(){
     
-   // this.currentItem = "wood";
-    tree.destroy;
+    this.forrestLayer.replaceByIndex(0,1,Math.floor(this.AE.x/32),Math.floor(this.AE.y/32),2,2);
     
-
-  }
+}
 
   
 
@@ -359,9 +345,9 @@ export default class MainScene extends Phaser.Scene {
    if(this.state == "paused"){
      if(this.Keys.space?.isDown){
        this.state = "active";
-       var seedStringArr = ["corn", "hemp", "wheat"];
-       var rand = Math.floor(Math.random() * 3);
-       this.plantSeed(this.AE.x,this.AE.y, seedStringArr[rand]);
+      // var seedStringArr = ["corn", "hemp", "wheat"];
+       //var rand = Math.floor(Math.random() * 3);
+       //this.plantSeed(this.AE.x,this.AE.y, seedStringArr[rand]);
        
      }
    }
