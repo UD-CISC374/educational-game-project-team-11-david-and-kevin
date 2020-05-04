@@ -39,6 +39,7 @@ export default class MainScene extends Phaser.Scene {
   private tubeLayer: Phaser.Tilemaps.DynamicTilemapLayer;
   private plantsLayer: Phaser.Tilemaps.DynamicTilemapLayer;
   private mountainLayer: Phaser.Tilemaps.DynamicTilemapLayer;
+  private pondLayer:  Phaser.Tilemaps.DynamicTilemapLayer;
   private plantImages;
   private bucketImages;
   private tubeImages;
@@ -109,7 +110,7 @@ export default class MainScene extends Phaser.Scene {
     this.forrestLayer = this.map.createBlankDynamicLayer("Forrest",this.tiles);
     this.mountainLayer = this.map.createBlankDynamicLayer("Mountain",this.tiles).setScale(2,2);
     this.farmLayer = this.map.createBlankDynamicLayer("Farm Layer",this.tiles);
-   
+    this.pondLayer = this.map.createBlankDynamicLayer("Pond Layer",this.tiles);
    // this.trees = this.physics.add.group();
     //this.mountain = this.physics.add.group();
     //this.pollution = new Array<Phaser.GameObjects.TileSprite>();
@@ -225,15 +226,23 @@ export default class MainScene extends Phaser.Scene {
 
   }
   worldGen(){
+
+    //Makes one of 2 forrest tile images
     this.groundLayer.weightedRandomize(0,0,32,32,[
 
-      {index: 3, weight: 7},
-      {index: 2, weight: 3}
+      {index: 3, weight: 7},//basic forrest tile
+      {index: 2, weight: 3}//forrest tile with flowers
     ]);
-    this.farmLayer.fill(4,17,8,8,6);
-    
+    this.farmLayer.fill(4,17,4,8,6); //Puts farm tiles in tile location 17,4 
+    //                                 and makes its 8 wide and 6 long
+    //forrest and mountain gen by every two steps
+    var xtiles = 0;
+    var ytiles = 0;
+    //while(ytiles != 32 && xtiles != 16){
+
+    //}
     for(let i = 0; i<32;){
-      var yesNo = Math.floor(((Math.random() * 3) + 1 ));
+      var yesNo = Math.floor(((Math.random() * 6) + 1 ));
       if(yesNo == 1 || yesNo == 2){
         this.forrestLayer.weightedRandomize(0,i,16,2,[
 
@@ -245,7 +254,7 @@ export default class MainScene extends Phaser.Scene {
 
       }
       else if(yesNo == 3){
-        this.mountainLayer.putTileAt(27,4,i/2);
+        this.mountainLayer.putTileAt(28,4,i/2);
         i+=2;
 
       }
