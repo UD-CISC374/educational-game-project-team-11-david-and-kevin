@@ -40,21 +40,15 @@ export default class MainScene extends Phaser.Scene {
   private tubeLayer: Phaser.Tilemaps.DynamicTilemapLayer;
   private plantLayer: Phaser.Tilemaps.DynamicTilemapLayer;
   private mountainLayer: Phaser.Tilemaps.DynamicTilemapLayer;
-  private plantImages;
-  private bucketImages;
-  private tubeImages;
-  private pondImages;
-  private plasticImages;
-  private forrestImages: Phaser.Tilemaps.Tileset;
-  private mountainImages: Phaser.Tilemaps.Tileset;;
-  private treeImages: Phaser.Tilemaps.Tileset;
   private tiles: Phaser.Tilemaps.Tileset;
-
+  private lookDirection: string;
+  private facing: Phaser.GameObjects.Text;
   constructor() {
     super({ key: 'MainScene' });
   }
 
   create() {
+    this.lookDirection = "down";
     this.map = this.make.tilemap({tileWidth: 32,
       tileHeight: 32,
       width: 1024,
@@ -94,20 +88,24 @@ export default class MainScene extends Phaser.Scene {
     
     console.log("creating farm");
     
-    this.AE = this.physics.add.sprite(543,191,"AE");
-    this.AE.setCollideWorldBounds(true);
-    this.CS = this.physics.add.sprite(575,191,"CS");
-    this.CS.setCollideWorldBounds(true);
+   
 
     this.worldGen();
     this.state = "paused";
+    var spawn = this.groundLayer.getTileAt(17,4)
+    
+    this.AE = this.physics.add.sprite(spawn.getCenterX(),spawn.getCenterY(),"AE");
+    this.AE.setCollideWorldBounds(true);
+    this.CS = this.physics.add.sprite(spawn.getCenterX() + 32,spawn.getCenterY(),"CS");
+    this.CS.setCollideWorldBounds(true);
     
     
-    this.physics.add.collider(this.forrestLayer,this.AE);
+    this.physics.add.overlap(this.forrestLayer,this.AE);
     this.physics.add.collider(this.mountainLayer,this.AE);
     this.physics.add.collider(this.pondLayer,this.AE);
     
     this.stateText = this.add.text(256,1280,this.state,{ fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' })
+    this.facing = this.add.text(256,1344,"Facing " + this.lookDirection,{ fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' })
     
     this.wheatSeedsCount = 0;
     
@@ -132,6 +130,7 @@ export default class MainScene extends Phaser.Scene {
     
     this.movePlayerManager();
     this.stateText.text = this.state;
+    this.facing.text = this.lookDirection;
     
     
     
@@ -262,8 +261,7 @@ export default class MainScene extends Phaser.Scene {
     }
     else if(type == "wood"){
       this.wCount += 1;
-      this.countArray[3].text = this.wCount.toString;
-    }
+      }
     else if(type == "rock"){
       this.mCount += 1;
       this.countArray[4].text = this.mCount.toString;
@@ -276,6 +274,9 @@ export default class MainScene extends Phaser.Scene {
       this.plasticCount += 1;
       this.countArray[6].text = this.plasticCount.toString;
     }
+
+    this.countArray[3].text = this.wCount;
+    
 
 
 
@@ -326,8 +327,42 @@ export default class MainScene extends Phaser.Scene {
 
 
   harvestTree(){
+    this.forrestLayer.replaceByIndex(0,1,Math.floor(this.AE.x/32),Math.floor(this.AE.y/32),1,1);
+    this.addInvItem("wood");
+    /*
+    if(this.state == "active"){
+      this.state = "paused";
+    if(this.lookDirection == "down"){
+      //this.state = "paused";
+      this.forrestLayer.replaceByIndex(0,1,Math.round(this.AE.x/32),Math.round(this.AE.y/32)-1,1,2);
+      this.addInvItem("wood");
+      
+
+    }
+
+    else if(this.lookDirection == "up"){
+     // this.state = "paused";
+      this.forrestLayer.replaceByIndex(0,1,Math.round(this.AE.x/32),Math.round(this.AE.y/32),1,2);
+      this.addInvItem("wood");
+      
+
+    }
+    else if(this.lookDirection == "left"){
+     // this.state = "paused";
+      this.forrestLayer.replaceByIndex(0,1,Math.round(this.AE.x/32),Math.round(this.AE.y/32),2,1);
+      this.addInvItem("wood");
+
+    }
+    else if(this.lookDirection == "right"){
+      //this.state = "paused";
+      this.forrestLayer.replaceByIndex(0,1,Math.round(this.AE.x/32)-1,Math.round(this.AE.y/32),2,1);
+      this.addInvItem("wood");
+
+    }
     
-    this.forrestLayer.replaceByIndex(0,1,Math.floor(this.AE.x/32),Math.floor(this.AE.y/32),2,2);
+    
+  }
+*/
     
 }
 
@@ -353,25 +388,33 @@ export default class MainScene extends Phaser.Scene {
    }
    else if(this.state == "active"){
     if(this.Keys.left?.isDown){
-      this.AE.x-=32;
       this.state = "paused";
+      this.AE.x-=32;
+      this.lookDirection = "left";
+      
     }
   
     else if(this.Keys.right?.isDown) {
-      this.AE.x+=32;
       this.state = "paused";
+      this.AE.x+=32;
+      this.lookDirection = "right";
+      
      
     }
     
   
   
     if(this.Keys.up?.isDown){
-      this.AE.y-=32;
       this.state = "paused";
+      this.AE.y-=32;
+      this.lookDirection = "up";
+      
     }
     else if(this.Keys.down?.isDown){
-      this.AE.y+=32;
       this.state = "paused";
+      this.AE.y+=32;
+      this.lookDirection = "down";
+      
 
     }
     
