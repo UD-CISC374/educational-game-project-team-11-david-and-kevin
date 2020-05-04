@@ -1,6 +1,6 @@
 //import AEItems from '../objects/aeitems';
 
-
+var isAE = true;
 export default class MainScene extends Phaser.Scene {
   
   private board: Phaser.GameObjects.TileSprite;
@@ -36,8 +36,9 @@ export default class MainScene extends Phaser.Scene {
   private groundLayer: Phaser.Tilemaps.DynamicTilemapLayer;
   private forrestLayer: Phaser.Tilemaps.DynamicTilemapLayer;
   private farmLayer: Phaser.Tilemaps.DynamicTilemapLayer;
+  private plantLayer: Phaser.Tilemaps.DynamicTilemapLayer;
   private tubeLayer: Phaser.Tilemaps.DynamicTilemapLayer;
-  private plantsLayer: Phaser.Tilemaps.DynamicTilemapLayer;
+  // private plantLayer: Phaser.Tilemaps.DynamicTilemapLayer;
   private mountainLayer: Phaser.Tilemaps.DynamicTilemapLayer;
   private plantImages;
   private bucketImages;
@@ -91,6 +92,10 @@ export default class MainScene extends Phaser.Scene {
     
     this.curFarmHeight = 160;
     this.curFarmLength = 544;
+
+    this.cornSeedsCount = Math.floor(Math.random() * 10);
+    this.wheatSeedsCount = Math.floor(Math.random() * 10);
+    this.hempSeedsCount = Math.floor(Math.random() * 10);
    
 
     this.inventory = new Array<Phaser.GameObjects.TileSprite>();
@@ -109,6 +114,7 @@ export default class MainScene extends Phaser.Scene {
     this.forrestLayer = this.map.createBlankDynamicLayer("Forrest",this.tiles);
     this.mountainLayer = this.map.createBlankDynamicLayer("Mountain",this.tiles).setScale(2,2);
     this.farmLayer = this.map.createBlankDynamicLayer("Farm Layer",this.tiles);
+    this.plantLayer = this.map.createBlankDynamicLayer("Plant Layer", this.tiles); 
    
    // this.trees = this.physics.add.group();
     //this.mountain = this.physics.add.group();
@@ -139,6 +145,8 @@ export default class MainScene extends Phaser.Scene {
 
     this.worldGen();
     this.Keys = this.input.keyboard.createCursorKeys();
+
+    this.physics.add.overlap(this.AE, this.plantLayer);
 
 
 
@@ -231,6 +239,7 @@ export default class MainScene extends Phaser.Scene {
       {index: 2, weight: 3}
     ]);
     this.farmLayer.fill(4,17,8,8,6);
+    this.plantLayer.fill(4,17,8,8,6);
     
     for(let i = 0; i<32;){
       var yesNo = Math.floor(((Math.random() * 3) + 1 ));
@@ -308,26 +317,32 @@ export default class MainScene extends Phaser.Scene {
 
   }
   plantSeed(x,y,type: string){
-    if(type == "corn"){
-      var  Plant = this.add.tileSprite(x,y,32,32,"seedsandplants", 1);
+    if(type == "corn" && this.cornSeedsCount > 0){
+      console.log(this.physics.overlap(this.AE, this.farmLayer));
+      Plant = this.add.tileSprite(x,y,32,32,"seedsandplants", 1);
       this.plantInventory[this.plantsize] = Plant;
       this.plantsize += 1;
       this.cornSeedsCount -= 1;
-      this.countArray[0].text = this.cornSeedsCount.toString;
+      console.log("Number: " + this.cornSeedsCount);
+      this.countArray[0].text = this.cornSeedsCount.toString();
+      console.log('PLANTED');
     }
-    else if(type == "wheat"){
+    else if(type == "wheat" && this.wheatSeedsCount > 0){
       var Plant = this.add.tileSprite(x,y,32,32,"seedsandplants", 2);
       this.plantInventory[this.plantsize] = Plant;
       this.plantsize += 1;
       this.wheatSeedsCount -= 1;
-      this.countArray[0].text = this.wheatSeedsCount.toString;
+      this.countArray[0].text = this.wheatSeedsCount.toString();
     }
-    else if(type == "hemp"){
+    else if(type == "hemp" && this.hempSeedsCount > 0){
       var Plant = this.add.tileSprite(x,y,32,32,"seedsandplants", 0);
       this.plantInventory[this.plantsize] = Plant;
       this.plantsize += 1;
       this.hempSeedsCount -= 1;
-      this.countArray[0].text = this.hempSeedsCount.toString;
+      this.countArray[0].text = this.hempSeedsCount.toString();
+    }
+    else{
+      alert('Out of seeds!');
     }
     
 
@@ -370,32 +385,57 @@ export default class MainScene extends Phaser.Scene {
     if(this.Keys.shift?.isDown){
      // if(this.state == "tutorial"){
       this.state += 1;
-
+      var seedStringArr = ["corn", "hemp", "wheat"];
+      var rand = Math.floor(Math.random() * 3);
+      this.plantSeed(this.AE.x,this.AE.y, seedStringArr[rand]);
      // }
 
       
     }
-    /*
-    else if(this.Keys.space?.isDown){
-      if(this.state == "plant mode"){
-        this.plantSeed(this.selector.x,this.selector.y,"corn");
-        this.currentFarmIndex += 1;
+    if(isAE == true){
+      if(this.Keys.left?.isDown){
+        this.AE.setTexture('AE_left');
+        this.AE.x = this.AE.x - 4;
       }
-
+    
+      else if(this.Keys.right?.isDown) {
+        this.AE.setTexture('AE');
+        this.AE.x = this.AE.x + 4;
+      }
+    
+    
+      if(this.Keys.up?.isDown){
+        this.AE.y = this.AE.y - 4;
+      }
+      else if(this.Keys.down?.isDown){
+        this.AE.y = this.AE.y + 4;
+  
+      }
+  
     }
-    else if(this.Keys.right?.isDown) {
-      if(this.state == "plant mode"){
-        if(this.currentFarmIndex < 47){
-          this.currentFarmIndex += 1;
-        }
-        else{
-          this.currentFarmIndex = 0;
-          this.selector.x = this.planttiles[this.currentFarmIndex].x;
-          this.selector.y = this.planttiles[this.currentFarmIndex].y;
-        }
-
+    else{
+      if(this.Keys.left?.isDown){
+        this.CS.setTexture('CS_left');
+        this.CS.x = this.CS.x - 4;
       }
-      */
+    
+      else if(this.Keys.right?.isDown) {
+        this.CS.setTexture('CS');
+        this.CS.x = this.CS.x + 4;
+       
+      }
+    
+    
+      if(this.Keys.up?.isDown){
+        this.CS.y = this.CS.y - 4;
+      }
+      else if(this.Keys.down?.isDown){
+        this.CS.y = this.CS.y + 4;
+  
+      }
+  
+    }
+    
      
     }
 
