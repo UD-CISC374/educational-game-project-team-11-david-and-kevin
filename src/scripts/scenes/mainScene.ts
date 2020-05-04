@@ -29,7 +29,7 @@ export default class MainScene extends Phaser.Scene {
 
   
   private plantsize: integer;
-  private state: integer;
+  private state: string;
   private states: Array<string>;
   private stateText: Phaser.GameObjects.Text;
   private map: Phaser.Tilemaps.Tilemap;
@@ -82,9 +82,7 @@ export default class MainScene extends Phaser.Scene {
     this.plasticCount = 0;
     this.plantsize = 0;
     this.states = new Array<string>();
-    this.states = ["tutorial","plant seeds","plant trees","harvest crop","harvest tree","harvest mountain"]
-    this.state = 0;
-    this.stateText = this.add.text(256,1280,this.state.toString(),{ fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' })
+    //this.states = ["tutorial","plant seeds","plant trees","harvest crop","harvest tree","harvest mountain"]
     
 
    
@@ -138,8 +136,11 @@ export default class MainScene extends Phaser.Scene {
 
     //this.physics.add.overlap(this.AE, this.trees, this.harvestTree);
     //this.physics.add.overlap(this.AE, this.mountain, this.harvestMoutain);
-
+      
     this.worldGen();
+    this.state = "paused";
+    this.stateText = this.add.text(256,1280,this.state,{ fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' })
+    
     this.Keys = this.input.keyboard.createCursorKeys();
 
 
@@ -152,7 +153,7 @@ export default class MainScene extends Phaser.Scene {
   update() {
     
     this.movePlayerManager();
-    this.stateText.text = this.states[this.state];
+    this.stateText.text = this.state;
     
     
     
@@ -266,36 +267,10 @@ export default class MainScene extends Phaser.Scene {
       
 
     }
-   /* 
 
-    for(let i = 0; i<32;){
-      var yesNo = Math.floor(((Math.random() * 3) + 1 ));
-      if(yesNo == 1 || yesNo == 2){
-        this.forrestLayer.weightedRandomize(0,i,16,2,[
-
-        {index: -1, weight: 55},
-        {index: 0, weight: 45},
-
-        ]);
-        i+=2;
-
-      }
-      else if(yesNo == 3){
-        this.mountainLayer.putTileAt(28,4,i/2);
-        i+=2;
-
-      }
-
-
-    
-    }
-    */
-    
-
-    
-    
-
-
+    this.forrestLayer.setCollision([0,1]);
+    this.mountainLayer.setCollision(28);
+    this.pondLayer.setCollision(38);
   
 }
 /*
@@ -404,46 +379,42 @@ export default class MainScene extends Phaser.Scene {
 
 
   movePlayerManager(){
-    if(this.Keys.shift?.isDown){
-     // if(this.state == "tutorial"){
-      this.state += 1;
-
-     // }
-
-      
+   if(this.state == "paused"){
+     if(this.Keys.space?.isDown){
+       this.state = "active";
+       
+     }
+   }
+   else if(this.state == "active"){
+    if(this.Keys.left?.isDown){
+      this.AE.x-=32;
+      this.state = "paused";
     }
-    /*
-    else if(this.Keys.space?.isDown){
-      if(this.state == "plant mode"){
-        this.plantSeed(this.selector.x,this.selector.y,"corn");
-        this.currentFarmIndex += 1;
-      }
-
-    }
+  
     else if(this.Keys.right?.isDown) {
-      if(this.state == "plant mode"){
-        if(this.currentFarmIndex < 47){
-          this.currentFarmIndex += 1;
-        }
-        else{
-          this.currentFarmIndex = 0;
-          this.selector.x = this.planttiles[this.currentFarmIndex].x;
-          this.selector.y = this.planttiles[this.currentFarmIndex].y;
-        }
-
-      }
-      */
+      this.AE.x+=32;
+      this.state = "paused";
      
     }
-
-
-
-
     
-    //}
+  
+  
+    if(this.Keys.up?.isDown){
+      this.AE.y+=32;
+      this.state = "paused";
+    }
+    else if(this.Keys.down?.isDown){
+      this.AE.y-=32;
+      this.state = "paused";
 
+    }
+    
+    
+
+  }
+    
     
   
 }
 
-
+}
