@@ -6,6 +6,8 @@ export default class MainScene extends Phaser.Scene {
   private board: Phaser.GameObjects.TileSprite;
   private CS: Phaser.Physics.Arcade.Sprite;
   private AE: Phaser.Physics.Arcade.Sprite;
+  private AES: Phaser.Physics.Arcade.Sprite;
+  private CSS: Phaser.Physics.Arcade.Sprite;
   private planttiles: Array<Phaser.GameObjects.TileSprite>;
 
   private Keys: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -49,6 +51,7 @@ export default class MainScene extends Phaser.Scene {
   private mountainImages: Phaser.Tilemaps.Tileset;;
   private treeImages: Phaser.Tilemaps.Tileset;
   private tiles: Phaser.Tilemaps.Tileset;
+  private isAE : boolean; 
 
   constructor() {
     super({ key: 'MainScene' });
@@ -66,6 +69,7 @@ export default class MainScene extends Phaser.Scene {
 
     this.curFarmHeight = 160;
     this.curFarmLength = 544;
+    this.isAE = true;
    
 
     this.inventory = new Array<Phaser.GameObjects.TileSprite>();
@@ -94,10 +98,68 @@ export default class MainScene extends Phaser.Scene {
     
     console.log("creating farm");
     
-    this.AE = this.physics.add.sprite(543,191,"AE");
+    // this.AE = this.physics.add.sprite(543,191,"AE")
+    // this.AE.setCollideWorldBounds(true);
+    // this.CS = this.physics.add.sprite(575,191,"CS");
+    // this.CS.setCollideWorldBounds(true);
+
+    this.AE = this.physics.add.sprite(543,191,"AES", 6).setScale(1.3);;
+    this.anims.create({
+      key: 'walk_up',
+      repeat: 0,
+      frameRate: 5, 
+      frames: this.anims.generateFrameNames('AES', {start: 0, end: 2})
+    });
+    this.anims.create({
+      key: 'walk_left',
+      repeat: 0,
+      frameRate: 5, 
+      frames: this.anims.generateFrameNames('AES', {start: 3, end: 5})
+    });
+    this.anims.create({
+      key: 'walk_right',
+      repeat: 0,
+      frameRate: 5, 
+      frames: this.anims.generateFrameNames('AES', {start: 6, end: 8})
+    });
+    this.anims.create({
+      key: 'walk_down',
+      repeat: 0,
+      frameRate: 5, 
+      frames: this.anims.generateFrameNames('AES', {start: 9, end: 11})
+    });
+    
     this.AE.setCollideWorldBounds(true);
-    this.CS = this.physics.add.sprite(575,191,"CS");
+
+    this.CS = this.physics.add.sprite(575,191,"CSS", 6).setScale(1.3);;
+    this.anims.create({
+      key: 'Cwalk_up',
+      repeat: 0,
+      frameRate: 5, 
+      frames: this.anims.generateFrameNames('CSS', {start: 0, end: 2})
+    });
+    this.anims.create({
+      key: 'Cwalk_left',
+      repeat: 0,
+      frameRate: 5, 
+      frames: this.anims.generateFrameNames('CSS', {start: 3, end: 5})
+    });
+    this.anims.create({
+      key: 'Cwalk_right',
+      repeat: 0,
+      frameRate: 5, 
+      frames: this.anims.generateFrameNames('CSS', {start: 6, end: 8})
+    });
+    this.anims.create({
+      key: 'Cwalk_down',
+      repeat: 0,
+      frameRate: 5, 
+      frames: this.anims.generateFrameNames('CSS', {start: 9, end: 11})
+    });
+    
     this.CS.setCollideWorldBounds(true);
+
+
 
     this.worldGen();
     this.state = "paused";
@@ -342,6 +404,7 @@ export default class MainScene extends Phaser.Scene {
 
 
   movePlayerManager(){
+   // console.log(this.isAE);
    if(this.state == "paused"){
      if(this.Keys.space?.isDown){
        this.state = "active";
@@ -351,30 +414,72 @@ export default class MainScene extends Phaser.Scene {
        
      }
    }
+   else if(this.Keys.shift?.isDown){
+     if(this.isAE == true){
+       this.isAE = false;
+     }
+     else if(this.isAE == false){
+      this.isAE = true;
+     }
+   }
    else if(this.state == "active"){
-    if(this.Keys.left?.isDown){
-      this.AE.x-=32;
-      this.state = "paused";
-    }
-  
-    else if(this.Keys.right?.isDown) {
-      this.AE.x+=32;
-      this.state = "paused";
-     
-    }
+    if(this.isAE == true){
+      if(this.Keys.left?.isDown){
+        this.AE.x-=32;
+        this.AE.play('walk_left');
+        this.state = "paused";
+      }
     
+      else if(this.Keys.right?.isDown) {
+        this.AE.x+=32;
+        this.AE.play('walk_down');
+        
+        this.state = "paused";
+      }
+      
+    
+    
+      if(this.Keys.up?.isDown){
+        this.AE.y-=32;
+        this.AE.play('walk_up');
+        this.state = "paused";
+      }
+      else if(this.Keys.down?.isDown){
+        this.AE.y+=32;
+        this.AE.play('walk_right');
+        this.state = "paused";
   
-  
-    if(this.Keys.up?.isDown){
-      this.AE.y-=32;
-      this.state = "paused";
+      }
     }
-    else if(this.Keys.down?.isDown){
-      this.AE.y+=32;
-      this.state = "paused";
+    else{
+      // alert('SWITCHED OCCURED');
+      if(this.Keys.left?.isDown){
+        this.CS.x-=32;
+        this.CS.play('Cwalk_left');
+        this.state = "paused";
+      }
+    
+      else if(this.Keys.right?.isDown) {
+        this.CS.x+=32;
+        this.CS.play('Cwalk_down');
+        
+        this.state = "paused";
+      }
+      
+    
+    
+      if(this.Keys.up?.isDown){
+        this.CS.y-=32;
+        this.CS.play('Cwalk_up');
+        this.state = "paused";
+      }
+      else if(this.Keys.down?.isDown){
+        this.CS.y+=32;
+        this.CS.play('Cwalk_right');
+        this.state = "paused";
+      }
 
     }
-    
     
 
   }
