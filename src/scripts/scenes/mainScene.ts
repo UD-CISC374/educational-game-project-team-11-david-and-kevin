@@ -32,8 +32,10 @@ export default class MainScene extends Phaser.Scene {
   
   private plantsize: integer;
   private state: string;
+  private char: string; 
   private states: Array<string>;
   private stateText: Phaser.GameObjects.Text;
+  private charText: Phaser.GameObjects.Text;
   private map: Phaser.Tilemaps.Tilemap;
   private groundLayer: Phaser.Tilemaps.DynamicTilemapLayer;
   private forrestLayer: Phaser.Tilemaps.DynamicTilemapLayer;
@@ -70,10 +72,12 @@ export default class MainScene extends Phaser.Scene {
     this.curFarmHeight = 160;
     this.curFarmLength = 544;
     this.isAE = true;
+
+    
    
 
     this.inventory = new Array<Phaser.GameObjects.TileSprite>();
-   this.plantInventory = new Array<Phaser.GameObjects.TileSprite>();
+    this.plantInventory = new Array<Phaser.GameObjects.TileSprite>();
      this.countArray = new Array<Phaser.GameObjects.Text>();
     console.log("generating world");
     
@@ -103,7 +107,7 @@ export default class MainScene extends Phaser.Scene {
     // this.CS = this.physics.add.sprite(575,191,"CS");
     // this.CS.setCollideWorldBounds(true);
 
-    this.AE = this.physics.add.sprite(543,191,"AES", 6).setScale(1.3);;
+    this.AE = this.physics.add.sprite(575,191,"AES", 6).setScale(1.3);
     this.anims.create({
       key: 'walk_up',
       repeat: 0,
@@ -131,7 +135,7 @@ export default class MainScene extends Phaser.Scene {
     
     this.AE.setCollideWorldBounds(true);
 
-    this.CS = this.physics.add.sprite(575,191,"CSS", 6).setScale(1.3);;
+    this.CS = this.physics.add.sprite(575,100,"CSS", 6).setScale(1.3);;
     this.anims.create({
       key: 'Cwalk_up',
       repeat: 0,
@@ -163,19 +167,23 @@ export default class MainScene extends Phaser.Scene {
 
     this.worldGen();
     this.state = "paused";
-    
+    this.char = "AE";
     
     this.physics.add.collider(this.forrestLayer,this.AE);
     this.physics.add.collider(this.mountainLayer,this.AE);
     this.physics.add.collider(this.pondLayer,this.AE);
     
     this.stateText = this.add.text(256,1280,this.state,{ fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' })
+    this.charText = this.add.text(256,1350,this.char,{ fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' })
+  
     
-    this.wheatSeedsCount = 0;
-    
-    this.hempSeedsCount = 0;
-    
-    this.cornSeedsCount = 0;
+    this.wheatSeedsCount = 10;
+    this.hempSeedsCount = 10;
+    this.cornSeedsCount = 10;
+
+    this.countArray[0].text = this.cornSeedsCount.toString();
+    this.countArray[1].text = this.hempSeedsCount.toString();
+    this.countArray[2].text = this.wheatSeedsCount.toString();
    
     this.mCount = 0;
     this.wCount = 0;
@@ -245,7 +253,6 @@ export default class MainScene extends Phaser.Scene {
 
       for(let i = 0;i<7;i++){
         this.countArray[i] = this.add.text(this.inventory[i].x + 64,this.inventory[i].y,"0",{ fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' })  
-    
       }
 
   }
@@ -256,6 +263,7 @@ export default class MainScene extends Phaser.Scene {
       {index: 2, weight: 3}
     ]);
     this.farmLayer.fill(4,17,4,8,6);
+    this.plantLayer.fill(4,17,4,8,6);
 
     var xloc = 0;
     var yloc = 0;
@@ -292,6 +300,10 @@ export default class MainScene extends Phaser.Scene {
 
     this.forrestLayer.setCollision([0,1]);
     this.forrestLayer.setTileIndexCallback(0,this.harvestTree,this);
+    
+    this.plantLayer.setCollision(4);
+    this.plantLayer.setTileIndexCallback(4,this.testPlantLayer,this);
+    
     this.mountainLayer.setCollision(28);
     this.pondLayer.setCollision(38);
 
@@ -344,11 +356,17 @@ export default class MainScene extends Phaser.Scene {
 
 
   }
- plantSeed(x,y,type: string){
-      if(type == "corn" && this.cornSeedsCount > 0){
-        console.log(this.physics.overlap(this.AE, this.farmLayer));
-        Plant = this.add.tileSprite(x,y,32,32,"seedsandplants", 1);
-        this.plantInventory[this.plantsize] = Plant;
+
+testPlantLayer(){
+  alert('WORKS');
+  }
+
+ plantSeed(type: string){
+      if(type == "corn" && this.cornSeedsCount){
+         // console.log(this.physics.overlap(this.AE, this.farmLayer));
+        // Plant = this.add.tileSprite(x,y,32,32,"seedsandplants", 1);
+        this.plantLayer.replaceByIndex(4,35,Math.floor(this.AE.x/32),Math.floor(this.AE.y/32),2,2);
+        // this.plantInventory[this.plantsize] = Plant;
         this.plantsize += 1;
         this.cornSeedsCount -= 1;
         console.log("Number: " + this.cornSeedsCount);
@@ -356,15 +374,17 @@ export default class MainScene extends Phaser.Scene {
         console.log('PLANTED');
       }
       else if(type == "wheat" && this.wheatSeedsCount > 0){
-        var Plant = this.add.tileSprite(x,y,32,32,"seedsandplants", 2);
-        this.plantInventory[this.plantsize] = Plant;
+        // var Plant = this.add.tileSprite(x,y,32,32,"seedsandplants", 2);
+        this.plantLayer.replaceByIndex(4,36,Math.floor(this.AE.x/32),Math.floor(this.AE.y/32),2,2);
+        // this.plantInventory[this.plantsize] = Plant;
         this.plantsize += 1;
         this.wheatSeedsCount -= 1;
         this.countArray[0].text = this.wheatSeedsCount.toString();
       }
       else if(type == "hemp" && this.hempSeedsCount > 0){
-        var Plant = this.add.tileSprite(x,y,32,32,"seedsandplants", 0);
-        this.plantInventory[this.plantsize] = Plant;
+        // var Plant = this.add.tileSprite(x,y,32,32,"seedsandplants", 0);
+        this.plantLayer.replaceByIndex(4,34,Math.floor(this.AE.x/32),Math.floor(this.AE.y/32),2,2);
+        // this.plantInventory[this.plantsize] = Plant;
         this.plantsize += 1;
         this.hempSeedsCount -= 1;
         this.countArray[0].text = this.hempSeedsCount.toString();
@@ -414,16 +434,24 @@ export default class MainScene extends Phaser.Scene {
        
      }
    }
-   else if(this.Keys.shift?.isDown){
-     if(this.isAE == true){
-       this.isAE = false;
+   if(this.Keys.shift?.isDown){
+     this.plantSeed("corn"); 
+   }
+   /*
+   if(this.Keys.shift?.isDown){
+     // alert('SHIFT PRESSED!');
+     if(this.char == "AE"){
+       this.char = "CS";
+       this.charText.setText("CS");
      }
-     else if(this.isAE == false){
-      this.isAE = true;
+     else if(this.char == "CS"){
+      this.char = "AE";
+      this.charText.setText("AE");
      }
    }
+   */
    else if(this.state == "active"){
-    if(this.isAE == true){
+    if(this.char == "AE"){
       if(this.Keys.left?.isDown){
         this.AE.x-=32;
         this.AE.play('walk_left');
@@ -451,7 +479,7 @@ export default class MainScene extends Phaser.Scene {
   
       }
     }
-    else{
+    else if(this.char == "CS"){
       // alert('SWITCHED OCCURED');
       if(this.Keys.left?.isDown){
         this.CS.x-=32;
