@@ -28,6 +28,17 @@ export default class PreloadScene extends Phaser.Scene {
       frameWidth: 32,
       frameHeight: 32
     });
+
+    this.load.spritesheet("AES", "assets/spritesheets/AE_sprites.png",{
+      frameWidth: 32,
+      frameHeight: 32
+    });
+    this.load.spritesheet("CSS", "assets/spritesheets/CS_sprites.png",{
+      frameWidth: 32,
+      frameHeight: 32
+    });
+
+
     this.load.image("tubing", "assets/spritesheets/tubing.png");
     this.load.tilemapTiledJSON("map", "assets/images/autoMap.json");
     this.load.image("mappedTiles", "assets/images/mappedTiles.png");
