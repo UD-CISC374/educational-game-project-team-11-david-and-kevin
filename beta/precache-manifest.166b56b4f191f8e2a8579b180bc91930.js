@@ -76,12 +76,20 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/educational-game-project-team-11-david-and-kevin/betaassets/spritesheets/AE.png"
   },
   {
+    "revision": "04b302c3f89bc0a44ddc579ce354926f",
+    "url": "/educational-game-project-team-11-david-and-kevin/betaassets/spritesheets/AE_sprites.png"
+  },
+  {
     "revision": "1e27e93bcb2fd9b82661b8054e31a700",
     "url": "/educational-game-project-team-11-david-and-kevin/betaassets/spritesheets/BasicMapTiles.png"
   },
   {
     "revision": "96e4d0c0283eba0eee45713c1cbcd786",
     "url": "/educational-game-project-team-11-david-and-kevin/betaassets/spritesheets/CS.png"
+  },
+  {
+    "revision": "342e479a3b641d829d5cdd544c70633c",
+    "url": "/educational-game-project-team-11-david-and-kevin/betaassets/spritesheets/CS_sprites.png"
   },
   {
     "revision": "374ee56ae71305e036e5f5929be2e8ee",
@@ -104,15 +112,15 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/educational-game-project-team-11-david-and-kevin/betafavicon.ico"
   },
   {
-    "revision": "f9e006f048196053d27d",
-    "url": "/educational-game-project-team-11-david-and-kevin/betagen.main.06ec5e0d62291c94fa51.bundle.js"
+    "revision": "8f76906616ad0ed2c630",
+    "url": "/educational-game-project-team-11-david-and-kevin/betagen.main.4fd244fb5ca36f3c16e8.bundle.js"
   },
   {
     "revision": "5e69403aa42e950fedff",
     "url": "/educational-game-project-team-11-david-and-kevin/betagen.vendors.0805bb80903235d40eaf.bundle.js"
   },
   {
-    "revision": "97364b9628baff9a3458c6fd71fc73a4",
+    "revision": "0ca9b9e042fe4006ec04e11baae76bd7",
     "url": "/educational-game-project-team-11-david-and-kevin/betaindex.html"
   },
   {
