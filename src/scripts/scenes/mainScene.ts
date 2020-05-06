@@ -15,9 +15,7 @@ export default class MainScene extends Phaser.Scene {
  
   private mCount;
   private wCount;
- 
-  private curFarmHeight: integer;
-  private curFarmLength: integer;
+
 
   private inventory: Array<Phaser.GameObjects.TileSprite>;
   private countArray: Array<Phaser.GameObjects.Text>;
@@ -45,6 +43,18 @@ export default class MainScene extends Phaser.Scene {
   private facing: Phaser.GameObjects.Text;
   private player: string;
   private mode: string;
+  private mode1: string;
+  private mode2: string;
+  private mode3: string;
+  private currentMode: Phaser.GameObjects.TileSprite;
+  private currentModeIndex: integer;
+  private currentItemIndex: integer;
+  private controls: Phaser.Tilemaps.DynamicTilemapLayer;
+  private previous: Phaser.Tilemaps.Tile;
+  private current: Phaser.Tilemaps.Tile;
+  private next: Phaser.Tilemaps.Tile;
+
+
 
   constructor() {
     super({ key: 'MainScene' });
@@ -54,8 +64,8 @@ export default class MainScene extends Phaser.Scene {
     this.lookDirection = "down";
     this.map = this.make.tilemap({tileWidth: 32,
       tileHeight: 32,
-      width: 1024,
-      height: 1024});
+      width: 48,
+      height: 48});
      this.tiles =this.map.addTilesetImage("mappedTiles");
 
 
@@ -77,7 +87,8 @@ export default class MainScene extends Phaser.Scene {
     this.farmLayer = this.map.createBlankDynamicLayer("Farm Layer",this.tiles);
     this.plantLayer = this.map.createBlankDynamicLayer("Plant Layer", this.tiles); 
     this.pondLayer = this.map.createBlankDynamicLayer("Pond Layer",this.tiles).setScale(2);
-    
+    this.controls = this.map.createBlankDynamicLayer("Controls",this.tiles);
+  
      //console.log("forrest gen");
    
     //console.log("inv gen");
@@ -88,10 +99,17 @@ export default class MainScene extends Phaser.Scene {
    
 
     this.worldGen();
-    this.state = "paused";
+    this.state = "active";
     this.player = "AE";
-    this.mode = "Collect";
-    var spawn = this.groundLayer.getTileAt(17,4)
+    
+    this.mode1 = "Collect";
+    this.mode2 = "Harvest";
+    this.mode3 = "Plant";
+    this.mode = this.mode1;
+    var spawn = this.groundLayer.getTileAt(17,14);
+   
+    this.currentModeIndex = 7;
+    
     
     this.AE = this.physics.add.sprite(spawn.getCenterX(),spawn.getCenterY(),"AE");
     this.AE.setCollideWorldBounds(true);
@@ -116,13 +134,28 @@ export default class MainScene extends Phaser.Scene {
     this.status[4] = this.add.text(1023,191,"State: " ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
     this.status[5] = this.add.text(1151,191,this.state ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
     
-    this.status[4] = this.add.text(1023,255,"Actions: " ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
-    this.status[5] = this.add.text(1051,255,"Plant" ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
-    this.status[6] = this.add.text(1051,319,"Harvest" ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
-    this.status[7] = this.add.text(1051,383,"Collect" ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
+    this.status[6] = this.add.text(1023,255,"Modes: " ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
+    this.status[7] = this.add.text(1279,255,this.mode1 + " 1" ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
     
+    this.status[8] = this.add.text(1279,319,this.mode2 + " 2" ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
+    this.status[9] = this.add.text(1279,383,this.mode3 + " 3",{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
     
+    this.status[10] = this.add.text(1407,255,"1" ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
+    this.status[11] = this.add.text(1407,319,"2" ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
+    
+     this.status[12] = this.add.text(1407,383,"3" ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
+    this.status[13] = this.add.text(1151,575,"Current Item" ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
+   this.status[14] =this.add.text(1023,703,"Press C: Computer Scientist" ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
+   
+   this.status[15] = this.add.text(1023,767,"Arrow keys to move" ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
+    this.status[16] = this.add.text(1151,639,"Spacebar" ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
+   this.status[17] =this.add.text(1023,831,"More instructions to come" ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
+   
 
+   // this.previous = this.controls.putTileAt(31,32,19);
+   this.current = this.controls.putTileAt(32,38,19);
+   //this.next = this.controls.putTileAt(33,46,19);
+  
     this.wheatSeedsCount = 0;
     
     this.hempSeedsCount = 0;
@@ -137,23 +170,170 @@ export default class MainScene extends Phaser.Scene {
     
     this.Keys = this.input.keyboard.createCursorKeys();
 
+    this.input.keyboard.on('keyup-C', (event) =>{
+        
+      this.playerSwitch("CS");
+    
 
+})
+
+this.input.keyboard.on('keyup-A', (event) =>{
+ 
+    this.playerSwitch("AE");
+  
+
+})
+
+this.input.keyboard.on('keyup-ONE', (event) =>{
+ 
+this.modeChange(1);
+
+
+})
+this.input.keyboard.on('keyup-TWO', (event) =>{
+ 
+this.modeChange(2);
+
+
+})
+this.input.keyboard.on('keyup-THREE', (event) =>{
+ 
+this.modeChange(3);
+
+
+})
+
+    this.setControls();
+
+  
 
 
     
 
   }
 
+  modeChange(mode: integer){
+      if(mode == 1){
+        this.mode = this.mode1;
+      }
+      else if(mode == 2){
+        this.mode = this.mode2;
+      }
+      else if(mode == 3){
+        this.mode = this.mode3;
+      }
+
+
+  }
+
   update() {
     
-    this.movePlayerManager();
+   // this.movePlayerManager();
     this.status[1].text = this.player;
     this.status[3].text = this.mode;
     this.status[5].text = this.state;
+    this.status[7].text = this.mode1;
+    this.status[8].text = this.mode2;
+    this.status[9].text = this.mode3;
     this.facing.text = this.lookDirection;
     
     
     
+  }
+
+  setControls(){
+    
+    this.input.keyboard.removeListener('keyup-RIGHT');
+      this.input.keyboard.removeListener('keyup-LEFT');
+      this.input.keyboard.removeListener('keyup-UP');
+      this.input.keyboard.removeListener('keyup-DOWN');
+    if(this.player == "AE"){
+      
+     
+      this.input.keyboard.on('keyup-RIGHT', (event) =>{
+        if(this.state == "active"){
+        this.AE.x +=32;
+        this.lookDirection = "right";
+        }
+        else if(this.state == "paused"){
+          this.switchIndex("right");
+
+        }
+
+      })
+      this.input.keyboard.on('keyup-LEFT', (event) =>{
+        if(this.state == "active"){
+        this.AE.x -=32;
+        this.lookDirection = "left";
+        }
+        else if(this.state == "paused"){
+          this.switchIndex("left");
+
+        }
+
+      })
+      this.input.keyboard.on('keyup-UP', (event) =>{
+        if(this.state == "active"){
+        this.AE.y -=32;
+        this.lookDirection = "up";
+        }
+        
+
+      })
+      this.input.keyboard.on('keyup-DOWN', (event) =>{
+        if(this.state == "active"){
+        this.AE.y +=32;
+        this.lookDirection = "down";
+        }
+        
+
+      })
+
+    }
+    else if(this.player=="CS"){
+      
+      this.input.keyboard.on('keyup-RIGHT', (event) =>{
+        if(this.state == "active"){
+        this.CS.x +=32;
+        this.lookDirection = "right";
+        }
+        else if(this.state == "paused"){
+          this.switchIndex("right");
+
+        }
+
+      })
+      this.input.keyboard.on('keyup-LEFT', (event) =>{
+        if(this.state == "active"){
+        this.CS.x -=32;
+        this.lookDirection = "left";
+        }
+        else if(this.state == "paused"){
+          this.switchIndex("left");
+
+        }
+
+      })
+      this.input.keyboard.on('keyup-UP', (event) =>{
+        if(this.state == "active"){
+        this.CS.y -=32;
+        this.lookDirection = "up";
+        }
+        
+
+      })
+      this.input.keyboard.on('keyup-DOWN', (event) =>{
+        if(this.state == "active"){
+        this.CS.y +=32;
+        this.lookDirection = "down";
+        }
+        
+
+      })
+    
+    }
+
+
   }
 
 
@@ -200,6 +380,7 @@ export default class MainScene extends Phaser.Scene {
       {index: 2, weight: 3}
     ]);
     this.farmLayer.fill(4,17,4,8,6);
+    
 
     var xloc = 0;
     var yloc = 0;
@@ -262,11 +443,11 @@ export default class MainScene extends Phaser.Scene {
     }
     else if(type == "hemp"){
       this.hempSeedsCount += 1;
-      this.countArray[1].text = this.hempSeedsCount.toString;
+      this.countArray[1].text = this.hempSeedsCount;
     }
     else if(type == "wheat"){
       this.wheatSeedsCount += 1;
-      this.countArray[2].text = this.wheatSeedsCount.toString;
+      this.countArray[2].text = this.wheatSeedsCount;
     }
     else if(type == "wood"){
       this.wCount += 1;
@@ -274,15 +455,15 @@ export default class MainScene extends Phaser.Scene {
       }
     else if(type == "rock"){
       this.mCount += 1;
-      this.countArray[4].text = this.mCount.toString;
+      this.countArray[4].text = this.mCount;
     }
     else if(type == "water"){
       this.bucketCount += 1;
-      this.countArray[5].text = this.bucketCount.toString;
+      this.countArray[5].text = this.bucketCount;
     }
     else if(type == "plastic"){
       this.plasticCount += 1;
-      this.countArray[6].text = this.plasticCount.toString;
+      this.countArray[6].text = this.plasticCount;
     }
 
     
@@ -319,7 +500,7 @@ export default class MainScene extends Phaser.Scene {
         this.countArray[0].text = this.hempSeedsCount.toString();
       }
       else{
-        alert('Out of seeds!');
+        //alert('Out of seeds!');
       }
       
   
@@ -352,55 +533,151 @@ export default class MainScene extends Phaser.Scene {
 
   }
 
+  playerSwitch(player: string){
+    if(player == "CS"){
+      this.mode1 = "Build";
+      this.mode2 = "Set";
+      this.mode3 = "Filter";
+      this.mode = this.mode1;
+      this.player = "CS";
+      this.current.index = 5;
+      this.currentItemIndex = 5;
+      this.status[14].text = "Press A: Agricultural Engineer"
+    }
+    else if(player == "AE"){
+      this.mode1 = "Collect";
+      this.mode2 = "Plant";
+      this.mode3 = "Harvest";
+      this.mode = this.mode1;
+      this.player = "AE";
+      this.current.index = 32;
+      this.status[14].text = "Press C: Computer Scientist"
+    
+  }
+  this.setControls();
+}
+
+
+  switchIndex(direction:string){
+
+
+    if(direction == "right"){
+    if(this.player == "AE"){
+
+      this.current.index += 1;
+      if(this.current.index == 34){
+        this.current.index = 31;
+
+      }
+    }
+      else if(this.player == "CS"){
+
+        this.current.index += 1;
+        if(this.current.index == 27){
+          this.current.index = 5;
+  
+        }
+      
+    }
+  }
+    else if(direction == "left"){
+      if(this.player == "AE"){
+
+        this.current.index -= 1;
+        if(this.current.index == 30){
+          this.current.index = 33;
+  
+        }
+      }
+        else if(this.player == "CS"){
+  
+          this.current.index -= 1;
+          if(this.current.index == 4){
+            this.current.index = 27;
+    
+          }
+        
+      }
+
+    }
+  }
+ 
+
+
+  
+
+
 
   movePlayerManager(){
-   if(this.state == "paused"){
-     if(this.Keys.space?.isDown){
-       this.state = "active";
+   /*
+      
+      if(this.Keys.shift?.isDown && this.player == "AE"){
+        
+          if(this.state == "active"){
+            this.state = "paused";
+          }
+          else{
+            this.playerSwitch("CS");
+
+          }
+          
+        }
+        else if(this.Keys.shift?.isDown && this.player == "CS"){
+          if(this.state == "active"){
+            this.state = "paused";
+        }
+        else{
+          this.playerSwitch("AE");
+
+        }
+      }
+      else if(this.Keys.right?.isDown&& this.player == "AE"){
+        if(this.state == "active"){
+          this.AE.x +=32;
+          this.lookDirection = "right";
+          this.state = "paused";
+      }
+      else if(this.state == "paused" ){
+       this.switchIndex();
+      }
+      else if(this.Keys.left?.isDown){
+        this.AE.x -= 32;
+        this.lookDirection = "left";
+      }
+      else if(this.Keys.up?.isDown){
+        this.AE.y -= 32;
+        this.lookDirection = "up";
+      }
+      else if(this.Keys.down?.isDown){
+        this.AE.y += 32;
+        this.lookDirection = "down";
+      }
+    }
+*/
+
+      
+      
+    
+  
+  }
+   
+     
+       //this.state = "active";
       // var seedStringArr = ["corn", "hemp", "wheat"];
        //var rand = Math.floor(Math.random() * 3);
        //this.plantSeed(this.AE.x,this.AE.y, seedStringArr[rand]);
        
-     }
-   }
-   else if(this.state == "active"){
-    if(this.Keys.left?.isDown){
-      this.state = "paused";
-      this.AE.x-=32;
-      this.lookDirection = "left";
-      
-    }
-  
-    else if(this.Keys.right?.isDown) {
-      this.state = "paused";
-      this.AE.x+=32;
-      this.lookDirection = "right";
-      
      
-    }
-    
-  
-  
-    if(this.Keys.up?.isDown){
-      this.state = "paused";
-      this.AE.y-=32;
-      this.lookDirection = "up";
-      
-    }
-    else if(this.Keys.down?.isDown){
-      this.state = "paused";
-      this.AE.y+=32;
-      this.lookDirection = "down";
-      
 
-    }
+  
     
     
 
-  }
+  
     
     
   
-}
+
+
 
 }
