@@ -34,12 +34,7 @@ export default class MainScene extends Phaser.Scene {
   
   private plantsize: integer;
   private state: string;
-<<<<<<< HEAD
   private status: Array<Phaser.GameObjects.Text>;
-=======
-  private char: string; 
-  private states: Array<string>;
->>>>>>> ccfff98c288ca6ebe38dcdf4288fae37f9d0a9c1
   private stateText: Phaser.GameObjects.Text;
   private charText: Phaser.GameObjects.Text;
   private map: Phaser.Tilemaps.Tilemap;
@@ -51,7 +46,6 @@ export default class MainScene extends Phaser.Scene {
   private plantLayer: Phaser.Tilemaps.DynamicTilemapLayer;
   private mountainLayer: Phaser.Tilemaps.DynamicTilemapLayer;
   private tiles: Phaser.Tilemaps.Tileset;
-<<<<<<< HEAD
   private lookDirection: string;
   private facing: Phaser.GameObjects.Text;
   private player: string;
@@ -66,11 +60,10 @@ export default class MainScene extends Phaser.Scene {
   private previous: Phaser.Tilemaps.Tile;
   private current: Phaser.Tilemaps.Tile;
   private next: Phaser.Tilemaps.Tile;
+  curFarmHeight: number;
+  curFarmLength: number;
 
 
-=======
-  private isAE : boolean; 
->>>>>>> ccfff98c288ca6ebe38dcdf4288fae37f9d0a9c1
 
   constructor() {
     super({ key: 'MainScene' });
@@ -84,14 +77,12 @@ export default class MainScene extends Phaser.Scene {
       height: 48});
      this.tiles =this.map.addTilesetImage("mappedTiles");
 
-<<<<<<< HEAD
-=======
     this.plasticCount = 0;
     this.plantsize = 0;
 
     this.curFarmHeight = 160;
     this.curFarmLength = 544;
-    this.isAE = true;
+ 
 
     this.randSeedArr = ["corn", "wheat", "hemp"]; 
 
@@ -100,7 +91,6 @@ export default class MainScene extends Phaser.Scene {
 
     
    
->>>>>>> ccfff98c288ca6ebe38dcdf4288fae37f9d0a9c1
 
     this.inventory = new Array<Phaser.GameObjects.TileSprite>();
     this.plantInventory = new Array<Phaser.GameObjects.TileSprite>();
@@ -129,75 +119,12 @@ export default class MainScene extends Phaser.Scene {
     
     //console.log("creating farm");
     
-<<<<<<< HEAD
-   
-=======
     // this.AE = this.physics.add.sprite(543,191,"AE")
     // this.AE.setCollideWorldBounds(true);
     // this.CS = this.physics.add.sprite(575,191,"CS");
     // this.CS.setCollideWorldBounds(true);
-
-    this.AE = this.physics.add.sprite(575,191,"AES", 6).setScale(1.3);
-    this.anims.create({
-      key: 'walk_up',
-      repeat: 0,
-      frameRate: 5, 
-      frames: this.anims.generateFrameNames('AES', {start: 0, end: 2})
-    });
-    this.anims.create({
-      key: 'walk_left',
-      repeat: 0,
-      frameRate: 5, 
-      frames: this.anims.generateFrameNames('AES', {start: 3, end: 5})
-    });
-    this.anims.create({
-      key: 'walk_right',
-      repeat: 0,
-      frameRate: 5, 
-      frames: this.anims.generateFrameNames('AES', {start: 6, end: 8})
-    });
-    this.anims.create({
-      key: 'walk_down',
-      repeat: 0,
-      frameRate: 5, 
-      frames: this.anims.generateFrameNames('AES', {start: 9, end: 11})
-    });
-    
-    this.AE.setCollideWorldBounds(true);
-
-    this.CS = this.physics.add.sprite(575,100,"CSS", 6).setScale(1.3);;
-    this.anims.create({
-      key: 'Cwalk_up',
-      repeat: 0,
-      frameRate: 5, 
-      frames: this.anims.generateFrameNames('CSS', {start: 0, end: 2})
-    });
-    this.anims.create({
-      key: 'Cwalk_left',
-      repeat: 0,
-      frameRate: 5, 
-      frames: this.anims.generateFrameNames('CSS', {start: 3, end: 5})
-    });
-    this.anims.create({
-      key: 'Cwalk_right',
-      repeat: 0,
-      frameRate: 5, 
-      frames: this.anims.generateFrameNames('CSS', {start: 6, end: 8})
-    });
-    this.anims.create({
-      key: 'Cwalk_down',
-      repeat: 0,
-      frameRate: 5, 
-      frames: this.anims.generateFrameNames('CSS', {start: 9, end: 11})
-    });
-    
-    this.CS.setCollideWorldBounds(true);
->>>>>>> ccfff98c288ca6ebe38dcdf4288fae37f9d0a9c1
-
-
-
+   
     this.worldGen();
-<<<<<<< HEAD
     this.state = "active";
     this.player = "AE";
     
@@ -205,26 +132,80 @@ export default class MainScene extends Phaser.Scene {
     this.mode2 = "Harvest";
     this.mode3 = "Plant";
     this.mode = this.mode1;
-    var spawn = this.groundLayer.getTileAt(17,14);
+    
    
     this.currentModeIndex = 7;
     
-    
+    /*
     this.AE = this.physics.add.sprite(spawn.getCenterX(),spawn.getCenterY(),"AE");
     this.AE.setCollideWorldBounds(true);
     this.CS = this.physics.add.sprite(spawn.getCenterX() + 32,spawn.getCenterY(),"CS");
     this.CS.setCollideWorldBounds(true);
-=======
-    this.state = "paused";
-    this.char = "AE";
->>>>>>> ccfff98c288ca6ebe38dcdf4288fae37f9d0a9c1
     
-    
+    */
+   var spawn = this.groundLayer.getTileAt(17,14);
+   this.AE = this.physics.add.sprite(spawn.getCenterX(),spawn.getCenterY(),"AES", 6);
+   this.anims.create({
+     key: 'walk_up',
+     repeat: 0,
+     frameRate: 5, 
+     frames: this.anims.generateFrameNames('AES', {start: 0, end: 2})
+   });
+   this.anims.create({
+     key: 'walk_left',
+     repeat: 0,
+     frameRate: 5, 
+     frames: this.anims.generateFrameNames('AES', {start: 3, end: 5})
+   });
+   this.anims.create({
+     key: 'walk_right',
+     repeat: 0,
+     frameRate: 5, 
+     frames: this.anims.generateFrameNames('AES', {start: 9, end: 11})
+   });
+   this.anims.create({
+     key: 'walk_down',
+     repeat: 0,
+     frameRate: 5, 
+     frames: this.anims.generateFrameNames('AES', {start: 6, end: 8})
+   });
+   
+   this.AE.setCollideWorldBounds(true);
+
+   this.CS = this.physics.add.sprite(spawn.getCenterX(),spawn.getCenterY(),"CSS", 6);
+   this.anims.create({
+     key: 'Cwalk_up',
+     repeat: 0,
+     frameRate: 5, 
+     frames: this.anims.generateFrameNames('CSS', {start: 0, end: 2})
+   });
+   this.anims.create({
+     key: 'Cwalk_left',
+     repeat: 0,
+     frameRate: 5, 
+     frames: this.anims.generateFrameNames('CSS', {start: 3, end: 5})
+   });
+   this.anims.create({
+     key: 'Cwalk_right',
+     repeat: 0,
+     frameRate: 5, 
+     frames: this.anims.generateFrameNames('CSS', {start: 9, end: 11})
+   });
+   this.anims.create({
+     key: 'Cwalk_down',
+     repeat: 0,
+     frameRate: 5, 
+     frames: this.anims.generateFrameNames('CSS', {start: 6, end: 8})
+   });
+   
+   this.CS.setCollideWorldBounds(true);
+
+
+
     this.physics.add.overlap(this.forrestLayer,this.AE);
     this.physics.add.collider(this.mountainLayer,this.AE);
     this.physics.add.collider(this.pondLayer,this.AE);
     
-<<<<<<< HEAD
     this.stateText = this.add.text(256,1280,this.state,{ fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' });
     this.facing = this.add.text(256,1344,"Facing " + this.lookDirection,{ fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' });
     this.status = new Array<Phaser.GameObjects.Text>();
@@ -265,19 +246,6 @@ export default class MainScene extends Phaser.Scene {
     this.hempSeedsCount = 0;
     
     this.cornSeedsCount = 0;
-=======
-    this.stateText = this.add.text(256,1280,this.state,{ fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' })
-    this.charText = this.add.text(256,1350,this.char,{ fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' })
-  
-    
-    this.wheatSeedsCount = 10;
-    this.hempSeedsCount = 10;
-    this.cornSeedsCount = 10;
-
-    this.countArray[0].text = this.cornSeedsCount.toString();
-    this.countArray[1].text = this.hempSeedsCount.toString();
-    this.countArray[2].text = this.wheatSeedsCount.toString();
->>>>>>> ccfff98c288ca6ebe38dcdf4288fae37f9d0a9c1
    
     this.mCount = 0;
     this.wCount = 0;
@@ -319,6 +287,17 @@ this.modeChange(3);
 
 
 })
+
+    this.addInvItem("corn");
+    this.addInvItem("corn");
+    this.addInvItem("corn");
+    this.addInvItem("hemp");
+    this.addInvItem("hemp");
+    this.addInvItem("hemp");
+    this.addInvItem("wheat");
+    this.addInvItem("wheat");
+    this.addInvItem("wheat");
+
 
     this.setControls();
 
@@ -370,6 +349,7 @@ this.modeChange(3);
       this.input.keyboard.on('keyup-RIGHT', (event) =>{
         if(this.state == "active"){
         this.AE.x +=32;
+        this.AE.play("walk_right");
         this.lookDirection = "right";
         }
         else if(this.state == "paused"){
@@ -381,6 +361,7 @@ this.modeChange(3);
       this.input.keyboard.on('keyup-LEFT', (event) =>{
         if(this.state == "active"){
         this.AE.x -=32;
+        this.AE.play("walk_left");
         this.lookDirection = "left";
         }
         else if(this.state == "paused"){
@@ -392,6 +373,7 @@ this.modeChange(3);
       this.input.keyboard.on('keyup-UP', (event) =>{
         if(this.state == "active"){
         this.AE.y -=32;
+        this.AE.play("walk_up");
         this.lookDirection = "up";
         }
         
@@ -400,11 +382,19 @@ this.modeChange(3);
       this.input.keyboard.on('keyup-DOWN', (event) =>{
         if(this.state == "active"){
         this.AE.y +=32;
+        this.AE.play("walk_down");
         this.lookDirection = "down";
         }
         
 
       })
+      this.input.keyboard.on('keyup-SPACE',  (event) =>{
+        if(this.state == "active"){
+        this.plantSeed();
+        }
+      })
+        
+
 
     }
     else if(this.player=="CS"){
@@ -412,6 +402,7 @@ this.modeChange(3);
       this.input.keyboard.on('keyup-RIGHT', (event) =>{
         if(this.state == "active"){
         this.CS.x +=32;
+        this.CS.play("Cwalk_right");
         this.lookDirection = "right";
         }
         else if(this.state == "paused"){
@@ -423,6 +414,7 @@ this.modeChange(3);
       this.input.keyboard.on('keyup-LEFT', (event) =>{
         if(this.state == "active"){
         this.CS.x -=32;
+        this.CS.play("Cwalk_left");
         this.lookDirection = "left";
         }
         else if(this.state == "paused"){
@@ -434,6 +426,7 @@ this.modeChange(3);
       this.input.keyboard.on('keyup-UP', (event) =>{
         if(this.state == "active"){
         this.CS.y -=32;
+        this.CS.play("Cwalk_up");
         this.lookDirection = "up";
         }
         
@@ -442,6 +435,7 @@ this.modeChange(3);
       this.input.keyboard.on('keyup-DOWN', (event) =>{
         if(this.state == "active"){
         this.CS.y +=32;
+        this.CS.play("Cwalk_down");
         this.lookDirection = "down";
         }
         
@@ -485,12 +479,8 @@ this.modeChange(3);
       this.inventory[6] = plastic;
 
       for(let i = 0;i<7;i++){
-<<<<<<< HEAD
         this.countArray[i] = this.add.text(this.inventory[i].x + 64,this.inventory[i].y - 16,"0",{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' })  
     
-=======
-        this.countArray[i] = this.add.text(this.inventory[i].x + 64,this.inventory[i].y,"0",{ fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' })  
->>>>>>> ccfff98c288ca6ebe38dcdf4288fae37f9d0a9c1
       }
 
   }
@@ -501,11 +491,8 @@ this.modeChange(3);
       {index: 2, weight: 3}
     ]);
     this.farmLayer.fill(4,17,4,8,6);
-<<<<<<< HEAD
-    
-=======
+
     this.plantLayer.fill(4,17,4,8,6);
->>>>>>> ccfff98c288ca6ebe38dcdf4288fae37f9d0a9c1
 
     var xloc = 0;
     var yloc = 0;
@@ -542,15 +529,12 @@ this.modeChange(3);
 
     this.forrestLayer.setCollision([0,1]);
     this.forrestLayer.setTileIndexCallback(0,this.harvestTree,this);
-<<<<<<< HEAD
     this.farmLayer.setCollision(4);
     //this.farmLayer.setTileIndexCallback(4,,this)
-=======
     
     this.plantLayer.setCollision(4);
     this.plantLayer.setTileIndexCallback(4,this.testPlantLayer,this);
     
->>>>>>> ccfff98c288ca6ebe38dcdf4288fae37f9d0a9c1
     this.mountainLayer.setCollision(28);
     this.pondLayer.setCollision(38);
 
@@ -611,15 +595,15 @@ testPlantLayer(){
   alert('WORKS');
   }
 
- plantSeed(type: string){
+ plantSeed(){
    var tile = this.plantLayer.getTileAtWorldXY(this.AE.x, this.AE.y);
-   alert(tile.index);
-      if(type == "corn" && this.cornSeedsCount){
+   //alert(tile.index);
+      if(this.current.index == 32 && this.cornSeedsCount > 0){
          // console.log(this.physics.overlap(this.AE, this.farmLayer));
         // Plant = this.add.tileSprite(x,y,32,32,"seedsandplants", 1);
           if(tile.index !== null){
             if (tile.index == 4) {
-              this.plantLayer.replaceByIndex(4,35,Math.floor(this.AE.x/32),Math.floor(this.AE.y/32),2,2);
+              this.plantLayer.replaceByIndex(4,this.current.index,Math.floor(this.AE.x/32),Math.floor(this.AE.y/32),2,2);
               // this.plantInventory[this.plantsize] = Plant;
               this.plantsize += 1;
               this.cornSeedsCount -= 1;
@@ -630,7 +614,7 @@ testPlantLayer(){
           }
           
       }
-      else if(type == "wheat" && this.wheatSeedsCount > 0){
+      else if(this.current.index == 33  && this.wheatSeedsCount > 0){
         // var Plant = this.add.tileSprite(x,y,32,32,"seedsandplants", 2);
         if(tile.index !== null){
           if(tile.index == 4){
@@ -643,11 +627,11 @@ testPlantLayer(){
           }
         }
       }
-      else if(type == "hemp" && this.hempSeedsCount > 0){
+      else if(this.current.index == 31 && this.hempSeedsCount > 0){
         // var Plant = this.add.tileSprite(x,y,32,32,"seedsandplants", 0);
         if(tile.index !== null){
           if(tile.index == 4){
-            this.plantLayer.replaceByIndex(4,34,Math.floor(this.AE.x/32),Math.floor(this.AE.y/32),2,2);
+            this.plantLayer.replaceByIndex(4,this.current.index,Math.floor(this.AE.x/32),Math.floor(this.AE.y/32),2,2);
             // this.plantInventory[this.plantsize] = Plant;
             this.plantsize += 1;
             this.hempSeedsCount -= 1;
@@ -716,7 +700,6 @@ testPlantLayer(){
   this.setControls();
 }
 
-<<<<<<< HEAD
 
   switchIndex(direction:string){
 
@@ -765,9 +748,9 @@ testPlantLayer(){
 
 
   
+/*
 
 
-=======
   movePlayerManager(){
    if(this.state == "paused"){
      if(this.Keys.space?.isDown){
@@ -933,4 +916,3 @@ testPlantLayer(){
 
 
 
-}
