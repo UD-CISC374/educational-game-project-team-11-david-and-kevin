@@ -11,9 +11,11 @@ export default class MainScene extends Phaser.Scene {
   private planttiles: Array<Phaser.GameObjects.TileSprite>;
 
   private Keys: Phaser.Types.Input.Keyboard.CursorKeys;
+  private keyP;
   private wheatSeedsCount;
   private cornSeedsCount;
   private hempSeedsCount;
+  private randSeedArr; 
  
   private mCount;
   private wCount;
@@ -28,6 +30,8 @@ export default class MainScene extends Phaser.Scene {
   
   private saplingCount;
   private plasticCount;
+
+  private flipFlop : boolean;
 
   
   private plantsize: integer;
@@ -72,6 +76,11 @@ export default class MainScene extends Phaser.Scene {
     this.curFarmHeight = 160;
     this.curFarmLength = 544;
     this.isAE = true;
+
+    this.randSeedArr = ["corn", "wheat", "hemp"]; 
+
+    this.keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
+
 
     
    
@@ -362,32 +371,51 @@ testPlantLayer(){
   }
 
  plantSeed(type: string){
+   var tile = this.plantLayer.getTileAtWorldXY(this.AE.x, this.AE.y);
+   alert(tile.index);
       if(type == "corn" && this.cornSeedsCount){
          // console.log(this.physics.overlap(this.AE, this.farmLayer));
         // Plant = this.add.tileSprite(x,y,32,32,"seedsandplants", 1);
-        this.plantLayer.replaceByIndex(4,35,Math.floor(this.AE.x/32),Math.floor(this.AE.y/32),2,2);
-        // this.plantInventory[this.plantsize] = Plant;
-        this.plantsize += 1;
-        this.cornSeedsCount -= 1;
-        console.log("Number: " + this.cornSeedsCount);
-        this.countArray[0].text = this.cornSeedsCount.toString();
-        console.log('PLANTED');
+          if(tile.index !== null){
+            if (tile.index == 4) {
+              this.plantLayer.replaceByIndex(4,35,Math.floor(this.AE.x/32),Math.floor(this.AE.y/32),2,2);
+              // this.plantInventory[this.plantsize] = Plant;
+              this.plantsize += 1;
+              this.cornSeedsCount -= 1;
+              console.log("Number: " + this.cornSeedsCount);
+              this.countArray[0].text = this.cornSeedsCount.toString();
+              console.log('PLANTED CORN'); 
+            }
+          }
+          
       }
       else if(type == "wheat" && this.wheatSeedsCount > 0){
         // var Plant = this.add.tileSprite(x,y,32,32,"seedsandplants", 2);
-        this.plantLayer.replaceByIndex(4,36,Math.floor(this.AE.x/32),Math.floor(this.AE.y/32),2,2);
-        // this.plantInventory[this.plantsize] = Plant;
-        this.plantsize += 1;
-        this.wheatSeedsCount -= 1;
-        this.countArray[0].text = this.wheatSeedsCount.toString();
+        if(tile.index !== null){
+          if(tile.index == 4){
+            this.plantLayer.replaceByIndex(4,36,Math.floor(this.AE.x/32),Math.floor(this.AE.y/32),2,2);
+            // this.plantInventory[this.plantsize] = Plant;
+            this.plantsize += 1;
+            this.wheatSeedsCount -= 1;
+            this.countArray[2].text = this.wheatSeedsCount.toString();
+            console.log('PLANTED WHEAT');
+          }
+        }
       }
       else if(type == "hemp" && this.hempSeedsCount > 0){
         // var Plant = this.add.tileSprite(x,y,32,32,"seedsandplants", 0);
-        this.plantLayer.replaceByIndex(4,34,Math.floor(this.AE.x/32),Math.floor(this.AE.y/32),2,2);
-        // this.plantInventory[this.plantsize] = Plant;
-        this.plantsize += 1;
-        this.hempSeedsCount -= 1;
-        this.countArray[0].text = this.hempSeedsCount.toString();
+        if(tile.index !== null){
+          if(tile.index == 4){
+            this.plantLayer.replaceByIndex(4,34,Math.floor(this.AE.x/32),Math.floor(this.AE.y/32),2,2);
+            // this.plantInventory[this.plantsize] = Plant;
+            this.plantsize += 1;
+            this.hempSeedsCount -= 1;
+            this.countArray[1].text = this.hempSeedsCount.toString();
+            console.log('PLANTED HEMP');
+          }
+
+        }
+        
       }
       else{
         alert('Out of seeds!');
@@ -424,20 +452,26 @@ testPlantLayer(){
 
 
   movePlayerManager(){
-   // console.log(this.isAE);
    if(this.state == "paused"){
      if(this.Keys.space?.isDown){
        this.state = "active";
-      // var seedStringArr = ["corn", "hemp", "wheat"];
-       //var rand = Math.floor(Math.random() * 3);
-       //this.plantSeed(this.AE.x,this.AE.y, seedStringArr[rand]);
-       
      }
    }
-   if(this.Keys.shift?.isDown){
-     this.plantSeed("corn"); 
+   
+   if(this.keyP.isDown){
+     if(!this.flipFlop){
+      var rand = Math.floor(Math.random()*3); 
+      this.plantSeed(this.randSeedArr[rand]); 
+      this.flipFlop = true;
+     }
    }
-   /*
+   
+
+   if (this.keyP.isUp) {
+     this.flipFlop = false;
+    }
+   
+    
    if(this.Keys.shift?.isDown){
      // alert('SHIFT PRESSED!');
      if(this.char == "AE"){
@@ -449,8 +483,10 @@ testPlantLayer(){
       this.charText.setText("AE");
      }
    }
-   */
+   
+   
    else if(this.state == "active"){
+     console.log('WHATS HAPPENING');
     if(this.char == "AE"){
       if(this.Keys.left?.isDown){
         this.AE.x-=32;
@@ -473,6 +509,7 @@ testPlantLayer(){
         this.state = "paused";
       }
       else if(this.Keys.down?.isDown){
+        console.log('WALKING');
         this.AE.y+=32;
         this.AE.play('walk_right');
         this.state = "paused";
