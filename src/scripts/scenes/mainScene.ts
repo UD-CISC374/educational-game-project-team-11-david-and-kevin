@@ -693,7 +693,8 @@ testPlantLayer(){
            if (tile.index == 4) {
              if(this.lookDirection == "down"){
                this.current.index = this.plantLayer.getTileAtWorldXY(this.CS.x, this.CS.y - 32).index;
-                if(this.current.index == 4||this.current.index == 5 || this.current.index==9 || this.current.index==11 ||this.current.index==13
+                
+              if(this.current.index == 5||this.current.index == 29 || this.current.index==9 || this.current.index==11 ||this.current.index==13
                   || this.current.index==17 || this.current.index==23|| this.current.index==25){
                 this.plantLayer.replaceByIndex(4,5,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32),1,1);
            
@@ -718,6 +719,10 @@ testPlantLayer(){
                   this.plantLayer.replaceByIndex(4,5,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32),1,1);
                   
                 }
+                if(this.current.index == 4){
+                  this.plantLayer.replaceByIndex(4,29,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32)-1,1,1);
+             
+                 }
                 
 
              }
