@@ -57,11 +57,14 @@ export default class MainScene extends Phaser.Scene {
   private currentModeIndex: integer;
   private currentItemIndex: integer;
   private controls: Phaser.Tilemaps.DynamicTilemapLayer;
-  private previous: Phaser.Tilemaps.Tile;
+  private previousItem: Phaser.Tilemaps.Tile;
   private current: Phaser.Tilemaps.Tile;
-  private next: Phaser.Tilemaps.Tile;
+  private nextItem: Phaser.Tilemaps.Tile;
   curFarmHeight: number;
   curFarmLength: number;
+  private cornPaths: integer[][];
+  private wheatPaths: integer[][];
+  private hempPaths: integer[][];
 
 
 
@@ -106,10 +109,10 @@ export default class MainScene extends Phaser.Scene {
    
     this.groundLayer = this.map.createBlankDynamicLayer("Ground Layer",this.tiles);
     this.forrestLayer = this.map.createBlankDynamicLayer("Forrest",this.tiles);
-    this.mountainLayer = this.map.createBlankDynamicLayer("Mountain",this.tiles).setScale(2,2);
+    this.mountainLayer = this.map.createBlankDynamicLayer("Mountain",this.tiles).setScale(3,3);
     this.farmLayer = this.map.createBlankDynamicLayer("Farm Layer",this.tiles);
     this.plantLayer = this.map.createBlankDynamicLayer("Plant Layer", this.tiles); 
-    this.pondLayer = this.map.createBlankDynamicLayer("Pond Layer",this.tiles).setScale(2);
+    //this.pondLayer = this.map.createBlankDynamicLayer("Pond Layer",this.tiles);
     this.controls = this.map.createBlankDynamicLayer("Controls",this.tiles);
   
      //console.log("forrest gen");
@@ -129,8 +132,8 @@ export default class MainScene extends Phaser.Scene {
     this.player = "AE";
     
     this.mode1 = "Collect";
-    this.mode2 = "Harvest";
-    this.mode3 = "Plant";
+    this.mode2 = "Plant";
+   
     this.mode = this.mode1;
     
    
@@ -172,7 +175,7 @@ export default class MainScene extends Phaser.Scene {
    
    this.AE.setCollideWorldBounds(true);
 
-   this.CS = this.physics.add.sprite(spawn.getCenterX(),spawn.getCenterY(),"CSS", 6);
+   this.CS = this.physics.add.sprite(spawn.getCenterX() + 32,spawn.getCenterY(),"CSS", 6);
    this.anims.create({
      key: 'Cwalk_up',
      repeat: 0,
@@ -204,10 +207,12 @@ export default class MainScene extends Phaser.Scene {
 
     this.physics.add.overlap(this.forrestLayer,this.AE);
     this.physics.add.collider(this.mountainLayer,this.AE);
-    this.physics.add.collider(this.pondLayer,this.AE);
+    //this.physics.add.collider(this.pondLayer,this.AE);
     
-    this.stateText = this.add.text(256,1280,this.state,{ fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' });
-    this.facing = this.add.text(256,1344,"Facing " + this.lookDirection,{ fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' });
+    this.stateText = this.add.text(256,1280,this.state,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
+    this.stateText.text = "Use your AE(in white) to harvest forrest resources";
+    
+    //this.facing = this.add.text(256,1344,"Facing " + this.lookDirection,{ fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' });
     this.status = new Array<Phaser.GameObjects.Text>();
 
     this.status[0] = this.add.text(1023,63,"Player: " ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
@@ -220,25 +225,25 @@ export default class MainScene extends Phaser.Scene {
     this.status[5] = this.add.text(1151,191,this.state ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
     
     this.status[6] = this.add.text(1023,255,"Modes: " ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
-    this.status[7] = this.add.text(1279,255,this.mode1 + " 1" ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
+    this.status[7] = this.add.text(1023,319,this.mode1 + " 1" ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
     
-    this.status[8] = this.add.text(1279,319,this.mode2 + " 2" ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
-    this.status[9] = this.add.text(1279,383,this.mode3 + " 3",{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
+    this.status[8] = this.add.text(1023,383,this.mode2 + " 2" ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
+    this.status[9] = this.add.text(1215,255,"Number Key Selection",{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
     
-    this.status[10] = this.add.text(1407,255,"1" ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
-    this.status[11] = this.add.text(1407,319,"2" ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
+    this.status[10] = this.add.text(1220,319,"1" ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
+    this.status[11] = this.add.text(1220,383,"2" ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
     
      this.status[12] = this.add.text(1407,383,"3" ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
     this.status[13] = this.add.text(1151,575,"Current Item" ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
    this.status[14] =this.add.text(1023,703,"Press C: Computer Scientist" ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
    
-   this.status[15] = this.add.text(1023,767,"Arrow keys to move" ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
+   this.status[15] = this.add.text(1023,767,"Arrow keys to move " + this.player ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
     this.status[16] = this.add.text(1151,639,"Spacebar" ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
-   this.status[17] =this.add.text(1023,831,"More instructions to come" ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
+   this.status[17] =this.add.text(1023,831,"P to Pause" ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
    
 
    // this.previous = this.controls.putTileAt(31,32,19);
-   this.current = this.controls.putTileAt(32,38,19);
+   this.current = this.controls.putTileAt(31,38,19);
    //this.next = this.controls.putTileAt(33,46,19);
   
     this.wheatSeedsCount = 0;
@@ -281,12 +286,22 @@ this.modeChange(2);
 
 
 })
-this.input.keyboard.on('keyup-THREE', (event) =>{
+
+
+this.input.keyboard.on('keyup-P', (event) =>{
  
-this.modeChange(3);
+  if(this.state == "paused"){
+    this.state = "active";
+    this.status[15].text = "Arrow keys to move " + this.player;
 
-
-})
+  }
+  else{
+    this.state = "paused";
+    this.status[15].text = "Arrow keys to change items"
+  }
+  
+  
+  })
 
     this.addInvItem("corn");
     this.addInvItem("corn");
@@ -315,9 +330,22 @@ this.modeChange(3);
       else if(mode == 2){
         this.mode = this.mode2;
       }
-      else if(mode == 3){
-        this.mode = this.mode3;
+
+      if(this.mode == "Collect"){
+        this.stateText.text = "Use your AE(in white) to harvest forrest resources";
       }
+      else if(this.mode == "Plant"){
+        this.stateText.text = "Plant objects with your AE(in white) in the farm area"
+
+      }
+      if(this.mode == "Build"){
+        this.stateText.text = "Use your CS(in orange) to create tubing";
+      }
+      else if(this.mode == "Set"){
+        this.stateText.text = "Set water paths through your tube objects"
+
+      }
+      
 
 
   }
@@ -330,8 +358,8 @@ this.modeChange(3);
     this.status[5].text = this.state;
     this.status[7].text = this.mode1;
     this.status[8].text = this.mode2;
-    this.status[9].text = this.mode3;
-    this.facing.text = this.lookDirection;
+    
+    //this.facing.text = this.lookDirection;
     
     
     
@@ -343,6 +371,7 @@ this.modeChange(3);
       this.input.keyboard.removeListener('keyup-LEFT');
       this.input.keyboard.removeListener('keyup-UP');
       this.input.keyboard.removeListener('keyup-DOWN');
+      this.input.keyboard.removeListener('keyup-SPACE');
     if(this.player == "AE"){
       
      
@@ -441,6 +470,11 @@ this.modeChange(3);
         
 
       })
+      this.input.keyboard.on('keyup-SPACE',  (event) =>{
+        if(this.state == "active"){
+        this.tubing();
+        }
+      })
     
     }
 
@@ -497,35 +531,32 @@ this.modeChange(3);
     var xloc = 0;
     var yloc = 0;
 
-    while(yloc < 31 && xloc < 31){
+    while(yloc < 29 && xloc < 29){
       var yesNo = Math.floor(((Math.random() * 8) + 1 ));
-      if(yesNo == 1 || yesNo == 2 || yesNo == 3 || yesNo == 4 || yesNo == 5 || yesNo == 6){
+      if(yesNo == 1 || yesNo == 2 || yesNo == 3 || yesNo == 4 || yesNo == 5 || yesNo == 6 || yesNo == 7){
         this.forrestLayer.weightedRandomize(xloc,yloc,2,2,[
 
-        {index: -1, weight: 75},
-        {index: 0, weight: 25},
+        {index: -1, weight: 80},
+        {index: 0, weight: 15},
+        {index: 37, weight: 5},
 
         ]);
-        xloc +=2;
-      }
-      else if(yesNo == 7){
-        this.mountainLayer.putTileAt(28,xloc/2,yloc/2);
-        xloc +=2;
-        
+        xloc +=3;
       }
       else if(yesNo == 8){
-        this.pondLayer.putTileAt(38,xloc/2,yloc/2);
-        xloc +=2;
+        this.mountainLayer.putTileAt(27,xloc/3,yloc/3);
+        xloc +=3;
         
       }
       
-      if((xloc >= 15 && yloc < 16) || (xloc >= 32)){
+      if((xloc >= 14 && yloc < 17) || (xloc >= 29)){
         xloc = 0;
-        yloc +=2;
+        yloc +=3;
       }
       
 
     }
+
 
     this.forrestLayer.setCollision([0,1]);
     this.forrestLayer.setTileIndexCallback(0,this.harvestTree,this);
@@ -535,8 +566,9 @@ this.modeChange(3);
     this.plantLayer.setCollision(4);
     this.plantLayer.setTileIndexCallback(4,this.testPlantLayer,this);
     
-    this.mountainLayer.setCollision(28);
-    this.pondLayer.setCollision(38);
+    this.mountainLayer.setCollision(27);
+    this.mountainLayer.setTileIndexCallback(27,this.harvestMountain,this);
+    //this.pondLayer.setCollision(38);
 
     //this.forrestLayer.setTileIndexCallback()
   
@@ -555,7 +587,7 @@ this.modeChange(3);
     if(type == "corn"){
      
       this.cornSeedsCount += 1;
-      this.countArray[0].text = this.cornSeedsCount.toString;
+      this.countArray[0].text = this.cornSeedsCount;
     }
     else if(type == "hemp"){
       this.hempSeedsCount += 1;
@@ -570,11 +602,11 @@ this.modeChange(3);
       this.countArray[3].text = this.wCount;
       }
     else if(type == "rock"){
-      this.mCount += 1;
+      this.mCount += 10;
       this.countArray[4].text = this.mCount;
     }
     else if(type == "water"){
-      this.bucketCount += 1;
+      this.bucketCount += 2;
       this.countArray[5].text = this.bucketCount;
     }
     else if(type == "plastic"){
@@ -596,14 +628,15 @@ testPlantLayer(){
   }
 
  plantSeed(){
+   if(this.mode == "Plant"){
    var tile = this.plantLayer.getTileAtWorldXY(this.AE.x, this.AE.y);
    //alert(tile.index);
-      if(this.current.index == 32 && this.cornSeedsCount > 0){
+      if(this.current.index == 31 && this.cornSeedsCount > 0){
          // console.log(this.physics.overlap(this.AE, this.farmLayer));
         // Plant = this.add.tileSprite(x,y,32,32,"seedsandplants", 1);
           if(tile.index !== null){
             if (tile.index == 4) {
-              this.plantLayer.replaceByIndex(4,this.current.index,Math.floor(this.AE.x/32),Math.floor(this.AE.y/32),2,2);
+              this.plantLayer.replaceByIndex(4,this.current.index,Math.floor(this.AE.x/32),Math.floor(this.AE.y/32),1,1);
               // this.plantInventory[this.plantsize] = Plant;
               this.plantsize += 1;
               this.cornSeedsCount -= 1;
@@ -614,11 +647,11 @@ testPlantLayer(){
           }
           
       }
-      else if(this.current.index == 33  && this.wheatSeedsCount > 0){
+      else if(this.current.index == 32  && this.wheatSeedsCount > 0){
         // var Plant = this.add.tileSprite(x,y,32,32,"seedsandplants", 2);
         if(tile.index !== null){
           if(tile.index == 4){
-            this.plantLayer.replaceByIndex(4,36,Math.floor(this.AE.x/32),Math.floor(this.AE.y/32),2,2);
+            this.plantLayer.replaceByIndex(4,this.current.index,Math.floor(this.AE.x/32),Math.floor(this.AE.y/32),1,1);
             // this.plantInventory[this.plantsize] = Plant;
             this.plantsize += 1;
             this.wheatSeedsCount -= 1;
@@ -627,11 +660,11 @@ testPlantLayer(){
           }
         }
       }
-      else if(this.current.index == 31 && this.hempSeedsCount > 0){
+      else if(this.current.index == 30 && this.hempSeedsCount > 0){
         // var Plant = this.add.tileSprite(x,y,32,32,"seedsandplants", 0);
         if(tile.index !== null){
           if(tile.index == 4){
-            this.plantLayer.replaceByIndex(4,this.current.index,Math.floor(this.AE.x/32),Math.floor(this.AE.y/32),2,2);
+            this.plantLayer.replaceByIndex(4,this.current.index,Math.floor(this.AE.x/32),Math.floor(this.AE.y/32),1,1);
             // this.plantInventory[this.plantsize] = Plant;
             this.plantsize += 1;
             this.hempSeedsCount -= 1;
@@ -645,55 +678,173 @@ testPlantLayer(){
       else{
         //alert('Out of seeds!');
       }
-      
+    }
   
   
     }
   
 
-  settubing(x,y,type: string){
+  tubing(){
+    if(this.mode == "Build"){
+      var tile = this.plantLayer.getTileAtWorldXY(this.CS.x, this.CS.y);
+      
+        
+         if(tile.index !== null){
+           if (tile.index == 4) {
+             if(this.lookDirection == "down"){
+               this.current.index = this.plantLayer.getTileAtWorldXY(this.CS.x, this.CS.y - 32).index;
+                if(this.current.index == 4||this.current.index == 5 || this.current.index==9 || this.current.index==11 ||this.current.index==13
+                  || this.current.index==17 || this.current.index==23|| this.current.index==25){
+                this.plantLayer.replaceByIndex(4,5,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32),1,1);
+           
+                }
+                else if(this.current.index == 7){
+                  this.plantLayer.replaceByIndex(7,13,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32)-1,1,1);
+                  this.plantLayer.replaceByIndex(4,5,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32),1,1);
+           
+                }
+                else if(this.current.index == 15){
+                  this.plantLayer.replaceByIndex(15,9,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32)-1,1,1);
+                  this.plantLayer.replaceByIndex(4,5,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32),1,1);
+           
+                }
+                else if(this.current.index == 19){
+                  this.plantLayer.replaceByIndex(19,17,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32)-1,1,1);
+                  this.plantLayer.replaceByIndex(4,5,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32),1,1);
+           
+                }
+                else if(this.current.index == 21){
+                  this.plantLayer.replaceByIndex(21,11,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32)-1,1,1);
+                  this.plantLayer.replaceByIndex(4,5,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32),1,1);
+                  
+                }
+                
+
+             }
+             else if(this.lookDirection == "right"){
+              this.current.index = this.plantLayer.getTileAtWorldXY(this.CS.x - 32, this.CS.y).index;
+               
+              if(this.current.index == 4||this.current.index == 7 || this.current.index==9 || this.current.index==13 ||this.current.index==15
+                || this.current.index==17 || this.current.index==19|| this.current.index==25){
+              this.plantLayer.replaceByIndex(4,7,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32),1,1);
+         
+              }
+              else if(this.current.index == 11){
+                this.plantLayer.replaceByIndex(11,9,Math.floor(this.CS.x/32)-1,Math.floor(this.CS.y/32),1,1);
+                this.plantLayer.replaceByIndex(4,7,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32),1,1);
+         
+              }
+              else if(this.current.index == 21){
+                this.plantLayer.replaceByIndex(21,15,Math.floor(this.CS.x/32)-1,Math.floor(this.CS.y/32),1,1);
+                this.plantLayer.replaceByIndex(4,7,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32),1,1);
+         
+              }
+              else if(this.current.index == 23){
+                this.plantLayer.replaceByIndex(23,13,Math.floor(this.CS.x/32)-1,Math.floor(this.CS.y/32),1,1);
+                this.plantLayer.replaceByIndex(4,7,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32),1,1);
+         
+              }
+              else if(this.current.index == 5){
+                this.plantLayer.replaceByIndex(5,19,Math.floor(this.CS.x/32)-1,Math.floor(this.CS.y/32),1,1);
+                this.plantLayer.replaceByIndex(4,7,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32),1,1);
+                
+              }
+             }
+             else if(this.lookDirection == "left"){
+              this.current.index = this.plantLayer.getTileAtWorldXY(this.CS.x + 32, this.CS.y).index;
+              if(this.current.index == 4||this.current.index == 7 || this.current.index==9 || this.current.index==13 ||this.current.index==15
+                || this.current.index==17 || this.current.index==19|| this.current.index==25){
+              this.plantLayer.replaceByIndex(4,7,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32),1,1);
+         
+              }
+              else if(this.current.index == 17){
+                this.plantLayer.replaceByIndex(17,9,Math.floor(this.CS.x/32)+1,Math.floor(this.CS.y/32),1,1);
+                this.plantLayer.replaceByIndex(4,7,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32),1,1);
+         
+              }
+              else if(this.current.index == 19){
+                this.plantLayer.replaceByIndex(19,15,Math.floor(this.CS.x/32)+1,Math.floor(this.CS.y/32),1,1);
+                this.plantLayer.replaceByIndex(4,7,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32),1,1);
+         
+              }
+              else if(this.current.index == 25){
+                this.plantLayer.replaceByIndex(25,13,Math.floor(this.CS.x/32)+1,Math.floor(this.CS.y/32),1,1);
+                this.plantLayer.replaceByIndex(4,7,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32),1,1);
+         
+              }
+              else if(this.current.index == 5){
+                this.plantLayer.replaceByIndex(5,21,Math.floor(this.CS.x/32)+1,Math.floor(this.CS.y/32),1,1);
+                this.plantLayer.replaceByIndex(4,7,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32),1,1);
+                
+              }
+             }
+
+            }
+            else{
+              this.plantLayer.removeTileAtWorldXY(this.CS.x, this.CS.y);
+              this.plantLayer.putTileAtWorldXY(4,this.CS.x, this.CS.y);
+            }
+          
+
+
+
+    }
     
-
-
+  
 
   }
+  }
+
+
+  
 
 
 
   harvestTree(){
+    if(this.mode == "Collect"){
     this.forrestLayer.replaceByIndex(0,1,Math.floor(this.AE.x/32),Math.floor(this.AE.y/32),1,1);
     this.addInvItem("wood");
+    }
+    
   
     
 }
 
+
+harvestMountain(){
+  if(this.mode == "Collect"){
+  this.mountainLayer.replaceByIndex(27,28,Math.floor(this.AE.x/96),Math.floor(this.AE.y/96),1,1);
+  this.addInvItem("rock");
+  }
   
 
+  
+}
 
 
-  harvestMoutain(AE,mount){
-    mount.destroy(true);
 
-  }
+
 
   playerSwitch(player: string){
     if(player == "CS"){
       this.mode1 = "Build";
       this.mode2 = "Set";
-      this.mode3 = "Filter";
-      this.mode = this.mode1;
+      
+      
       this.player = "CS";
       this.current.index = 5;
       this.currentItemIndex = 5;
+      this.modeChange(1);
       this.status[14].text = "Press A: Agricultural Engineer"
     }
     else if(player == "AE"){
       this.mode1 = "Collect";
       this.mode2 = "Plant";
-      this.mode3 = "Harvest";
+      
       this.mode = this.mode1;
       this.player = "AE";
-      this.current.index = 32;
+      this.current.index = 31;
+      this.modeChange(1);
       this.status[14].text = "Press C: Computer Scientist"
     
   }
@@ -708,15 +859,15 @@ testPlantLayer(){
     if(this.player == "AE"){
 
       this.current.index += 1;
-      if(this.current.index == 34){
-        this.current.index = 31;
+      if(this.current.index == 33){
+        this.current.index = 30;
 
       }
     }
       else if(this.player == "CS"){
 
-        this.current.index += 1;
-        if(this.current.index == 27){
+        this.current.index += 2;
+        if(this.current.index == 25){
           this.current.index = 5;
   
         }
@@ -727,8 +878,8 @@ testPlantLayer(){
       if(this.player == "AE"){
 
         this.current.index -= 1;
-        if(this.current.index == 30){
-          this.current.index = 33;
+        if(this.current.index == 29){
+          this.current.index = 32;
   
         }
       }
@@ -736,7 +887,7 @@ testPlantLayer(){
   
           this.current.index -= 1;
           if(this.current.index == 4){
-            this.current.index = 27;
+            this.current.index = 26;
     
           }
         
