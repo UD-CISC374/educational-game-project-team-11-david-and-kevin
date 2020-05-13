@@ -65,6 +65,8 @@ export default class MainScene extends Phaser.Scene {
   private cornPaths: integer[][];
   private wheatPaths: integer[][];
   private hempPaths: integer[][];
+  private enemy: Phaser.Physics.Arcade.Sprite;
+  private enemyLookDirection: string;
 
 
 
@@ -202,6 +204,8 @@ export default class MainScene extends Phaser.Scene {
    });
    
    this.CS.setCollideWorldBounds(true);
+   this.enemy = this.physics.add.sprite(spawn.getCenterX() - 64,spawn.getCenterY() - 256,"enemy", 3);
+   this.enemyLookDirection = "down";
 
 
 
@@ -212,7 +216,7 @@ export default class MainScene extends Phaser.Scene {
     this.stateText = this.add.text(256,1280,this.state,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
     this.stateText.text = "Use your AE(in white) to harvest forrest resources";
     
-    //this.facing = this.add.text(256,1344,"Facing " + this.lookDirection,{ fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' });
+    this.facing = this.add.text(256,1344,"P to Pause" + this.lookDirection,{ fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' });
     this.status = new Array<Phaser.GameObjects.Text>();
 
     this.status[0] = this.add.text(1023,63,"Player: " ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
@@ -380,6 +384,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
         this.AE.x +=32;
         this.AE.play("walk_right");
         this.lookDirection = "right";
+        this.enemyHandler();
         }
         else if(this.state == "paused"){
           this.switchIndex("right");
@@ -392,6 +397,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
         this.AE.x -=32;
         this.AE.play("walk_left");
         this.lookDirection = "left";
+        this.enemyHandler();
         }
         else if(this.state == "paused"){
           this.switchIndex("left");
@@ -404,6 +410,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
         this.AE.y -=32;
         this.AE.play("walk_up");
         this.lookDirection = "up";
+        this.enemyHandler();
         }
         
 
@@ -413,6 +420,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
         this.AE.y +=32;
         this.AE.play("walk_down");
         this.lookDirection = "down";
+        this.enemyHandler();
         }
         
 
@@ -420,6 +428,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
       this.input.keyboard.on('keyup-SPACE',  (event) =>{
         if(this.state == "active"){
         this.plantSeed();
+        this.enemyHandler();
         }
       })
         
@@ -433,6 +442,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
         this.CS.x +=32;
         this.CS.play("Cwalk_right");
         this.lookDirection = "right";
+        this.enemyHandler();
         }
         else if(this.state == "paused"){
           this.switchIndex("right");
@@ -445,6 +455,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
         this.CS.x -=32;
         this.CS.play("Cwalk_left");
         this.lookDirection = "left";
+        this.enemyHandler();
         }
         else if(this.state == "paused"){
           this.switchIndex("left");
@@ -457,6 +468,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
         this.CS.y -=32;
         this.CS.play("Cwalk_up");
         this.lookDirection = "up";
+        this.enemyHandler();
         }
         
 
@@ -466,6 +478,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
         this.CS.y +=32;
         this.CS.play("Cwalk_down");
         this.lookDirection = "down";
+        this.enemyHandler();
         }
         
 
@@ -481,6 +494,59 @@ this.input.keyboard.on('keyup-P', (event) =>{
 
   }
 
+  enemyHandler(){
+    
+  
+    if(this.enemyLookDirection == "down" || this.enemyLookDirection == "up"){
+      if(this.AE.x > this.enemy.x){
+        this.enemy.x += 32;
+        this.enemyLookDirection = "right";
+        this.enemy.setFrame(0);
+      }
+      else if(this.AE.x < this.enemy.x){
+        this.enemy.x -= 32;
+        this.enemyLookDirection = "left";
+        this.enemy.setFrame(1);
+      }
+      else if(this.AE.x == this.enemy.x
+      ){
+        if(this.AE.y > this.enemy.y){
+          this.enemy.y += 32;
+          this.enemyLookDirection = "down";
+          this.enemy.setFrame(2);
+        }
+        else if(this.AE.y < this.enemy.y){
+          this.enemy.y -= 32;
+          this.enemyLookDirection = "up";
+          this.enemy.setFrame(3);
+        }
+      }
+    }
+    else if(this.enemyLookDirection == "right" || this.enemyLookDirection == "left"){
+      if(this.AE.y > this.enemy.y){
+        this.enemy.y += 32;
+        this.enemyLookDirection = "down";
+        this.enemy.setFrame(2);
+      }
+      else if(this.AE.y < this.enemy.y){
+        this.enemy.y -= 32;
+        this.enemyLookDirection = "up";
+        this.enemy.setFrame(3);
+      }
+      else if(this.AE.y == this.enemy.y){
+        if(this.AE.x > this.enemy.x){
+          this.enemy.x += 32;
+          this.enemyLookDirection = "right";
+          this.enemy.setFrame(0);
+        }
+        else if(this.AE.x < this.enemy.x || this.AE.x == this.enemy.x){
+          this.enemy.x -= 32;
+          this.enemyLookDirection = "left";
+          this.enemy.setFrame(1);
+        }
+      }
+    }
+  }
 
 
  

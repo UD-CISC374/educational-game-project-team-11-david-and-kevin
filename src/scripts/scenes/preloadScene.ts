@@ -42,6 +42,8 @@ export default class PreloadScene extends Phaser.Scene {
     this.load.image("tubing", "assets/spritesheets/tubing.png");
     this.load.tilemapTiledJSON("map", "assets/images/autoMap.json");
     this.load.image("mappedTiles", "assets/images/mappedTiles.png");
+    this.load.spritesheet("enemy","assets/images/enemy.png",{ frameWidth: 32,
+    frameHeight: 32})
 
 
 
