@@ -1,5 +1,5 @@
 //import AEItems from '../objects/aeitems';
-
+// import Beam from "./beam";
 
 export default class MainScene extends Phaser.Scene {
   
@@ -8,6 +8,7 @@ export default class MainScene extends Phaser.Scene {
   private AE: Phaser.Physics.Arcade.Sprite;
   private AES: Phaser.Physics.Arcade.Sprite;
   private CSS: Phaser.Physics.Arcade.Sprite;
+  private laser: Phaser.Physics.Arcade.Sprite;
   private planttiles: Array<Phaser.GameObjects.TileSprite>;
 
   private Keys: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -65,6 +66,7 @@ export default class MainScene extends Phaser.Scene {
   private cornPaths: integer[][];
   private wheatPaths: integer[][];
   private hempPaths: integer[][];
+  private projectiles: Phaser.GameObjects.Group;
 
 
 
@@ -90,6 +92,8 @@ export default class MainScene extends Phaser.Scene {
     this.randSeedArr = ["corn", "wheat", "hemp"]; 
 
     this.keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
+
+  
 
 
     
@@ -148,6 +152,8 @@ export default class MainScene extends Phaser.Scene {
     */
    var spawn = this.groundLayer.getTileAt(17,14);
    this.AE = this.physics.add.sprite(spawn.getCenterX(),spawn.getCenterY(),"AES", 6);
+   this.laser = this.physics.add.sprite(100, 100, "laser", 0);
+   
    this.anims.create({
      key: 'walk_up',
      repeat: 0,
@@ -271,6 +277,12 @@ this.input.keyboard.on('keyup-A', (event) =>{
  
     this.playerSwitch("AE");
   
+
+})
+
+this.input.keyboard.on('keyup-B', (event) =>{
+  // USE THIS TO TEST THE BEAM. 
+  this.laser.x +=32;
 
 })
 
