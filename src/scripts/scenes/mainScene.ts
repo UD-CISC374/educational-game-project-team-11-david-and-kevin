@@ -1,5 +1,7 @@
 //import AEItems from '../objects/aeitems';
 
+import { Physics } from "phaser";
+
 
 export default class MainScene extends Phaser.Scene {
   
@@ -41,7 +43,7 @@ export default class MainScene extends Phaser.Scene {
   private groundLayer: Phaser.Tilemaps.DynamicTilemapLayer;
   private forrestLayer: Phaser.Tilemaps.DynamicTilemapLayer;
   private farmLayer: Phaser.Tilemaps.DynamicTilemapLayer;
-  private pondLayer: Phaser.Tilemaps.DynamicTilemapLayer;
+  private mineLayer: Phaser.Tilemaps.DynamicTilemapLayer;
   private tubeLayer: Phaser.Tilemaps.DynamicTilemapLayer;
   private plantLayer: Phaser.Tilemaps.DynamicTilemapLayer;
   private mountainLayer: Phaser.Tilemaps.DynamicTilemapLayer;
@@ -65,9 +67,12 @@ export default class MainScene extends Phaser.Scene {
   private cornPaths: integer[][];
   private wheatPaths: integer[][];
   private hempPaths: integer[][];
-  private enemy: Phaser.Physics.Arcade.Sprite;
+  private enemyCount: integer;
   private enemyLookDirection: string;
-
+  private enemies: Phaser.Physics.Arcade.Group;
+  private : Phaser.Physics.Arcade.Group;
+  private speed: integer;
+  private storage: Phaser.Tilemaps.Tile;
 
 
   constructor() {
@@ -75,6 +80,7 @@ export default class MainScene extends Phaser.Scene {
   }
 
   create() {
+    this.speed = 1;
     this.lookDirection = "down";
     this.map = this.make.tilemap({tileWidth: 32,
       tileHeight: 32,
@@ -114,7 +120,7 @@ export default class MainScene extends Phaser.Scene {
     this.mountainLayer = this.map.createBlankDynamicLayer("Mountain",this.tiles).setScale(3,3);
     this.farmLayer = this.map.createBlankDynamicLayer("Farm Layer",this.tiles);
     this.plantLayer = this.map.createBlankDynamicLayer("Plant Layer", this.tiles); 
-    //this.pondLayer = this.map.createBlankDynamicLayer("Pond Layer",this.tiles);
+    this.mineLayer = this.map.createBlankDynamicLayer("Mine Layer",this.tiles);
     this.controls = this.map.createBlankDynamicLayer("Controls",this.tiles);
   
      //console.log("forrest gen");
@@ -204,14 +210,28 @@ export default class MainScene extends Phaser.Scene {
    });
    
    this.CS.setCollideWorldBounds(true);
-   this.enemy = this.physics.add.sprite(spawn.getCenterX() - 64,spawn.getCenterY() - 256,"enemy", 3);
-   this.enemyLookDirection = "down";
+   
+   this.mineLayer.setCollision(39);
+   this.enemies = this.physics.add.group({classType: Phaser.GameObjects.Sprite});
+  
+   this.addEnemy(1);
+   this.addEnemy(2);
+   this.physics.world.enable(this.enemies);
+   this.mineLayer.setTileIndexCallback(39,this.destroyEnemy,this);
+  // this.physics.add.collider(this.mineLayer,this.enemies,(tile,enemy)=> {
+    //if(tile instanceof Phaser.Tilemaps.Tile && tile.index == 39){  
+      
+   
+  
+   
 
 
 
     this.physics.add.overlap(this.forrestLayer,this.AE);
     this.physics.add.collider(this.mountainLayer,this.AE);
-    //this.physics.add.collider(this.pondLayer,this.AE);
+    //this.physics.add.collider(this.mineLayer,this.enemies);
+    
+    
     
     this.stateText = this.add.text(256,1280,this.state,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
     this.stateText.text = "Use your AE(in white) to harvest forrest resources";
@@ -485,7 +505,8 @@ this.input.keyboard.on('keyup-P', (event) =>{
       })
       this.input.keyboard.on('keyup-SPACE',  (event) =>{
         if(this.state == "active"){
-        this.tubing();
+        this.placeBomb();
+        
         }
       })
     
@@ -494,59 +515,135 @@ this.input.keyboard.on('keyup-P', (event) =>{
 
   }
 
+  placeBomb(){
+    this.mineLayer.putTileAtWorldXY(39,this.CS.x,this.CS.y);
+  }
+
+  addEnemy(type: integer){
+    
+    
+    if(type == 1){
+      var spawn = this.groundLayer.getTileAt(3,3);
+      let newEnemy = this.physics.add.sprite(spawn.getCenterX(),spawn.getCenterY(),"enemy", 0);
+      newEnemy.setData({location: 'top',itemIndex: 0});
+      
+      this.physics.add.overlap(newEnemy,this.mineLayer);
+      this.enemies.add(newEnemy);
+    }
+    else if(type == 2){
+      var spawn = this.groundLayer.getTileAt(29,29);
+      let newEnemy = this.physics.add.sprite(spawn.getCenterX(),spawn.getCenterY(),"enemy", 3);
+      newEnemy.setData({location: 'bot',itemIndex: 3});
+      
+      this.physics.add.overlap(newEnemy,this.mineLayer);
+      this.enemies.add(newEnemy);
+    }
+    
+  }
+
+
+
   enemyHandler(){
     
+    
+    
+
+
+    Phaser.Actions.Call(this.enemies.getChildren(),(enemy) =>{
+      //543x351
+      let moved = 0;
+      if(enemy instanceof Phaser.GameObjects.Sprite){
+        
+      
+      
+      
+      while(moved != this.speed){  
+      
+
+    
+    
+      if(enemy.getData('itemIndex') == 3 ||enemy.getData('itemIndex')  == 7){
+        
+        if(enemy.y > this.storage.getCenterY()){
+          enemy.y -=32;
+          
+          moved += 1;
+        }
+        
+        else if(enemy.y == this.storage.getCenterY()){
+          let currIndex = enemy.getData('itemIndex') - 2;
+          enemy.setData('itemIndex', currIndex);
+          enemy.x -= 32;
+          
+          moved += 1;
+        }
+  /*
+        else if(enemy.x > 543 && enemy.y == 351){
+          enemy.x -= 32;
+          let currIndex = enemy.getData('itemIndex') - 1;
+          enemy.setData('itemIndex', currIndex);
+          moved+=1;
+          
+        }*/
+      }
+      else if(enemy.getData('itemIndex') == 0 ||enemy.getData('itemIndex')  == 4){
+        /*if(enemy.x == 543 && enemy.y == 576){
+          enemy.destroy();
+        }
+      */
+       if(enemy.x < this.storage.getCenterX()){
+          enemy.x += 32;
+          
+          moved += 1;
+        }
+        else if(enemy.x == this.storage.getCenterX()){
+          
+          let currIndex = enemy.getData('itemIndex') + 2;
+          enemy.setData('itemIndex', currIndex);
+          enemy.y += 32;
+          moved += 1;
+        }
   
-    if(this.enemyLookDirection == "down" || this.enemyLookDirection == "up"){
-      if(this.AE.x > this.enemy.x){
-        this.enemy.x += 32;
-        this.enemyLookDirection = "right";
-        this.enemy.setFrame(0);
+        
       }
-      else if(this.AE.x < this.enemy.x){
-        this.enemy.x -= 32;
-        this.enemyLookDirection = "left";
-        this.enemy.setFrame(1);
-      }
-      else if(this.AE.x == this.enemy.x
-      ){
-        if(this.AE.y > this.enemy.y){
-          this.enemy.y += 32;
-          this.enemyLookDirection = "down";
-          this.enemy.setFrame(2);
+      else if(enemy.getData('itemIndex') == 1 ||enemy.getData('itemIndex')  == 5){
+        
+        if(enemy.x > this.storage.getCenterX()){
+          enemy.x -= 32;
+          
+          moved += 1;
         }
-        else if(this.AE.y < this.enemy.y){
-          this.enemy.y -= 32;
-          this.enemyLookDirection = "up";
-          this.enemy.setFrame(3);
-        }
+        
+        
       }
+  
+      else if(enemy.getData('itemIndex') == 2 ||enemy.getData('itemIndex')  == 6){
+        if(enemy.y < this.storage.getCenterY()){
+          enemy.y += 32;
+          
+          moved += 1;
+        }
+        
+      }
+      
+      
     }
-    else if(this.enemyLookDirection == "right" || this.enemyLookDirection == "left"){
-      if(this.AE.y > this.enemy.y){
-        this.enemy.y += 32;
-        this.enemyLookDirection = "down";
-        this.enemy.setFrame(2);
-      }
-      else if(this.AE.y < this.enemy.y){
-        this.enemy.y -= 32;
-        this.enemyLookDirection = "up";
-        this.enemy.setFrame(3);
-      }
-      else if(this.AE.y == this.enemy.y){
-        if(this.AE.x > this.enemy.x){
-          this.enemy.x += 32;
-          this.enemyLookDirection = "right";
-          this.enemy.setFrame(0);
-        }
-        else if(this.AE.x < this.enemy.x || this.AE.x == this.enemy.x){
-          this.enemy.x -= 32;
-          this.enemyLookDirection = "left";
-          this.enemy.setFrame(1);
-        }
-      }
+    if(enemy.x == this.storage.getCenterX() && enemy.y == this.storage.getCenterY()){
+      enemy.destroy();
+    }
+    else{
+    enemy.setFrame(enemy.getData('itemIndex'));
     }
   }
+    
+      
+
+    },this);
+  
+    
+  }
+
+  
 
 
  
@@ -593,6 +690,9 @@ this.input.keyboard.on('keyup-P', (event) =>{
     this.farmLayer.fill(4,17,4,8,6);
 
     this.plantLayer.fill(4,17,4,8,6);
+    //128x576
+    this.storage = this.plantLayer.putTileAt(41,17,11);
+    //543x351
 
     var xloc = 0;
     var yloc = 0;
@@ -623,7 +723,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
 
     }
 
-
+    
     this.forrestLayer.setCollision([0,1]);
     this.forrestLayer.setTileIndexCallback(0,this.harvestTree,this);
     this.farmLayer.setCollision(4);
@@ -634,7 +734,8 @@ this.input.keyboard.on('keyup-P', (event) =>{
     
     this.mountainLayer.setCollision(27);
     this.mountainLayer.setTileIndexCallback(27,this.harvestMountain,this);
-    //this.pondLayer.setCollision(38);
+    
+    //this.mountainLayer.setTileIndexCallback(40,this.destroyEnemy,this);
 
     //this.forrestLayer.setTileIndexCallback()
   
@@ -889,6 +990,13 @@ harvestMountain(){
   }
   
 
+  
+}
+
+destroyEnemy(enemy,bomb){
+  this.mineLayer.replaceByIndex(39,-1,Math.floor(enemy.x/32),Math.floor(enemy.y/32),1,1);
+  enemy.destroy();
+  
   
 }
 
