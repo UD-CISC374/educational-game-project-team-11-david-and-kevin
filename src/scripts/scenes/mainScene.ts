@@ -826,61 +826,62 @@ testPlantLayer(){
   alert('WORKS');
   }
 
- plantSeed(){
-   if(this.mode == "Plant"){
-   var tile = this.plantLayer.getTileAtWorldXY(this.AE.x, this.AE.y);
-   //alert(tile.index);
-      if(this.current.index == 31 && this.cornSeedsCount > 0){
-         // console.log(this.physics.overlap(this.AE, this.farmLayer));
-        // Plant = this.add.tileSprite(x,y,32,32,"seedsandplants", 1);
-          if(tile.index !== null){
-            if (tile.index == 4) {
-              this.plantLayer.replaceByIndex(4,this.current.index,Math.floor(this.AE.x/32),Math.floor(this.AE.y/32),1,1);
-              // this.plantInventory[this.plantsize] = Plant;
-              this.plantsize += 1;
-              this.cornSeedsCount -= 1;
-              console.log("Number: " + this.cornSeedsCount);
-              this.countArray[0].text = this.cornSeedsCount.toString();
-              console.log('PLANTED CORN'); 
-            }
-          }
-          
-      }
-      else if(this.current.index == 32  && this.wheatSeedsCount > 0){
-        // var Plant = this.add.tileSprite(x,y,32,32,"seedsandplants", 2);
-        if(tile.index !== null){
-          if(tile.index == 4){
-            this.plantLayer.replaceByIndex(4,this.current.index,Math.floor(this.AE.x/32),Math.floor(this.AE.y/32),1,1);
-            // this.plantInventory[this.plantsize] = Plant;
-            this.plantsize += 1;
-            this.wheatSeedsCount -= 1;
-            this.countArray[2].text = this.wheatSeedsCount.toString();
-            console.log('PLANTED WHEAT');
-          }
-        }
-      }
-      else if(this.current.index == 30 && this.hempSeedsCount > 0){
-        // var Plant = this.add.tileSprite(x,y,32,32,"seedsandplants", 0);
-        if(tile.index !== null){
-          if(tile.index == 4){
-            this.plantLayer.replaceByIndex(4,this.current.index,Math.floor(this.AE.x/32),Math.floor(this.AE.y/32),1,1);
-            // this.plantInventory[this.plantsize] = Plant;
-            this.plantsize += 1;
-            this.hempSeedsCount -= 1;
-            this.countArray[1].text = this.hempSeedsCount.toString();
-            console.log('PLANTED HEMP');
-          }
-
-        }
-        
-      }
-      else{
-        //alert('Out of seeds!');
-      }
-    }
-  
-  
-    }
+  plantSeed(){
+    if(this.mode == "Plant"){3
+      alert(this.current.index);
+    var tile = this.plantLayer.getTileAtWorldXY(this.AE.x, this.AE.y);
+    //alert(tile.index);
+       if(this.current.index == 31 && this.cornSeedsCount > 0){
+          // console.log(this.physics.overlap(this.AE, this.farmLayer));
+         // Plant = this.add.tileSprite(x,y,32,32,"seedsandplants", 1);
+           if(tile.index !== null){
+             if (tile.index == 4 && (this.AE.y == 272 ||this.AE.y == 304)) {
+               this.plantLayer.replaceByIndex(4,this.current.index,Math.floor(this.AE.x/32),Math.floor(this.AE.y/32),1,1);
+               // this.plantInventory[this.plantsize] = Plant;
+               this.plantsize += 1;
+               this.cornSeedsCount -= 1;
+               console.log("Number: " + this.cornSeedsCount);
+               this.countArray[0].text = this.cornSeedsCount.toString();
+               alert('PLANTED CORN'); 
+             }
+           }
+           
+       }
+       else if(this.current.index == 32  && this.wheatSeedsCount > 0){
+         // var Plant = this.add.tileSprite(x,y,32,32,"seedsandplants", 2);
+         if(tile.index !== null){
+           if(tile.index == 4 && (this.AE.y == 240 ||this.AE.y == 208)){
+             this.plantLayer.replaceByIndex(4,this.current.index,Math.floor(this.AE.x/32),Math.floor(this.AE.y/32),1,1);
+             // this.plantInventory[this.plantsize] = Plant;
+             this.plantsize += 1;
+             this.wheatSeedsCount -= 1;
+             this.countArray[2].text = this.wheatSeedsCount.toString();
+             alert('PLANTED WHEAT');
+           }
+         }
+       }
+       else if(this.current.index == 30 && this.hempSeedsCount > 0){
+         // var Plant = this.add.tileSprite(x,y,32,32,"seedsandplants", 0);
+         if(tile.index !== null){
+           if(tile.index == 4 && (this.AE.y == 144 ||this.AE.y == 176)){
+             this.plantLayer.replaceByIndex(4,this.current.index,Math.floor(this.AE.x/32),Math.floor(this.AE.y/32),1,1);
+             // this.plantInventory[this.plantsize] = Plant;
+             this.plantsize += 1;
+             this.hempSeedsCount -= 1;
+             this.countArray[1].text = this.hempSeedsCount.toString();
+             alert('PLANTED HEMP');
+           }
+ 
+         }
+         
+       }
+       else{
+         //alert('Out of seeds!');
+       }
+     }
+   
+   
+     }
   
 
   tubing(){
