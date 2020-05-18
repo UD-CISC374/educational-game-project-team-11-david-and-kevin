@@ -73,6 +73,8 @@ export default class MainScene extends Phaser.Scene {
   private : Phaser.Physics.Arcade.Group;
   private speed: integer;
   private storage: Phaser.Tilemaps.Tile;
+  private iteration: integer;
+  private iterationText: Phaser.GameObjects.Text;
 
 
   constructor() {
@@ -339,6 +341,9 @@ this.input.keyboard.on('keyup-P', (event) =>{
 
 
     this.setControls();
+    this.iteration = 0;
+    this.iterationText = this.add.text(1471,1471,this.iteration.toString(),{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' })
+      
 
   
 
@@ -383,6 +388,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
     this.status[7].text = this.mode1;
     this.status[8].text = this.mode2;
     
+    
     //this.facing.text = this.lookDirection;
     
     
@@ -396,6 +402,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
       this.input.keyboard.removeListener('keyup-UP');
       this.input.keyboard.removeListener('keyup-DOWN');
       this.input.keyboard.removeListener('keyup-SPACE');
+      
     if(this.player == "AE"){
       
      
@@ -405,6 +412,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
         this.AE.play("walk_right");
         this.lookDirection = "right";
         this.enemyHandler();
+        this.lazyIterate();
         }
         else if(this.state == "paused"){
           this.switchIndex("right");
@@ -418,6 +426,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
         this.AE.play("walk_left");
         this.lookDirection = "left";
         this.enemyHandler();
+        this.lazyIterate();
         }
         else if(this.state == "paused"){
           this.switchIndex("left");
@@ -431,6 +440,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
         this.AE.play("walk_up");
         this.lookDirection = "up";
         this.enemyHandler();
+        this.lazyIterate();
         }
         
 
@@ -441,6 +451,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
         this.AE.play("walk_down");
         this.lookDirection = "down";
         this.enemyHandler();
+        this.lazyIterate();
         }
         
 
@@ -449,6 +460,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
         if(this.state == "active"){
         this.plantSeed();
         this.enemyHandler();
+        this.lazyIterate();
         }
       })
         
@@ -463,6 +475,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
         this.CS.play("Cwalk_right");
         this.lookDirection = "right";
         this.enemyHandler();
+        this.lazyIterate();
         }
         else if(this.state == "paused"){
           this.switchIndex("right");
@@ -476,6 +489,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
         this.CS.play("Cwalk_left");
         this.lookDirection = "left";
         this.enemyHandler();
+        this.lazyIterate();
         }
         else if(this.state == "paused"){
           this.switchIndex("left");
@@ -489,6 +503,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
         this.CS.play("Cwalk_up");
         this.lookDirection = "up";
         this.enemyHandler();
+        this.lazyIterate();
         }
         
 
@@ -499,6 +514,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
         this.CS.play("Cwalk_down");
         this.lookDirection = "down";
         this.enemyHandler();
+        this.lazyIterate();
         }
         
 
@@ -506,6 +522,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
       this.input.keyboard.on('keyup-SPACE',  (event) =>{
         if(this.state == "active"){
         this.placeBomb();
+        this.lazyIterate();
         
         }
       })
@@ -513,6 +530,20 @@ this.input.keyboard.on('keyup-P', (event) =>{
     }
 
 
+  }
+
+  lazyIterate(){
+    this.iteration += 1;
+    if(this.iteration == 10){
+      this.forrestLayer.replaceByIndex(1,0,0,0,32,32);
+      this.mountainLayer.replaceByIndex(28,27,0,0,32,32);
+    }
+    if(this.iteration == 20){
+      this.addEnemy(1);
+      this.addEnemy(2);
+      this.iteration = 0;
+    }
+    this.iterationText.text = this.iteration.toString();
   }
 
   placeBomb(){
@@ -546,6 +577,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
   enemyHandler(){
     
     
+
     
 
 
@@ -993,7 +1025,7 @@ harvestMountain(){
   
 }
 
-destroyEnemy(enemy,bomb){
+destroyEnemy(enemy){
   this.mineLayer.replaceByIndex(39,-1,Math.floor(enemy.x/32),Math.floor(enemy.y/32),1,1);
   enemy.destroy();
   
