@@ -112,7 +112,7 @@ The health of the farm decreases if they are unable to protect it against the pl
 
 # Procedures/Actions
 
-You can swap between the characters by pressnig 'C' for Computer Scientist or 'A' for the Agricultural Engineer to either: 
+You can swap between the characters by pressing 'C' for Computer Scientist or 'A' for the Agricultural Engineer to either: 
 - Automate watering or plant mines by hitting '1' or '2' and pressing the SPACEBAR to perform the action 
 - Collect resources or plant crops by hitting '1' or '2' and pressing the SPACEBAR to perform the action 
 
@@ -142,8 +142,8 @@ You can swap between the characters by pressnig 'C' for Computer Scientist or 'A
 ## Feedback
 Starting the farm will be done by the agricultural engineer
 When in maintenance, or agricultural engineer mode, you are meant to collect, plant, and harvest crop.
-Failure to do so correctly will lead to score deduction
-When I’m building, or computer scientist mode, you are in charge of keeping the system flowing smoothly with the gates you allow to be open or closed. 
+Failure to do so correctly will result in a low score. 
+When I’m building, or computer scientist mode, you are in charge of keeping the water system flowing smoothly to specific seed rows with switches you allow to be on or off. 
 As you advance, you are rewarded more seeds but need to find a way of fitting them all into your farm. 
 If you take point loss, it will reflect either in the environment around you changing and becoming more dangerous or your home planet lacking greater resources.
 
@@ -152,25 +152,22 @@ If you take point loss, it will reflect either in the environment around you cha
 
 ## Presentation of Rules
 
-- Give players a seed
-- Require Agricultural engineer to research a seed
-- Require agricultural engineer to plant seed
-- Require agricultural engineer to create proper nutrient 
-- Require computer scientist to build system
-- Require both to go out and collect more resources from the forest 
+- Give players a starting set of seeds
+- Require Agricultural engineer to collect wood and plant a seed
+- Require agricultural engineer to collect water 
+- Require computer scientist to use switches for water flow and build mines 
 
 
 ## Presentation of Content
 
-Users will begin by receiving a base plot of land. They will then be given a few seeds. The agricultural engineer should begin planting seeds in a certain way so when the computer scientist builds the system, the water flows to each seed currently and at the time required. Failure to do so will result in either faulty crops or damage to the ecosystem.
+Users will begin by receiving a base plot of land. They will then be given a few seeds. The agricultural engineer should begin planting seeds in a certain way so when the computer scientist builds the system, the water flows to each seed currently and at the time required. 
 
 
 ## Story (Brief)
 
+The Government sends an agricultural engineer and a computer scientist to another planet to grow a foreign food source for them. Using the unique mechanics for each character they plant and harvest crops while maintain the surrounding ecosystem by defending the farm against wildlife which can destroy the farmland. The player has a month to reach their government’s quota to prove to their nation their research was not in vain. 
 
-The Government sends an agricultural engineer and a computer scientist to another planet to grow a foreign food source for them using unique mechanics, such as condtional statements and logic gates, but if the player fails to harvest well and maintain the surrounding ecosystem, the wildlife begins to revolt. The player has a month to reach their government’s quota to prove to their nation their research was not in vain. 
-
-## Storyboarding
+## Storyboarding (Old)
 The AE and CS have a weekly supply drop of crops and piping from Earth. They can also gather foreign crops / materials at the risk of being injured by the wildlife. Being that this terrain is completely new, we don’t know if they will grow in the same environments like on Earth. It’s their job to find out what works best for the crops. If they waste the crops they either die of starvation or are killed by the planet’s wildlife. 
 
 The A.E. can perform three functions using condtional statements :  Plant, Harvest, Gather Crops
