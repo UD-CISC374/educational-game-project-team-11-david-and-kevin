@@ -11,3 +11,5 @@ You switch which mode you are using 1 and 2 which gives your character different
 You can plant crops, set mines and tubing using the SPACEBAR depending on which character and mode you are on. 
 Make sure you are on the farm area (in brown) when you are planting seeds.
 Pay attention to your farm area and protect it from invading wildlife.
+
+![Image of Yaktocat](https://octodex.github.com/images/yaktocat.png)
