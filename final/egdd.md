@@ -16,7 +16,7 @@ meta:
 
 ## Elevator Pitch
 
-The Government sends an agricultural engineer and a computer scientist to another planet to grow food and build their home economy using hydroponics systems managed by for conditional statements and logic gates, but when the player worsens the planet's ecosystem, the wildlife begins to revolt.
+Space Farm is a game that takes place on a foreign planet and your job is to grow crops and maintain its ecosystem for a period of 30 days. You will be switching between two characters, an Agricultural Engineer (AE) and a Computer Scientist (CS), as your play. Each character has different functionality that will assist you in gameplay. Users will explore the different processes that go into maintaining an ecosystem, such as planting, watering, and harvesting crops while protecting the farm area from wildlife. The player is rewarded with a high score by maintaining this area over the required period of time. 
 
 ## Influences (Brief)
 
@@ -25,24 +25,24 @@ The Government sends an agricultural engineer and a computer scientist to anothe
   - Explanation: They may be able to provide more insight about maintaining an ecosystem and planting crops that we could utilize in our game mechanics. 
 - Being Computer Science students :
   - Medium: Experience
-  - Explanation: A student that is fairly new to Computer Science and programming may have a difficult time grasping the concepts of conditional statements and logic gates. We felt we could incorporate these lessons into the game mechanics by making some of the land cultivation automated using these concepts. 
+  - Explanation: A student that is fairly new to Computer Science and programming may have a difficult time grasping some basic concepts. 
 - Animal Crossing
   - Medium: Game
   - Explanation: Animal Crossing is an open-ended game with no definitive objectives where the player is able to interact with anthropomorphic animals and the environment extensively from talking to villagers to planting crops. The idea of cultivating a foreign environment and interacting with unique fictional creatures was inspired from this. 
 
 ## Core Gameplay Mechanics (Brief)
 
-- Farm and tend to crops.
-- Work with logic gates and conditional statements to automate production.
-- Maintain the surrounding ecosystem.
-- Build the farming economy of your home planet.
+- Gather seeds and water crops.
+- Work with switches to automate water system.
+- Maintain the surrounding ecosystem by neutralizng wildlife.
+- Maintain the surrounding ecosystem through selective collection of resources (trees and mountains).
+- Build the farming economy of your home planet by collecting crops which increaes your score. 
 
 # Learning Aspects
 
 ## Learning Domains
-- Introductory Computer Science Concepts 
-- Introductory Economic Practices 
-- Introductory Agriculture Practices 
+- Introductory Computer Science Concepts (Switches)
+- Introductory Agriculture Practices (Planting, Watering, Harvesting) 
 
 
 ## Target Audiences
@@ -54,36 +54,29 @@ The Government sends an agricultural engineer and a computer scientist to anothe
 
 ## Target Contexts
 
-- This would be utilized in introductory Computer Science courses such as CISC 106/108 and CISC 260 as either a in-class exercise or homework assignment
-- Used to simulate farming situations for hydroponic farms  
+- This would be utilized in introductory Computer Science courses such as CISC 106/108 as either a in-class exercise or homework assignment
+- Used to simulate farming situations
 
 
 ## Learning Objectives
-
-- By the end of the lesson, players will be able to experiment with hydroponic farming material.
 - By the end of the lesson, players will be able to identify different types of seeds
-- By the end of the lesson, players will be able to build logic gates / condtional statements for automating manufacturing.
-- By the end of the lesson, players will be able to identify the changes that the use of different ecological materials has on the economy.
+- By the end of the lesson, players will be able to use switches to automate watering of seeds.
+- By the end of the lesson, players will be able to collect crops which aids their home economy. 
 
 
 ## Prerequisite Knowledge
 
 - Prior to starting the game, the player needs to be able to express concepts of supply and demand. 
-- Prior to starting the game, the player should be able to list and explain the concept of different condtional statements either in Python or JavaScript. 
-- Prior to starting the game, the player should be able to identify the different types of logic gates and their outputs
-- Prior to starting the game, players should have a basic understanding of agriculture(planting, watering, harvesting).. 
+- Prior to starting the game, the player should be able to list and explain the concept of switches. 
+- Prior to starting the game, players should have a basic understanding of agriculture (planting, watering, harvesting).
 
 
 ## Assessment Measures
 
-As the user progresses through each level, they receive points for how efficient their hydroponic system is and can lose points if there are any negative benefactors to the environment.
-
-For example, after doing research the player would need to know what kind of nutrient to give the seed so it can grow. The computer scientist would then be in charge of creating gates that open and close at certain times according to the seeds required watering cycle. If watered incorrectly or given the wrong nutrient, it could pose one of many threats to your home planet or the environment surrounding the farm. 
-
+The health of the farm decreases if they are unable to protect it against the planet's wildlife. Players recieve points for how much crops they are able to produce. 
 
 # What sets this project apart?
-
-- You can learn multiple skills such as farming and coding
+- You can learn multiple skills such as farming and coding concepts
 - Can be edited to fit classroom examples
 - It’s interactive in many fields of study
 
@@ -92,69 +85,65 @@ For example, after doing research the player would need to know what kind of nut
 ## Player Interaction Pattern
 
 - 1 Player
-  - Build starting farm
   - Switch back and forth between two players to manage water movement and harvesting 
-  - Use agricultural engineer to upgrade material used
-  - Maintain the ecosystem 
-  - Build home economy
-- 2 Players
-  - Take turns as either the agricultural engineer or the computer scientist 
-  - If agricultural engineer, build operate and maintain the farm
-  - If computer scientist, build wiring for automating farm
+  - Use agricultural engineer to gather and plant crops 
+  - Use computer scientist to set mines and automate watering with switches 
+  - Maintain the ecosystem by protecting the farm area from wildlife  
+  - Build home economy by collecting crops after fully grown. 
 
 
 
 ## Player Modes
 
 - *Single Player*: Switch between the two engineers to manage the farm. (See Characters)
-- *Multiplayer*: Take turns using either the engineer or the computer scientist. (See Characters)
-
 
 # Gameplay Objectives
 
-- Automate your farm
-    - Description: Creating gates that open and close at certain times during a crop's required watering cycle
-    - Alignment: In completing this objective, the player will demonstrate their knowledge of logic gate and condtional statements
+- Automate watering
+    - Description: Once seeds have been planted, you can automate watering by switching on/off specific pipes when you are playing as the CS 
+    - Alignment: In completing this objective, the player will demonstrate their knowledge of switches 
+- Harvesting Crops
+   - Description: When playing as the AE, the player can plant seeds in the farm area and collect them when they're watered
+   - Alignment: In completeling this objective, the player will demonstrate their knowledge of agricultural practices
 - Maintain the ecosystem
-    -  Description :  Giving the crops the correct nutrients to yield positive results. 
-    -  Alignment:  The player will identify the correct methods that yields positive changes on the ecosystem on the economy.
+    -  Description :  The CS can plant mines to neutralize wildlife that threaten the farm area 
+    -  Alignment:  The player maintain the ecosystem against threats.
 
 
 # Procedures/Actions
 
-You can swap between the Computer Scientist or Agricultural Engineer using the SPACE key to either automate or manually plant crops in the fields and regulate the water systems. 
+You can swap between the characters by pressing 'C' for Computer Scientist or 'A' for the Agricultural Engineer to either: 
+- Automate watering or plant mines by hitting '1' or '2' and pressing the SPACEBAR to perform the action 
+- Collect resources or plant crops by hitting '1' or '2' and pressing the SPACEBAR to perform the action 
 
 # Rules
-
-- Do not let the wrong water concentrate interact with the wrong plant
-- Do not let watering occur during times it shouldn’t
-- Don’t plant crops that do not mix together
-- Keep the environment as close to similar as before you arrived as possible
-- Produce up to your hometown’s quota
+- Don't allow the wildlife to reach the farm box.
+- Make sure you switch on/off the specific tubing/pipes to water specific rows in the farm area 
+- Don't forget to collect the seeds to gain points
+- Be careful not to collect all the resources at once 
+- Monitor you inventory to see if you have enough material to perform your action 
+- Don't misplace your mines
 
 
 # Objects/Entities
 - Animals 
 - Trees
-- Spaceship
-- Home planet 
 - Jungle/Forrest 
 
 
 ## Core Gameplay Mechanics (Detailed)
 
-- *Automate your farm*: build systems for watering and tending to crops. Use the correct nutrient for each plant and expand your farm as you produce more. If you fail to accomplish both the current nutrient and water cycle, your overall score will be penalized. 
+- *Automate your water system*: With your Computer Scientist, when the seeds are laid on the farm ground by the Agricultural Engineer, turn on or off the switches to automatically send water flow to specific rows which will switch the seeds into collectable crops. 
 
-- *Build your automation system*: Use the computer scientist to build logic gates for controlling water flow. As your farm expands, so should your automation system. To continue to advance, you must use the planet's resources as a form of material for flow. You must then use your knowledge of logic gates to open up each valve at given times. 
+- *Maintain the ecosystem*: Use the Agricultural Engineer to collect rock, plastic, and wood that can be utilized for different tasks. Wood will allow the AE to plant seeds. Plastic/Rock allows the Computer scientist to build mines to defend the farmland from wildlife. The collection of water allows the CS to utilize the tubing to send water to plants. 
 
-- *Build your home economy*: Increase your home economy by selling your produce back home. You can increase food, income and healthiness of the planet. However, if crop becomes spoiled, this can take a toll on your score. 
-
+- *Build your home economy*: Increase your home economy by collecting crops which increases your score.
 
 ## Feedback
 Starting the farm will be done by the agricultural engineer
-When in maintenance, or agricultural engineer mode, you are meant to research, plant, and harvest crop.
-Failure to do so correctly will lead to score deduction
-When I’m building, or computer scientist mode, you are in charge of keeping the system flowing smoothly with the gates you allow to be open or closed. 
+When in maintenance, or agricultural engineer mode, you are meant to collect, plant, and harvest crop.
+Failure to do so correctly will result in a low score. 
+When I’m building, or computer scientist mode, you are in charge of keeping the water system flowing smoothly to specific seed rows with switches you allow to be on or off. 
 As you advance, you are rewarded more seeds but need to find a way of fitting them all into your farm. 
 If you take point loss, it will reflect either in the environment around you changing and becoming more dangerous or your home planet lacking greater resources.
 
@@ -163,25 +152,22 @@ If you take point loss, it will reflect either in the environment around you cha
 
 ## Presentation of Rules
 
-- Give players a seed
-- Require Agricultural engineer to research a seed
-- Require agricultural engineer to plant seed
-- Require agricultural engineer to create proper nutrient 
-- Require computer scientist to build system
-- Require both to go out and collect more resources from the forest 
+- Give players a starting set of seeds
+- Require Agricultural engineer to collect wood and plant a seed
+- Require agricultural engineer to collect water 
+- Require computer scientist to use switches for water flow and build mines 
 
 
 ## Presentation of Content
 
-Users will begin by receiving a base plot of land. They will then be given a few seeds and a seed reader. The agricultural engineer should begin planting seeds in a certain way so when the computer scientist builds the system, the water flows to each seed currently and at the time required. Failure to do so will result in either faulty crops or damage to the ecosystem.
+Users will begin by receiving a base plot of land. They will then be given a few seeds. The agricultural engineer should begin planting seeds in a certain way so when the computer scientist builds the system, the water flows to each seed currently and at the time required. 
 
 
 ## Story (Brief)
 
+The Government sends an agricultural engineer and a computer scientist to another planet to grow a foreign food source for them. Using the unique mechanics for each character they plant and harvest crops while maintain the surrounding ecosystem by defending the farm against wildlife which can destroy the farmland. The player has a month to reach their government’s quota to prove to their nation their research was not in vain. 
 
-The Government sends an agricultural engineer and a computer scientist to another planet to grow a foreign food source for them using unique mechanics, such as condtional statements and logic gates, but if the player fails to harvest well and maintain the surrounding ecosystem, the wildlife begins to revolt. The player has a month to reach their government’s quota to prove to their nation their research was not in vain. 
-
-## Storyboarding
+## Storyboarding (Old)
 The AE and CS have a weekly supply drop of crops and piping from Earth. They can also gather foreign crops / materials at the risk of being injured by the wildlife. Being that this terrain is completely new, we don’t know if they will grow in the same environments like on Earth. It’s their job to find out what works best for the crops. If they waste the crops they either die of starvation or are killed by the planet’s wildlife. 
 
 The A.E. can perform three functions using condtional statements :  Plant, Harvest, Gather Crops
@@ -273,16 +259,14 @@ If you lose all your HP or do not meet quota in a month, you lose and must resta
 
 ## Aethestics
 
-The aethestics will be very cartoonish and pixelated. The audio will create an immersive atmosphere and the sound effects will whacky allowing playing to feel okay with making mistakes and trying again. 
+The aethestics will be very 8bit style and pixelated. The audio will create an immersive atmosphere and the sound effects will whacky allowing playing to feel okay with making mistakes and trying again. 
 
 ## Graphical
 
 - Characters List
   - Agriculural Engineer
   - Computer Scientist
-  - Governor 
 - Textures:
-  - Space Farm House
   - Wheat
   - Corn
   - Hemp
@@ -291,7 +275,6 @@ The aethestics will be very cartoonish and pixelated. The audio will create an i
   - Water 
 - Environment Art/Textures:
   - New Planet
-  - Home Planet 
 
 
 ## Audio

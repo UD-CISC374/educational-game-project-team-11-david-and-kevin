@@ -36,6 +36,10 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/educational-game-project-team-11-david-and-kevin/finalassets/images/WeaponsAndChest.png"
   },
   {
+    "revision": "0350ac9f4316ca54914430d54677f626",
+    "url": "/educational-game-project-team-11-david-and-kevin/finalassets/images/aeinstructions.png"
+  },
+  {
     "revision": "e43d910498fa80bab65d72445dcd7e73",
     "url": "/educational-game-project-team-11-david-and-kevin/finalassets/images/alpha-map-background.png"
   },
@@ -46,6 +50,14 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "314f0c5e054fd70812203fd11c7f9d15",
     "url": "/educational-game-project-team-11-david-and-kevin/finalassets/images/bucket.png"
+  },
+  {
+    "revision": "427fa57ef3260635afe06d0124535d8b",
+    "url": "/educational-game-project-team-11-david-and-kevin/finalassets/images/controls.png"
+  },
+  {
+    "revision": "c2c6a2cedc091045ea5ae50f82c62db9",
+    "url": "/educational-game-project-team-11-david-and-kevin/finalassets/images/csinstructions.png"
   },
   {
     "revision": "093f1f8021e2859aaeb25269fe9db73c",
@@ -128,15 +140,15 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/educational-game-project-team-11-david-and-kevin/finalfavicon.ico"
   },
   {
-    "revision": "895931f19bd2483b4bf4",
-    "url": "/educational-game-project-team-11-david-and-kevin/finalgen.main.1a0f25665c40e211e509.bundle.js"
+    "revision": "56d5be1a4f7f531b8f8c",
+    "url": "/educational-game-project-team-11-david-and-kevin/finalgen.main.c7797e67344ab8c9b442.bundle.js"
   },
   {
     "revision": "5e69403aa42e950fedff",
     "url": "/educational-game-project-team-11-david-and-kevin/finalgen.vendors.0805bb80903235d40eaf.bundle.js"
   },
   {
-    "revision": "674c13308fe148049b05d6275e8b04c6",
+    "revision": "4686d3acebab6f430cf0b9898a543231",
     "url": "/educational-game-project-team-11-david-and-kevin/finalindex.html"
   },
   {
