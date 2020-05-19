@@ -719,31 +719,42 @@ this.input.keyboard.on('keyup-P', (event) =>{
   
   generateInventory(){
 
-    var cornSeed = this.add.tileSprite(64,1088,32,32,"seedsandplants", 1).setScale(2);
-      
+    var cornSeed = this.add.tileSprite(64,1088,32,32,"seedsandplants", 1)
+    this.add.text(64,1056,"Corn Seed",{ fontFamily: 'Arial', fontSize: 16, color: '#C9BE29 ' })
+    
     this.inventory[0] = cornSeed;
      
 
   
-    var hempSeed = this.add.tileSprite(64,1152,32,32,"seedsandplants", 0).setScale(2);
+    var hempSeed = this.add.tileSprite(64,1152,32,32,"seedsandplants", 0)
+    this.add.text(64,1140,"Rope Seed",{ fontFamily: 'Arial', fontSize: 16, color: '#C9BE29 ' })
     this.inventory[1] = hempSeed;
 
-      var wheatSeed = this.add.tileSprite(64,1216,32,32,"seedsandplants", 2).setScale(2);
-      this.inventory[2] = wheatSeed;
+      var wheatSeed = this.add.tileSprite(64,1216,32,32,"seedsandplants", 2)
+      
+      this.add.text(64,1184,"Wheat Seed",{ fontFamily: 'Arial', fontSize: 16, color: '#C9BE29 ' })
+    this.inventory[2] = wheatSeed;
 
-      var wood = this.add.tileSprite(64,1280,32,32,"icons", 2).setScale(2);
+      var wood = this.add.tileSprite(64,1280,32,32,"icons", 2)
+      this.add.text(64,1248,"Wood",{ fontFamily: 'Arial', fontSize: 16, color: '#C9BE29 ' })
+    
       this.inventory[3] = wood;
 
-      var rock = this.add.tileSprite(64,1344,32,32,"icons", 1).setScale(2);
+      var rock = this.add.tileSprite(64,1344,32,32,"icons", 1)
       this.inventory[4] = rock;
+      this.add.text(64,1312,"Rock",{ fontFamily: 'Arial', fontSize: 16, color: '#C9BE29 ' })
+    
       
-      var bucket = this.add.tileSprite(64,1408,32,32,"bucket").setScale(2);
+      var bucket = this.add.tileSprite(64,1408,32,32,"bucket")
+      this.add.text(64,1376,"Water",{ fontFamily: 'Arial', fontSize: 16, color: '#C9BE29 ' })
+    
       this.inventory[5] = bucket;
 
-      var plastic = this.add.tileSprite(64,1472,32,32,"plastic").setScale(2);
-      this.inventory[6] = plastic;
+      
+      
+      
 
-      for(let i = 0;i<7;i++){
+      for(let i = 0;i<6;i++){
         this.countArray[i] = this.add.text(this.inventory[i].x + 64,this.inventory[i].y - 16,"0",{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' })  
     
       }
@@ -863,10 +874,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
       this.bucketCount += 2;
       this.countArray[5].text = this.bucketCount;
     }
-    else if(type == "plastic"){
-      this.plasticCount += 1;
-      this.countArray[6].text = this.plasticCount;
-    }
+    
   }
 
 /**
