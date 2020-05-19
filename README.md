@@ -12,4 +12,4 @@ You can plant crops, set mines and tubing using the SPACEBAR depending on which 
 Make sure you are on the farm area (in brown) when you are planting seeds.
 Pay attention to your farm area and protect it from invading wildlife.
 
-![Image of Yaktocat](https://octodex.github.com/images/yaktocat.png)
+![Screenshot of Game](https://github.com/UD-CISC374/educational-game-project-team-11-david-and-kevin/blob/master/src/assets/screenshots/large.png)
