@@ -77,6 +77,7 @@ export default class MainScene extends Phaser.Scene {
   private iterationText: Phaser.GameObjects.Text;
   private farmHealth: integer;
   private healthText: Phaser.GameObjects.Text;
+  private currentPlant: integer
 
 
   constructor() {
@@ -84,6 +85,7 @@ export default class MainScene extends Phaser.Scene {
   }
 
   create() {
+    this.currentPlant = 1;
     this.speed = 1;
     this.lookDirection = "down";
     this.map = this.make.tilemap({tileWidth: 32,
@@ -365,17 +367,17 @@ this.input.keyboard.on('keyup-P', (event) =>{
       }
 
       if(this.mode == "Collect"){
-        this.stateText.text = "Use your AE(in white) to harvest forrest resources";
+        this.stateText.text = "Collect resources for planting crops";
       }
       else if(this.mode == "Plant"){
-        this.stateText.text = "Plant objects with your AE(in white) in the farm area"
+        this.stateText.text = "Plant crops in given areas(the farm)"
 
       }
-      if(this.mode == "Build"){
-        this.stateText.text = "Use your CS(in orange) to create tubing";
+      if(this.mode == "Filter"){
+        this.stateText.text = "Water and grow the current crop";
       }
-      else if(this.mode == "Set"){
-        this.stateText.text = "Set water paths through your tube objects"
+      else if(this.mode == "Bomb"){
+        this.stateText.text = "Place traps for the enemy aliens!"
 
       }
       
@@ -525,7 +527,8 @@ this.input.keyboard.on('keyup-P', (event) =>{
       })
       this.input.keyboard.on('keyup-SPACE',  (event) =>{
         if(this.state == "active"){
-        this.placeBomb();
+        this.CsHandler();
+        this.enemyHandler();
         this.lazyIterate();
         
         }
@@ -553,8 +556,14 @@ this.input.keyboard.on('keyup-P', (event) =>{
     this.iterationText.text = this.iteration.toString();
   }
 
-  placeBomb(){
+  CsHandler(){
+    if(this.mode == "Bomb"){
     this.mineLayer.putTileAtWorldXY(39,this.CS.x,this.CS.y);
+    }
+    else if(this.mode == "Filter"){
+      this.tubing();
+      
+    }
   }
 
   addEnemy(type: integer){
@@ -873,119 +882,27 @@ testPlantLayer(){
   
 
   tubing(){
-    if(this.mode == "Build"){
-      var tile = this.plantLayer.getTileAtWorldXY(this.CS.x, this.CS.y);
+    this.plantLayer.replaceByIndex(14,13,8,2,6,6);
+    if(this.currentPlant == 1){
+      this.plantLayer.replaceByIndex(13,14,8,2,6,1);
+      this.plantLayer.replaceByIndex(30,33,8,3,6,1);
       
-        
-         if(tile.index !== null){
-           if (tile.index == 4) {
-             if(this.lookDirection == "down"){
-               this.current.index = this.plantLayer.getTileAtWorldXY(this.CS.x, this.CS.y - 32).index;
-                
-              if(this.current.index == 5||this.current.index == 29 || this.current.index==9 || this.current.index==11 ||this.current.index==13
-                  || this.current.index==17 || this.current.index==23|| this.current.index==25){
-                this.plantLayer.replaceByIndex(4,5,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32),1,1);
-           
-                }
-                else if(this.current.index == 7){
-                  this.plantLayer.replaceByIndex(7,13,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32)-1,1,1);
-                  this.plantLayer.replaceByIndex(4,5,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32),1,1);
-           
-                }
-                else if(this.current.index == 15){
-                  this.plantLayer.replaceByIndex(15,9,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32)-1,1,1);
-                  this.plantLayer.replaceByIndex(4,5,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32),1,1);
-           
-                }
-                else if(this.current.index == 19){
-                  this.plantLayer.replaceByIndex(19,17,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32)-1,1,1);
-                  this.plantLayer.replaceByIndex(4,5,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32),1,1);
-           
-                }
-                else if(this.current.index == 21){
-                  this.plantLayer.replaceByIndex(21,11,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32)-1,1,1);
-                  this.plantLayer.replaceByIndex(4,5,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32),1,1);
-                  
-                }
-                if(this.current.index == 4){
-                  this.plantLayer.replaceByIndex(4,29,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32)-1,1,1);
-             
-                 }
-                
-
-             }
-             else if(this.lookDirection == "right"){
-              this.current.index = this.plantLayer.getTileAtWorldXY(this.CS.x - 32, this.CS.y).index;
-               
-              if(this.current.index == 4||this.current.index == 7 || this.current.index==9 || this.current.index==13 ||this.current.index==15
-                || this.current.index==17 || this.current.index==19|| this.current.index==25){
-              this.plantLayer.replaceByIndex(4,7,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32),1,1);
-         
-              }
-              else if(this.current.index == 11){
-                this.plantLayer.replaceByIndex(11,9,Math.floor(this.CS.x/32)-1,Math.floor(this.CS.y/32),1,1);
-                this.plantLayer.replaceByIndex(4,7,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32),1,1);
-         
-              }
-              else if(this.current.index == 21){
-                this.plantLayer.replaceByIndex(21,15,Math.floor(this.CS.x/32)-1,Math.floor(this.CS.y/32),1,1);
-                this.plantLayer.replaceByIndex(4,7,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32),1,1);
-         
-              }
-              else if(this.current.index == 23){
-                this.plantLayer.replaceByIndex(23,13,Math.floor(this.CS.x/32)-1,Math.floor(this.CS.y/32),1,1);
-                this.plantLayer.replaceByIndex(4,7,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32),1,1);
-         
-              }
-              else if(this.current.index == 5){
-                this.plantLayer.replaceByIndex(5,19,Math.floor(this.CS.x/32)-1,Math.floor(this.CS.y/32),1,1);
-                this.plantLayer.replaceByIndex(4,7,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32),1,1);
-                
-              }
-             }
-             else if(this.lookDirection == "left"){
-              this.current.index = this.plantLayer.getTileAtWorldXY(this.CS.x + 32, this.CS.y).index;
-              if(this.current.index == 4||this.current.index == 7 || this.current.index==9 || this.current.index==13 ||this.current.index==15
-                || this.current.index==17 || this.current.index==19|| this.current.index==25){
-              this.plantLayer.replaceByIndex(4,7,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32),1,1);
-         
-              }
-              else if(this.current.index == 17){
-                this.plantLayer.replaceByIndex(17,9,Math.floor(this.CS.x/32)+1,Math.floor(this.CS.y/32),1,1);
-                this.plantLayer.replaceByIndex(4,7,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32),1,1);
-         
-              }
-              else if(this.current.index == 19){
-                this.plantLayer.replaceByIndex(19,15,Math.floor(this.CS.x/32)+1,Math.floor(this.CS.y/32),1,1);
-                this.plantLayer.replaceByIndex(4,7,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32),1,1);
-         
-              }
-              else if(this.current.index == 25){
-                this.plantLayer.replaceByIndex(25,13,Math.floor(this.CS.x/32)+1,Math.floor(this.CS.y/32),1,1);
-                this.plantLayer.replaceByIndex(4,7,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32),1,1);
-         
-              }
-              else if(this.current.index == 5){
-                this.plantLayer.replaceByIndex(5,21,Math.floor(this.CS.x/32)+1,Math.floor(this.CS.y/32),1,1);
-                this.plantLayer.replaceByIndex(4,7,Math.floor(this.CS.x/32),Math.floor(this.CS.y/32),1,1);
-                
-              }
-             }
-
-            }
-            else{
-              this.plantLayer.removeTileAtWorldXY(this.CS.x, this.CS.y);
-              this.plantLayer.putTileAtWorldXY(4,this.CS.x, this.CS.y);
-            }
-          
-
-
-
     }
-    
-  
+    else if(this.currentPlant == 2){
+      this.plantLayer.replaceByIndex(13,14,8,4,6,1);
+      this.plantLayer.replaceByIndex(31,34,8,5,6,1);
+     
+    }
+    else if(this.currentPlant == 3){
+      this.plantLayer.replaceByIndex(13,14,8,6,6,1);
+      this.plantLayer.replaceByIndex(32,35,8,7,6,1);
+      
+    }
+    this.currentPlant += 1;
+    if(this.currentPlant == 4){
+      this.currentPlant = 1;
+    }
 
-  }
   }
 
 
@@ -1033,8 +950,8 @@ destroyEnemy(enemy,bomb){
 
   playerSwitch(player: string){
     if(player == "CS"){
-      this.mode1 = "Build";
-      this.mode2 = "Set";
+      this.mode1 = "Filter";
+      this.mode2 = "Bomb";
       
       
       this.player = "CS";
