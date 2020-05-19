@@ -547,15 +547,18 @@ this.input.keyboard.on('keyup-P', (event) =>{
   }
 
   lazyIterate(){
+    if(this.farmHealth == 0){
+      this.scene.restart();
+    }
     this.iteration += 1;
-    if(this.iteration == 10){
+    if(this.iteration == 8){
       this.forrestLayer.replaceByIndex(1,0,0,0,32,32);
       this.mountainLayer.replaceByIndex(28,27,0,0,32,32);
     }
-    if(this.iteration == 15){
+    if(this.iteration == 16){
       this.forrestLayer.replaceByIndex(38,37,0,0,32,32);
     }
-    if(this.iteration == 20){
+    if(this.iteration == 32){
       this.addEnemy(1);
       this.addEnemy(2);
       this.iteration = 0;
@@ -566,8 +569,11 @@ this.input.keyboard.on('keyup-P', (event) =>{
   CsHandler(){
     if(this.mode == "Bomb"){
       
-    
-    this.mineLayer.putTileAtWorldXY(39,this.CS.x,this.CS.y);
+    if(this.mCount > 5){
+      this.mineLayer.putTileAtWorldXY(39,this.CS.x,this.CS.y)
+      this.mCount -= 5;
+      this.countArray[4].text = this.mCount.toString();
+    }
     
     }
     else if(this.mode == "Filter"){
