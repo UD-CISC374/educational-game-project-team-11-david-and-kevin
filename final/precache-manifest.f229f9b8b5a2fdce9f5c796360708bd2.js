@@ -128,15 +128,15 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/educational-game-project-team-11-david-and-kevin/finalfavicon.ico"
   },
   {
-    "revision": "73537f2b36ffb50549e1",
-    "url": "/educational-game-project-team-11-david-and-kevin/finalgen.main.822f9b71fe229df66dd1.bundle.js"
+    "revision": "895931f19bd2483b4bf4",
+    "url": "/educational-game-project-team-11-david-and-kevin/finalgen.main.1a0f25665c40e211e509.bundle.js"
   },
   {
     "revision": "5e69403aa42e950fedff",
     "url": "/educational-game-project-team-11-david-and-kevin/finalgen.vendors.0805bb80903235d40eaf.bundle.js"
   },
   {
-    "revision": "ece733dc072c79d98ac1266581b000b3",
+    "revision": "674c13308fe148049b05d6275e8b04c6",
     "url": "/educational-game-project-team-11-david-and-kevin/finalindex.html"
   },
   {
