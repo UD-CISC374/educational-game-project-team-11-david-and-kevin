@@ -25,7 +25,7 @@ Space Farm is a game that takes place on a foreign planet and your job is to gro
   - Explanation: They may be able to provide more insight about maintaining an ecosystem and planting crops that we could utilize in our game mechanics. 
 - Being Computer Science students :
   - Medium: Experience
-  - Explanation: A student that is fairly new to Computer Science and programming may have a difficult time grasping the concepts of conditional statements and logic gates. We felt we could incorporate these lessons into the game mechanics by making some of the land cultivation automated using these concepts. 
+  - Explanation: A student that is fairly new to Computer Science and programming may have a difficult time grasping some basic concepts. 
 - Animal Crossing
   - Medium: Game
   - Explanation: Animal Crossing is an open-ended game with no definitive objectives where the player is able to interact with anthropomorphic animals and the environment extensively from talking to villagers to planting crops. The idea of cultivating a foreign environment and interacting with unique fictional creatures was inspired from this. 
@@ -55,7 +55,7 @@ Space Farm is a game that takes place on a foreign planet and your job is to gro
 ## Target Contexts
 
 - This would be utilized in introductory Computer Science courses such as CISC 106/108 as either a in-class exercise or homework assignment
-- Used to simulate farming situations for hydroponic farms  
+- Used to simulate farming situations
 
 
 ## Learning Objectives
@@ -68,12 +68,12 @@ Space Farm is a game that takes place on a foreign planet and your job is to gro
 
 - Prior to starting the game, the player needs to be able to express concepts of supply and demand. 
 - Prior to starting the game, the player should be able to list and explain the concept of switches. 
-- Prior to starting the game, players should have a basic understanding of agriculture(planting, watering, harvesting)
+- Prior to starting the game, players should have a basic understanding of agriculture (planting, watering, harvesting).
 
 
 ## Assessment Measures
 
-As the user steps, the health of the farm decreases if they are unable to protect it against the planet's wildlife. Players recieve points for how much crops they are able to produce. 
+The health of the farm decreases if they are unable to protect it against the planet's wildlife. Players recieve points for how much crops they are able to produce. 
 
 # What sets this project apart?
 - You can learn multiple skills such as farming and coding concepts
@@ -133,12 +133,11 @@ You can swap between the characters by pressnig 'C' for Computer Scientist or 'A
 
 ## Core Gameplay Mechanics (Detailed)
 
-- *Automate your water system*: build systems for watering and tending to crops. Use the correct nutrient for each plant and expand your farm as you produce more. If you fail to accomplish both the current nutrient and water cycle, your overall score will be penalized. 
+- *Automate your water system*: With your Computer Scientist, when the seeds are laid on the farm ground by the Agricultural Engineer, turn on or off the switches to automatically send water flow to specific rows which will switch the seeds into collectable crops. 
 
-- *Build your automation system*: Use the computer scientist to build logic gates for controlling water flow. As your farm expands, so should your automation system. To continue to advance, you must use the planet's resources as a form of material for flow. You must then use your knowledge of logic gates to open up each valve at given times. 
+- *Maintain the ecosystem*: Use the Agricultural Engineer to collect rock, plastic, and wood that can be utilized for different tasks. Wood will allow the AE to plant seeds. Plastic/Rock allows the Computer scientist to build mines to defend the farmland from wildlife. The collection of water allows the CS to utilize the tubing to send water to plants. 
 
-- *Build your home economy*: Increase your home economy by selling your produce back home. You can increase food, income and healthiness of the planet. However, if crop becomes spoiled, this can take a toll on your score. 
-
+- *Build your home economy*: Increase your home economy by collecting crops which increases your score.
 
 ## Feedback
 Starting the farm will be done by the agricultural engineer
@@ -163,7 +162,7 @@ If you take point loss, it will reflect either in the environment around you cha
 
 ## Presentation of Content
 
-Users will begin by receiving a base plot of land. They will then be given a few seeds and a seed reader. The agricultural engineer should begin planting seeds in a certain way so when the computer scientist builds the system, the water flows to each seed currently and at the time required. Failure to do so will result in either faulty crops or damage to the ecosystem.
+Users will begin by receiving a base plot of land. They will then be given a few seeds. The agricultural engineer should begin planting seeds in a certain way so when the computer scientist builds the system, the water flows to each seed currently and at the time required. Failure to do so will result in either faulty crops or damage to the ecosystem.
 
 
 ## Story (Brief)
