@@ -7,5 +7,7 @@ Space Farm is a game that takes place on a foreign planet and your job is to gro
 
 # Instructions 
 You can move around the screen with the arrow keys.
-You switch which mode you are using 1,2,3 which gives your character different functionality. 
+You switch which mode you are using 1 and 2 which gives your character different functionality. 
 You can plant crops, set mines and tubing using the SPACEBAR depending on which character and mode you are on. 
+Make sure you are on the farm area (in brown) when you are planting seeds.
+Pay attention to your farm area and protect it from invading wildlife.
