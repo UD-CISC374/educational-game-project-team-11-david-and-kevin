@@ -36,7 +36,7 @@ Space Farm is a game that takes place on a foreign planet and your job is to gro
 - Work with switches to automate water system.
 - Maintain the surrounding ecosystem by neutralizng wildlife.
 - Maintain the surrounding ecosystem through selective collection of resources (trees and mountains).
-- Build the farming economy of your home planet by collect crops which increaes your score. 
+- Build the farming economy of your home planet by collecting crops which increaes your score. 
 
 # Learning Aspects
 
