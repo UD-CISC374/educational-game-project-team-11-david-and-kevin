@@ -75,6 +75,8 @@ export default class MainScene extends Phaser.Scene {
   private storage: Phaser.Tilemaps.Tile;
   private iteration: integer;
   private iterationText: Phaser.GameObjects.Text;
+  private farmHealth: integer;
+  private healthText: Phaser.GameObjects.Text;
 
 
   constructor() {
@@ -342,9 +344,11 @@ this.input.keyboard.on('keyup-P', (event) =>{
 
     this.setControls();
     this.iteration = 0;
-    this.iterationText = this.add.text(1471,1471,this.iteration.toString(),{ fontFamily: 'Arial', fontSize: 128, color: '#C9BE29 ' })
-      
-
+    this.iterationText = this.add.text(1407,1407,this.iteration.toString(),{ fontFamily: 'Arial', fontSize: 128, color: '#C9BE29 ' })
+    this.farmHealth = 100;
+    this.add.text(1151,1151,"Health: ", { fontFamily: 'Arial', fontSize: 128, color: '#C9BE29 ' })
+    this.healthText = this.add.text(1279,1279,this.farmHealth.toString(),{ fontFamily: 'Arial', fontSize: 128, color: '#C9BE29 ' })
+    
   
 
 
@@ -538,6 +542,9 @@ this.input.keyboard.on('keyup-P', (event) =>{
       this.forrestLayer.replaceByIndex(1,0,0,0,32,32);
       this.mountainLayer.replaceByIndex(28,27,0,0,32,32);
     }
+    if(this.iteration == 15){
+      this.forrestLayer.replaceByIndex(38,37,0,0,32,32);
+    }
     if(this.iteration == 20){
       this.addEnemy(1);
       this.addEnemy(2);
@@ -661,6 +668,8 @@ this.input.keyboard.on('keyup-P', (event) =>{
       
     }
     if(enemy.x == this.storage.getCenterX() && enemy.y == this.storage.getCenterY()){
+      this.farmHealth -= 1;
+      this.healthText.text = this.farmHealth.toString();
       enemy.destroy();
     }
     else{
@@ -719,11 +728,19 @@ this.input.keyboard.on('keyup-P', (event) =>{
       {index: 3, weight: 7},
       {index: 2, weight: 3}
     ]);
-    this.farmLayer.fill(4,9,4,6,4);
-
-    this.plantLayer.fill(4,9,4,6,4);
+    this.farmLayer.fill(4,8,2,6,6);
+    this.plantLayer.fill(4,8,2,6,6);
+    this.plantLayer.putTileAt(29,7,2);
+    this.plantLayer.fill(13,8,2,6,1);
+    
+    this.plantLayer.putTileAt(29,7,4);
+    this.plantLayer.fill(13,8,4,6,1);
+    
+    this.plantLayer.putTileAt(29,7,6);
+    this.plantLayer.fill(13,8,6,6,1);
+    
     //128x576
-    this.storage = this.plantLayer.putTileAt(41,8,3);
+    this.storage = this.plantLayer.putTileAt(41,8,8);
     //543x351
 
     var xloc = 0;
@@ -731,17 +748,17 @@ this.input.keyboard.on('keyup-P', (event) =>{
 
     while(yloc < 13 && xloc < 13){
       var yesNo = Math.floor(((Math.random() * 8) + 1 ));
-      if(yesNo == 1 || yesNo == 2 || yesNo == 3 || yesNo == 4 || yesNo == 5 || yesNo == 6 || yesNo == 7){
+      if(yesNo == 1 || yesNo == 2 || yesNo == 3 || yesNo == 4 || yesNo == 5){
         this.forrestLayer.weightedRandomize(xloc,yloc,2,2,[
 
-        {index: -1, weight: 80},
-        {index: 0, weight: 15},
-        {index: 37, weight: 5},
+        {index: -1, weight: 50},
+        {index: 0, weight: 30},
+        {index: 37, weight: 20},
 
         ]);
         xloc +=3;
       }
-      else if(yesNo == 8){
+      else if( yesNo == 6 || yesNo == 7 || yesNo == 8){
         this.mountainLayer.putTileAt(27,xloc/3,yloc/3);
         xloc +=3;
         
@@ -756,8 +773,9 @@ this.input.keyboard.on('keyup-P', (event) =>{
     }
 
     
-    this.forrestLayer.setCollision([0,1]);
+    this.forrestLayer.setCollision([0,37]);
     this.forrestLayer.setTileIndexCallback(0,this.harvestTree,this);
+    this.forrestLayer.setTileIndexCallback(37,this.harvestPond,this);
     this.farmLayer.setCollision(4);
     //this.farmLayer.setTileIndexCallback(4,,this)
     
@@ -826,120 +844,32 @@ testPlantLayer(){
   alert('WORKS');
   }
 
-<<<<<<< HEAD
- plantSeed(){
-   if(this.mode == "Plant"){
-   var tile = this.plantLayer.getTileAtWorldXY(this.AE.x, this.AE.y);
-   //alert(tile.index);
-      if(this.current.index == 31 && this.cornSeedsCount > 0){
-         // console.log(this.physics.overlap(this.AE, this.farmLayer));
-        // Plant = this.add.tileSprite(x,y,32,32,"seedsandplants", 1);
-          if(tile.index !== null){
-            if (tile.index == 4) {
-              this.plantLayer.replaceByIndex(4,this.current.index,Math.floor(this.AE.x/64),Math.floor(this.AE.y/64),1,1);
-              // this.plantInventory[this.plantsize] = Plant;
-              this.plantsize += 1;
-              this.cornSeedsCount -= 1;
-              console.log("Number: " + this.cornSeedsCount);
-              this.countArray[0].text = this.cornSeedsCount.toString();
-              console.log('PLANTED CORN'); 
-            }
-          }
-          
-      }
-      else if(this.current.index == 32  && this.wheatSeedsCount > 0){
-        // var Plant = this.add.tileSprite(x,y,32,32,"seedsandplants", 2);
-        if(tile.index !== null){
-          if(tile.index == 4){
-            this.plantLayer.replaceByIndex(4,this.current.index,Math.floor(this.AE.x/64),Math.floor(this.AE.y/64),1,1);
-            // this.plantInventory[this.plantsize] = Plant;
-            this.plantsize += 1;
-            this.wheatSeedsCount -= 1;
-            this.countArray[2].text = this.wheatSeedsCount.toString();
-            console.log('PLANTED WHEAT');
-          }
+  plantSeed(){
+    if(this.mode == "Plant"){
+      var tile = this.plantLayer.getTileAtWorldXY(this.AE.x, this.AE.y);
+     
+      if(tile.index == 4){
+        if(tile.y == 3 && this.hempSeedsCount > 0){
+          this.plantLayer.replaceByIndex(4,30,tile.x,tile.y,1,1);
+          this.hempSeedsCount -= 1;
+          this.countArray[1].text = this.hempSeedsCount;
         }
-      }
-      else if(this.current.index == 30 && this.hempSeedsCount > 0){
-        // var Plant = this.add.tileSprite(x,y,32,32,"seedsandplants", 0);
-        if(tile.index !== null){
-          if(tile.index == 4){
-            this.plantLayer.replaceByIndex(4,this.current.index,Math.floor(this.AE.x/64),Math.floor(this.AE.y/64),1,1);
-            // this.plantInventory[this.plantsize] = Plant;
-            this.plantsize += 1;
-            this.hempSeedsCount -= 1;
-            this.countArray[1].text = this.hempSeedsCount.toString();
-            console.log('PLANTED HEMP');
-          }
-
+        else if(tile.y == 5&& this.cornSeedsCount > 0){
+          this.plantLayer.replaceByIndex(4,31,tile.x,tile.y,1,1);
+          this.cornSeedsCount -= 1;
+          this.countArray[0].text = this.cornSeedsCount;
+        }
+        else if(tile.y == 7 && this.wheatSeedsCount > 0){
+          this.plantLayer.replaceByIndex(4,32,tile.x,tile.y,1,1);
+          this.wheatSeedsCount -= 1;
+          this.countArray[2].text = this.wheatSeedsCount;
         }
         
       }
-      else{
-        //alert('Out of seeds!');
-      }
-    }
-  
-  
-    }
-=======
-  plantSeed(){
-    if(this.mode == "Plant"){3
-      alert(this.current.index);
-    var tile = this.plantLayer.getTileAtWorldXY(this.AE.x, this.AE.y);
-    //alert(tile.index);
-       if(this.current.index == 31 && this.cornSeedsCount > 0){
-          // console.log(this.physics.overlap(this.AE, this.farmLayer));
-         // Plant = this.add.tileSprite(x,y,32,32,"seedsandplants", 1);
-           if(tile.index !== null){
-             if (tile.index == 4 && (this.AE.y == 272 ||this.AE.y == 304)) {
-               this.plantLayer.replaceByIndex(4,this.current.index,Math.floor(this.AE.x/32),Math.floor(this.AE.y/32),1,1);
-               // this.plantInventory[this.plantsize] = Plant;
-               this.plantsize += 1;
-               this.cornSeedsCount -= 1;
-               console.log("Number: " + this.cornSeedsCount);
-               this.countArray[0].text = this.cornSeedsCount.toString();
-               alert('PLANTED CORN'); 
-             }
-           }
-           
-       }
-       else if(this.current.index == 32  && this.wheatSeedsCount > 0){
-         // var Plant = this.add.tileSprite(x,y,32,32,"seedsandplants", 2);
-         if(tile.index !== null){
-           if(tile.index == 4 && (this.AE.y == 240 ||this.AE.y == 208)){
-             this.plantLayer.replaceByIndex(4,this.current.index,Math.floor(this.AE.x/32),Math.floor(this.AE.y/32),1,1);
-             // this.plantInventory[this.plantsize] = Plant;
-             this.plantsize += 1;
-             this.wheatSeedsCount -= 1;
-             this.countArray[2].text = this.wheatSeedsCount.toString();
-             alert('PLANTED WHEAT');
-           }
-         }
-       }
-       else if(this.current.index == 30 && this.hempSeedsCount > 0){
-         // var Plant = this.add.tileSprite(x,y,32,32,"seedsandplants", 0);
-         if(tile.index !== null){
-           if(tile.index == 4 && (this.AE.y == 144 ||this.AE.y == 176)){
-             this.plantLayer.replaceByIndex(4,this.current.index,Math.floor(this.AE.x/32),Math.floor(this.AE.y/32),1,1);
-             // this.plantInventory[this.plantsize] = Plant;
-             this.plantsize += 1;
-             this.hempSeedsCount -= 1;
-             this.countArray[1].text = this.hempSeedsCount.toString();
-             alert('PLANTED HEMP');
-           }
- 
-         }
-         
-       }
-       else{
-         //alert('Out of seeds!');
-       }
+    } 
+    
+    
      }
-   
-   
-     }
->>>>>>> 447b9bf40bb98eb4dbb3c3dfb3130dcde4ee61e0
   
 
   tubing(){
@@ -1068,7 +998,13 @@ testPlantLayer(){
     this.forrestLayer.replaceByIndex(0,1,Math.floor(this.AE.x/64),Math.floor(this.AE.y/64),1,1);
     this.addInvItem("wood");
     }
+  }
     
+    harvestPond(){
+      if(this.mode == "Collect"){
+      this.forrestLayer.replaceByIndex(37,38,Math.floor(this.AE.x/64),Math.floor(this.AE.y/64),1,1);
+      this.addInvItem("water");
+      }
   
     
 }
