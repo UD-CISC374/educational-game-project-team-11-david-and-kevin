@@ -67,8 +67,9 @@ export default class MainScene extends Phaser.Scene {
   private cornPaths: integer[][];
   private wheatPaths: integer[][];
   private hempPaths: integer[][];
-  private enemyCount: integer;
-  private enemyLookDirection: string;
+  private score: integer;
+  private scoreText: Phaser.GameObjects.Text;
+  
   private enemies: Phaser.Physics.Arcade.Group;
   private : Phaser.Physics.Arcade.Group;
   private speed: integer;
@@ -85,6 +86,7 @@ export default class MainScene extends Phaser.Scene {
   }
 
   create() {
+  
     this.currentPlant = 1;
     this.speed = 1;
     this.lookDirection = "down";
@@ -189,7 +191,7 @@ export default class MainScene extends Phaser.Scene {
    
    this.AE.setCollideWorldBounds(true);
 
-   this.CS = this.physics.add.sprite(spawn.getCenterX() + 32,spawn.getCenterY(),"CSS", 6).setScale(2,2);
+   this.CS = this.physics.add.sprite(spawn.getCenterX() + 64,spawn.getCenterY(),"CSS", 6).setScale(2,2);
    this.anims.create({
      key: 'Cwalk_up',
      repeat: 0,
@@ -235,6 +237,7 @@ export default class MainScene extends Phaser.Scene {
 
     this.physics.add.overlap(this.forrestLayer,this.AE);
     this.physics.add.collider(this.mountainLayer,this.AE);
+    this.physics.add.collider(this.plantLayer,this.AE);
     //this.physics.add.collider(this.mineLayer,this.enemies);
     
     
@@ -281,6 +284,7 @@ export default class MainScene extends Phaser.Scene {
     this.hempSeedsCount = 0;
     
     this.cornSeedsCount = 0;
+    this.bucketCount = 0;
    
     this.mCount = 0;
     this.wCount = 0;
@@ -346,11 +350,14 @@ this.input.keyboard.on('keyup-P', (event) =>{
 
     this.setControls();
     this.iteration = 0;
-    this.iterationText = this.add.text(1407,1407,this.iteration.toString(),{ fontFamily: 'Arial', fontSize: 128, color: '#C9BE29 ' })
+    this.iterationText = this.add.text(1407,1407,this.iteration.toString(),{ fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' })
     this.farmHealth = 100;
-    this.add.text(1151,1151,"Health: ", { fontFamily: 'Arial', fontSize: 128, color: '#C9BE29 ' })
-    this.healthText = this.add.text(1279,1279,this.farmHealth.toString(),{ fontFamily: 'Arial', fontSize: 128, color: '#C9BE29 ' })
-    
+    this.add.text(1087,1279,"Health: ", { fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' })
+    this.healthText = this.add.text(1279,1279,this.farmHealth.toString(),{ fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' })
+    this.score = 0;
+    this.add.text(1087,1279 - 128,"Score: ", { fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' })
+    this.scoreText = this.add.text(1279,1279 - 128,this.score.toString(),{ fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' })
+ 
   
 
 
@@ -558,7 +565,10 @@ this.input.keyboard.on('keyup-P', (event) =>{
 
   CsHandler(){
     if(this.mode == "Bomb"){
+      
+    
     this.mineLayer.putTileAtWorldXY(39,this.CS.x,this.CS.y);
+    
     }
     else if(this.mode == "Filter"){
       this.tubing();
@@ -749,7 +759,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
     this.plantLayer.fill(13,8,6,6,1);
     
     //128x576
-    this.storage = this.plantLayer.putTileAt(41,8,8);
+    this.storage = this.plantLayer.putTileAt(41,15,2);
     //543x351
 
     var xloc = 0;
@@ -789,7 +799,11 @@ this.input.keyboard.on('keyup-P', (event) =>{
     //this.farmLayer.setTileIndexCallback(4,,this)
     
     this.plantLayer.setCollision(4);
-    this.plantLayer.setTileIndexCallback(4,this.testPlantLayer,this);
+    this.plantLayer.setCollision([33,34,35]);
+    this.plantLayer.setTileIndexCallback([33,34,35],this.harvestCrop,this);
+    
+
+
     
     this.mountainLayer.setCollision(27);
     this.mountainLayer.setTileIndexCallback(27,this.harvestMountain,this);
@@ -857,22 +871,26 @@ testPlantLayer(){
     if(this.mode == "Plant"){
       var tile = this.plantLayer.getTileAtWorldXY(this.AE.x, this.AE.y);
      
-      if(tile.index == 4){
+      if(tile.index == 4 && this.wCount > 2){
         if(tile.y == 3 && this.hempSeedsCount > 0){
           this.plantLayer.replaceByIndex(4,30,tile.x,tile.y,1,1);
           this.hempSeedsCount -= 1;
           this.countArray[1].text = this.hempSeedsCount;
+          this.wCount -= 3;
         }
         else if(tile.y == 5&& this.cornSeedsCount > 0){
           this.plantLayer.replaceByIndex(4,31,tile.x,tile.y,1,1);
           this.cornSeedsCount -= 1;
           this.countArray[0].text = this.cornSeedsCount;
+          this.wCount -= 3;
         }
         else if(tile.y == 7 && this.wheatSeedsCount > 0){
           this.plantLayer.replaceByIndex(4,32,tile.x,tile.y,1,1);
           this.wheatSeedsCount -= 1;
           this.countArray[2].text = this.wheatSeedsCount;
+          this.wCount -= 3;
         }
+        this.countArray[3].text = this.wCount;
         
       }
     } 
@@ -883,6 +901,7 @@ testPlantLayer(){
 
   tubing(){
     this.plantLayer.replaceByIndex(14,13,8,2,6,6);
+    if(this.bucketCount > 1){
     if(this.currentPlant == 1){
       this.plantLayer.replaceByIndex(13,14,8,2,6,1);
       this.plantLayer.replaceByIndex(30,33,8,3,6,1);
@@ -902,6 +921,7 @@ testPlantLayer(){
     if(this.currentPlant == 4){
       this.currentPlant = 1;
     }
+  }
 
   }
 
@@ -935,6 +955,30 @@ harvestMountain(){
   
 
   
+}
+harvestCrop(){
+  if(this.mode == "Collect"){
+    var tile = this.plantLayer.getTileAtWorldXY(this.AE.x,this.AE.y);
+    if(tile.index == 33){
+      this.plantLayer.replaceByIndex(33,4,Math.floor(this.AE.x/64),Math.floor(this.AE.y/64),1,1)
+      this.addInvItem("hemp");
+      this.score += 3;
+    }
+    else if(tile.index == 34){
+      this.plantLayer.replaceByIndex(34,4,Math.floor(this.AE.x/64),Math.floor(this.AE.y/64),1,1)
+      this.addInvItem("corn");
+      this.addInvItem("corn");
+      this.addInvItem("corn");
+      this.score += 1;
+    }
+    else if(tile.index == 35){
+      this.plantLayer.replaceByIndex(35,4,Math.floor(this.AE.x/64),Math.floor(this.AE.y/64),1,1)
+      this.addInvItem("wheat");
+      this.addInvItem("wheat");
+      this.score += 2;
+    }
+
+  }
 }
 
 destroyEnemy(enemy,bomb){
