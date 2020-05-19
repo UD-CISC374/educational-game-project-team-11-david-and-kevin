@@ -18,6 +18,8 @@ export default class PreloadScene extends Phaser.Scene {
     this.load.image("pond", "assets/images/pond.png");
     this.load.image("plastic", "assets/images/plastic.png");
     this.load.image("forrestTile", "assets/spritesheets/forrestTile.png");
+    this.load.image("aei", "assets/images/aeinstructions.png");
+    this.load.image("csi", "assets/images/csinstructions.png");
     
     this.load.image("plantsformap", "assets/spritesheets/seedsandplants.png")
     this.load.spritesheet("icons", "assets/spritesheets/icons.png",{

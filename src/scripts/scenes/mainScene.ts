@@ -16,6 +16,7 @@ export default class MainScene extends Phaser.Scene {
   private cornSeedsCount;
   private hempSeedsCount;
   private randSeedArr; 
+  private tutImage;
  
   private mCount;
   private wCount;
@@ -229,7 +230,7 @@ export default class MainScene extends Phaser.Scene {
     this.stateText = this.add.text(256,1280,this.state,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
     this.stateText.text = "Use your AE(in white) to harvest forrest resources";
     
-    this.facing = this.add.text(256,1344,"P to Pause" + this.lookDirection,{ fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' });
+    this.facing = this.add.text(256,1344,"P for Instructions" + this.lookDirection,{ fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' });
     this.status = new Array<Phaser.GameObjects.Text>();
 
     this.status[0] = this.add.text(1040,63,"Player: " ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
@@ -264,6 +265,8 @@ export default class MainScene extends Phaser.Scene {
 
 })
 
+
+
 this.input.keyboard.on('keyup-A', (event) =>{
  
     this.playerSwitch("AE");
@@ -288,14 +291,24 @@ this.modeChange(2);
 
 this.input.keyboard.on('keyup-P', (event) =>{
  
+
   if(this.state == "paused"){
+    this.tutImage.destroy();
+    this.tutImage = null; 
+    
     this.state = "active";
-    this.status[15].text = "Arrow keys to move " + this.player;
+    // this.status[15].text = "Arrow keys to move " + this.player;
 
   }
   else{
+    if(this.player == "AE"){
+      this.tutImage = this.add.image(512, 512, 'aei').setScale(2);
+    }
+    else{
+      this.tutImage = this.add.image(512, 512, 'csi').setScale(2);
+    }
     this.state = "paused";
-    this.status[15].text = "Arrow keys to change items"
+    // this.status[15].text = "Arrow keys to change items"
   }
   
   
