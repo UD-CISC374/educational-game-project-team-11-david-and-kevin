@@ -977,6 +977,7 @@ harvestCrop(){
       this.addInvItem("wheat");
       this.score += 2;
     }
+    this.scoreText.text = this.score.toString();
 
   }
 }
