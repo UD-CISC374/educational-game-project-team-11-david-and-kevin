@@ -117,13 +117,13 @@ export default class MainScene extends Phaser.Scene {
     this.physics.world.setBounds(0,0,1024,1024,true,true);
 
    
-    this.groundLayer = this.map.createBlankDynamicLayer("Ground Layer",this.tiles);
-    this.forrestLayer = this.map.createBlankDynamicLayer("Forrest",this.tiles);
-    this.mountainLayer = this.map.createBlankDynamicLayer("Mountain",this.tiles).setScale(3,3);
-    this.farmLayer = this.map.createBlankDynamicLayer("Farm Layer",this.tiles);
-    this.plantLayer = this.map.createBlankDynamicLayer("Plant Layer", this.tiles); 
-    this.mineLayer = this.map.createBlankDynamicLayer("Mine Layer",this.tiles);
-    this.controls = this.map.createBlankDynamicLayer("Controls",this.tiles);
+    this.groundLayer = this.map.createBlankDynamicLayer("Ground Layer",this.tiles).setScale(2,2);
+    this.forrestLayer = this.map.createBlankDynamicLayer("Forrest",this.tiles).setScale(2,2);
+    this.mountainLayer = this.map.createBlankDynamicLayer("Mountain",this.tiles).setScale(6,6);
+    this.farmLayer = this.map.createBlankDynamicLayer("Farm Layer",this.tiles).setScale(2,2);
+    this.plantLayer = this.map.createBlankDynamicLayer("Plant Layer", this.tiles).setScale(2,2); 
+    this.mineLayer = this.map.createBlankDynamicLayer("Mine Layer",this.tiles).setScale(2,2);
+    this.controls = this.map.createBlankDynamicLayer("Controls",this.tiles).setScale(2,2);
   
      //console.log("forrest gen");
    
@@ -156,8 +156,8 @@ export default class MainScene extends Phaser.Scene {
     this.CS.setCollideWorldBounds(true);
     
     */
-   var spawn = this.groundLayer.getTileAt(17,14);
-   this.AE = this.physics.add.sprite(spawn.getCenterX(),spawn.getCenterY(),"AES", 6);
+   var spawn = this.groundLayer.getTileAt(9,7);
+   this.AE = this.physics.add.sprite(spawn.getCenterX(),spawn.getCenterY(),"AES", 6).setScale(2,2);
    this.anims.create({
      key: 'walk_up',
      repeat: 0,
@@ -185,7 +185,7 @@ export default class MainScene extends Phaser.Scene {
    
    this.AE.setCollideWorldBounds(true);
 
-   this.CS = this.physics.add.sprite(spawn.getCenterX() + 32,spawn.getCenterY(),"CSS", 6);
+   this.CS = this.physics.add.sprite(spawn.getCenterX() + 32,spawn.getCenterY(),"CSS", 6).setScale(2,2);
    this.anims.create({
      key: 'Cwalk_up',
      repeat: 0,
@@ -342,7 +342,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
 
     this.setControls();
     this.iteration = 0;
-    this.iterationText = this.add.text(1471,1471,this.iteration.toString(),{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' })
+    this.iterationText = this.add.text(1471,1471,this.iteration.toString(),{ fontFamily: 'Arial', fontSize: 128, color: '#C9BE29 ' })
       
 
   
@@ -408,7 +408,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
      
       this.input.keyboard.on('keyup-RIGHT', (event) =>{
         if(this.state == "active"){
-        this.AE.x +=32;
+        this.AE.x +=64;
         this.AE.play("walk_right");
         this.lookDirection = "right";
         this.enemyHandler();
@@ -422,7 +422,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
       })
       this.input.keyboard.on('keyup-LEFT', (event) =>{
         if(this.state == "active"){
-        this.AE.x -=32;
+        this.AE.x -=64;
         this.AE.play("walk_left");
         this.lookDirection = "left";
         this.enemyHandler();
@@ -436,7 +436,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
       })
       this.input.keyboard.on('keyup-UP', (event) =>{
         if(this.state == "active"){
-        this.AE.y -=32;
+        this.AE.y -=64;
         this.AE.play("walk_up");
         this.lookDirection = "up";
         this.enemyHandler();
@@ -447,7 +447,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
       })
       this.input.keyboard.on('keyup-DOWN', (event) =>{
         if(this.state == "active"){
-        this.AE.y +=32;
+        this.AE.y +=64;
         this.AE.play("walk_down");
         this.lookDirection = "down";
         this.enemyHandler();
@@ -471,7 +471,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
       
       this.input.keyboard.on('keyup-RIGHT', (event) =>{
         if(this.state == "active"){
-        this.CS.x +=32;
+        this.CS.x +=64;
         this.CS.play("Cwalk_right");
         this.lookDirection = "right";
         this.enemyHandler();
@@ -485,7 +485,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
       })
       this.input.keyboard.on('keyup-LEFT', (event) =>{
         if(this.state == "active"){
-        this.CS.x -=32;
+        this.CS.x -=64;
         this.CS.play("Cwalk_left");
         this.lookDirection = "left";
         this.enemyHandler();
@@ -499,7 +499,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
       })
       this.input.keyboard.on('keyup-UP', (event) =>{
         if(this.state == "active"){
-        this.CS.y -=32;
+        this.CS.y -=64;
         this.CS.play("Cwalk_up");
         this.lookDirection = "up";
         this.enemyHandler();
@@ -510,7 +510,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
       })
       this.input.keyboard.on('keyup-DOWN', (event) =>{
         if(this.state == "active"){
-        this.CS.y +=32;
+        this.CS.y +=64;
         this.CS.play("Cwalk_down");
         this.lookDirection = "down";
         this.enemyHandler();
@@ -554,16 +554,16 @@ this.input.keyboard.on('keyup-P', (event) =>{
     
     
     if(type == 1){
-      var spawn = this.groundLayer.getTileAt(3,3);
-      let newEnemy = this.physics.add.sprite(spawn.getCenterX(),spawn.getCenterY(),"enemy", 0);
+      var spawn = this.groundLayer.getTileAt(1,1);
+      let newEnemy = this.physics.add.sprite(spawn.getCenterX(),spawn.getCenterY(),"enemy", 0).setScale(2,2);
       newEnemy.setData({location: 'top',itemIndex: 0});
       
       this.physics.add.overlap(newEnemy,this.mineLayer);
       this.enemies.add(newEnemy);
     }
     else if(type == 2){
-      var spawn = this.groundLayer.getTileAt(29,29);
-      let newEnemy = this.physics.add.sprite(spawn.getCenterX(),spawn.getCenterY(),"enemy", 3);
+      var spawn = this.groundLayer.getTileAt(15,15);
+      let newEnemy = this.physics.add.sprite(spawn.getCenterX(),spawn.getCenterY(),"enemy", 3).setScale(2,2);
       newEnemy.setData({location: 'bot',itemIndex: 3});
       
       this.physics.add.overlap(newEnemy,this.mineLayer);
@@ -597,7 +597,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
       if(enemy.getData('itemIndex') == 3 ||enemy.getData('itemIndex')  == 7){
         
         if(enemy.y > this.storage.getCenterY()){
-          enemy.y -=32;
+          enemy.y -=64;
           
           moved += 1;
         }
@@ -605,7 +605,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
         else if(enemy.y == this.storage.getCenterY()){
           let currIndex = enemy.getData('itemIndex') - 2;
           enemy.setData('itemIndex', currIndex);
-          enemy.x -= 32;
+          enemy.x -= 64;
           
           moved += 1;
         }
@@ -624,7 +624,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
         }
       */
        if(enemy.x < this.storage.getCenterX()){
-          enemy.x += 32;
+          enemy.x += 64;
           
           moved += 1;
         }
@@ -632,7 +632,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
           
           let currIndex = enemy.getData('itemIndex') + 2;
           enemy.setData('itemIndex', currIndex);
-          enemy.y += 32;
+          enemy.y += 64;
           moved += 1;
         }
   
@@ -641,7 +641,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
       else if(enemy.getData('itemIndex') == 1 ||enemy.getData('itemIndex')  == 5){
         
         if(enemy.x > this.storage.getCenterX()){
-          enemy.x -= 32;
+          enemy.x -= 64;
           
           moved += 1;
         }
@@ -651,7 +651,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
   
       else if(enemy.getData('itemIndex') == 2 ||enemy.getData('itemIndex')  == 6){
         if(enemy.y < this.storage.getCenterY()){
-          enemy.y += 32;
+          enemy.y += 64;
           
           moved += 1;
         }
@@ -714,22 +714,22 @@ this.input.keyboard.on('keyup-P', (event) =>{
 
   }
   worldGen(){
-    this.groundLayer.weightedRandomize(0,0,32,32,[
+    this.groundLayer.weightedRandomize(0,0,16,16,[
 
       {index: 3, weight: 7},
       {index: 2, weight: 3}
     ]);
-    this.farmLayer.fill(4,17,4,8,6);
+    this.farmLayer.fill(4,9,4,6,4);
 
-    this.plantLayer.fill(4,17,4,8,6);
+    this.plantLayer.fill(4,9,4,6,4);
     //128x576
-    this.storage = this.plantLayer.putTileAt(41,17,11);
+    this.storage = this.plantLayer.putTileAt(41,8,3);
     //543x351
 
     var xloc = 0;
     var yloc = 0;
 
-    while(yloc < 29 && xloc < 29){
+    while(yloc < 13 && xloc < 13){
       var yesNo = Math.floor(((Math.random() * 8) + 1 ));
       if(yesNo == 1 || yesNo == 2 || yesNo == 3 || yesNo == 4 || yesNo == 5 || yesNo == 6 || yesNo == 7){
         this.forrestLayer.weightedRandomize(xloc,yloc,2,2,[
@@ -747,7 +747,7 @@ this.input.keyboard.on('keyup-P', (event) =>{
         
       }
       
-      if((xloc >= 14 && yloc < 17) || (xloc >= 29)){
+      if((xloc >= 6 && yloc < 9) || (xloc >= 13)){
         xloc = 0;
         yloc +=3;
       }
@@ -835,7 +835,7 @@ testPlantLayer(){
         // Plant = this.add.tileSprite(x,y,32,32,"seedsandplants", 1);
           if(tile.index !== null){
             if (tile.index == 4) {
-              this.plantLayer.replaceByIndex(4,this.current.index,Math.floor(this.AE.x/32),Math.floor(this.AE.y/32),1,1);
+              this.plantLayer.replaceByIndex(4,this.current.index,Math.floor(this.AE.x/64),Math.floor(this.AE.y/64),1,1);
               // this.plantInventory[this.plantsize] = Plant;
               this.plantsize += 1;
               this.cornSeedsCount -= 1;
@@ -850,7 +850,7 @@ testPlantLayer(){
         // var Plant = this.add.tileSprite(x,y,32,32,"seedsandplants", 2);
         if(tile.index !== null){
           if(tile.index == 4){
-            this.plantLayer.replaceByIndex(4,this.current.index,Math.floor(this.AE.x/32),Math.floor(this.AE.y/32),1,1);
+            this.plantLayer.replaceByIndex(4,this.current.index,Math.floor(this.AE.x/64),Math.floor(this.AE.y/64),1,1);
             // this.plantInventory[this.plantsize] = Plant;
             this.plantsize += 1;
             this.wheatSeedsCount -= 1;
@@ -863,7 +863,7 @@ testPlantLayer(){
         // var Plant = this.add.tileSprite(x,y,32,32,"seedsandplants", 0);
         if(tile.index !== null){
           if(tile.index == 4){
-            this.plantLayer.replaceByIndex(4,this.current.index,Math.floor(this.AE.x/32),Math.floor(this.AE.y/32),1,1);
+            this.plantLayer.replaceByIndex(4,this.current.index,Math.floor(this.AE.x/64),Math.floor(this.AE.y/64),1,1);
             // this.plantInventory[this.plantsize] = Plant;
             this.plantsize += 1;
             this.hempSeedsCount -= 1;
@@ -1006,7 +1006,7 @@ testPlantLayer(){
 
   harvestTree(){
     if(this.mode == "Collect"){
-    this.forrestLayer.replaceByIndex(0,1,Math.floor(this.AE.x/32),Math.floor(this.AE.y/32),1,1);
+    this.forrestLayer.replaceByIndex(0,1,Math.floor(this.AE.x/64),Math.floor(this.AE.y/64),1,1);
     this.addInvItem("wood");
     }
     
@@ -1017,7 +1017,7 @@ testPlantLayer(){
 
 harvestMountain(){
   if(this.mode == "Collect"){
-  this.mountainLayer.replaceByIndex(27,28,Math.floor(this.AE.x/96),Math.floor(this.AE.y/96),1,1);
+  this.mountainLayer.replaceByIndex(27,28,Math.floor(this.AE.x/192),Math.floor(this.AE.y/192),1,1);
   this.addInvItem("rock");
   }
   
@@ -1025,8 +1025,8 @@ harvestMountain(){
   
 }
 
-destroyEnemy(enemy){
-  this.mineLayer.replaceByIndex(39,-1,Math.floor(enemy.x/32),Math.floor(enemy.y/32),1,1);
+destroyEnemy(enemy,bomb){
+  this.mineLayer.replaceByIndex(39,-1,Math.floor(enemy.x/64),Math.floor(enemy.y/64),1,1);
   enemy.destroy();
   
   
