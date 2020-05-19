@@ -4,7 +4,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/educational-game-project-team-11-david-and-kevin/finalassets/citations.md"
   },
   {
-    "revision": "53cefca2a0f75654486b180949686165",
+    "revision": "a1ea3218ca18d924ae00af4b75f91340",
     "url": "/educational-game-project-team-11-david-and-kevin/finalassets/icons/favicon.ico"
   },
   {
@@ -12,11 +12,11 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/educational-game-project-team-11-david-and-kevin/finalassets/icons/icons-16.png"
   },
   {
-    "revision": "feee71db2bb3ba5d11b26658baf97783",
+    "revision": "53521920f481d38a0fdcbe3224347656",
     "url": "/educational-game-project-team-11-david-and-kevin/finalassets/icons/icons-192.png"
   },
   {
-    "revision": "cb71713be71d0b8820c7ea6af9c5ddc6",
+    "revision": "3b01f87535450d40622c809fd6d1a020",
     "url": "/educational-game-project-team-11-david-and-kevin/finalassets/icons/icons-512.png"
   },
   {
@@ -80,6 +80,14 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/educational-game-project-team-11-david-and-kevin/finalassets/images/updatebackground.xcf"
   },
   {
+    "revision": "8513321f497deb48583cc30b24a97bc7",
+    "url": "/educational-game-project-team-11-david-and-kevin/finalassets/screenshots/large.png"
+  },
+  {
+    "revision": "f4cb60a1d910f8ec23060bd7d96c642b",
+    "url": "/educational-game-project-team-11-david-and-kevin/finalassets/screenshots/small.png"
+  },
+  {
     "revision": "426c64762368c2e78f65f511ad0edbb8",
     "url": "/educational-game-project-team-11-david-and-kevin/finalassets/spritesheets/AE.png"
   },
@@ -116,19 +124,19 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/educational-game-project-team-11-david-and-kevin/finalassets/spritesheets/tubing.png"
   },
   {
-    "revision": "53cefca2a0f75654486b180949686165",
+    "revision": "a1ea3218ca18d924ae00af4b75f91340",
     "url": "/educational-game-project-team-11-david-and-kevin/finalfavicon.ico"
   },
   {
-    "revision": "4ba6a47fbe755056f5f2",
-    "url": "/educational-game-project-team-11-david-and-kevin/finalgen.main.3b89ad22cf5107e3d455.bundle.js"
+    "revision": "15f5cdb0df589c7b199c",
+    "url": "/educational-game-project-team-11-david-and-kevin/finalgen.main.4ebdf9ad54815f515089.bundle.js"
   },
   {
     "revision": "5e69403aa42e950fedff",
     "url": "/educational-game-project-team-11-david-and-kevin/finalgen.vendors.0805bb80903235d40eaf.bundle.js"
   },
   {
-    "revision": "8bede6f80a801aa4b025670b74e6ed83",
+    "revision": "929c678938f56cf10f42d89d07bf4374",
     "url": "/educational-game-project-team-11-david-and-kevin/finalindex.html"
   },
   {
