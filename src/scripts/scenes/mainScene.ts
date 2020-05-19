@@ -1,5 +1,3 @@
-//import AEItems from '../objects/aeitems';
-
 import { Physics } from "phaser";
 
 
@@ -30,8 +28,6 @@ export default class MainScene extends Phaser.Scene {
   
   private bucketCount;
   private plasticCount;
-
-  private flipFlop : boolean;
 
   
   private plantsize: integer;
@@ -119,7 +115,6 @@ export default class MainScene extends Phaser.Scene {
     
     this.board = this.add.tileSprite(0, 0, this.scale.width, this.scale.height, "board")
     this.board.setOrigin(0, 0);
-   // this.background = this.add.tileSprite(511, 511, 1024, 1024, "forrestTile",1);
     this.physics.world.setBounds(0,0,1024,1024,true,true);
 
    
@@ -137,12 +132,7 @@ export default class MainScene extends Phaser.Scene {
     this.generateInventory();
     
     //console.log("creating farm");
-    
-    // this.AE = this.physics.add.sprite(543,191,"AE")
-    // this.AE.setCollideWorldBounds(true);
-    // this.CS = this.physics.add.sprite(575,191,"CS");
-    // this.CS.setCollideWorldBounds(true);
-   
+
     this.worldGen();
     this.state = "active";
     this.player = "AE";
@@ -155,13 +145,7 @@ export default class MainScene extends Phaser.Scene {
    
     this.currentModeIndex = 7;
     
-    /*
-    this.AE = this.physics.add.sprite(spawn.getCenterX(),spawn.getCenterY(),"AE");
-    this.AE.setCollideWorldBounds(true);
-    this.CS = this.physics.add.sprite(spawn.getCenterX() + 32,spawn.getCenterY(),"CS");
-    this.CS.setCollideWorldBounds(true);
-    
-    */
+ 
    var spawn = this.groundLayer.getTileAt(9,7);
    this.AE = this.physics.add.sprite(spawn.getCenterX(),spawn.getCenterY(),"AES", 6).setScale(2,2);
    this.anims.create({
@@ -248,32 +232,11 @@ export default class MainScene extends Phaser.Scene {
     this.facing = this.add.text(256,1344,"P to Pause" + this.lookDirection,{ fontFamily: 'Arial', fontSize: 64, color: '#C9BE29 ' });
     this.status = new Array<Phaser.GameObjects.Text>();
 
-    this.status[0] = this.add.text(1023,63,"Player: " ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
+    this.status[0] = this.add.text(1040,63,"Player: " ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
     this.status[1] = this.add.text(1151,63,this.player ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
     
-    this.status[2] = this.add.text(1023,127,"Mode: " ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
+    this.status[2] = this.add.text(1040,127,"Mode: " ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
     this.status[3] = this.add.text(1151,127,this.mode ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
-    
-    this.status[4] = this.add.text(1023,191,"State: " ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
-    this.status[5] = this.add.text(1151,191,this.state ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
-    
-    this.status[6] = this.add.text(1023,255,"Modes: " ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
-    this.status[7] = this.add.text(1023,319,this.mode1 + " 1" ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
-    
-    this.status[8] = this.add.text(1023,383,this.mode2 + " 2" ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
-    this.status[9] = this.add.text(1215,255,"Number Key Selection",{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
-    
-    this.status[10] = this.add.text(1220,319,"1" ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
-    this.status[11] = this.add.text(1220,383,"2" ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
-    
-     this.status[12] = this.add.text(1407,383,"3" ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
-    this.status[13] = this.add.text(1151,575,"Current Item" ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
-   this.status[14] =this.add.text(1023,703,"Press C: Computer Scientist" ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
-   
-   this.status[15] = this.add.text(1023,767,"Arrow keys to move " + this.player ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
-    this.status[16] = this.add.text(1151,639,"Spacebar" ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
-   this.status[17] =this.add.text(1023,831,"P to Pause" ,{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' });
-   
 
    // this.previous = this.controls.putTileAt(31,32,19);
    this.current = this.controls.putTileAt(31,38,19);
@@ -307,6 +270,7 @@ this.input.keyboard.on('keyup-A', (event) =>{
   
 
 })
+
 
 this.input.keyboard.on('keyup-ONE', (event) =>{
  
@@ -365,6 +329,12 @@ this.input.keyboard.on('keyup-P', (event) =>{
 
   }
 
+  /**
+ * Changes the mode of the player 
+ * @param {number} mode - The current mode of the player 
+ * @return {void} Nothing
+ */
+
   modeChange(mode: integer){
       if(mode == 1){
         this.mode = this.mode1;
@@ -392,21 +362,17 @@ this.input.keyboard.on('keyup-P', (event) =>{
 
   }
 
+
   update() {
-    
-   // this.movePlayerManager();
     this.status[1].text = this.player;
     this.status[3].text = this.mode;
-    this.status[5].text = this.state;
-    this.status[7].text = this.mode1;
-    this.status[8].text = this.mode2;
-    
-    
-    //this.facing.text = this.lookDirection;
-    
-    
-    
   }
+
+/**
+ * Handles movement of CS and AE through keyboard
+ * listeners
+ * @return {void} Nothing
+ */
 
   setControls(){
     
@@ -546,6 +512,11 @@ this.input.keyboard.on('keyup-P', (event) =>{
 
   }
 
+ /** Refreshes mountains, trees, and enemies on-screen
+ * Changes the mode of the player 
+ * @return {void} Nothing
+ */
+
   lazyIterate(){
     if(this.farmHealth == 0){
       this.scene.restart();
@@ -566,6 +537,12 @@ this.input.keyboard.on('keyup-P', (event) =>{
     this.iterationText.text = this.iteration.toString();
   }
 
+ /**
+ * Will plant a bomb at CS location
+ *  or swtich on tubing for CS when called 
+ * @return {void} Nothing
+ */
+
   CsHandler(){
     if(this.mode == "Bomb"){
       
@@ -581,6 +558,11 @@ this.input.keyboard.on('keyup-P', (event) =>{
       
     }
   }
+
+/**
+ * Spawns enemies on-screen
+ * @return {void} Nothing
+ */
 
   addEnemy(type: integer){
     
@@ -604,7 +586,11 @@ this.input.keyboard.on('keyup-P', (event) =>{
     
   }
 
-
+ /**
+ * Will cause enemies to move closer to farm box and
+ * decrease the health when it collides 
+ * @return {void} Nothing
+ */
 
   enemyHandler(){
     
@@ -712,9 +698,12 @@ this.input.keyboard.on('keyup-P', (event) =>{
   
 
 
- 
+  /**
+  * Adds item icons and corresponding inventory quantity
+  * to the bottom of the screen
+  * @return {void} Nothing
+  */
   
-
   generateInventory(){
 
     var cornSeed = this.add.tileSprite(64,1088,32,32,"seedsandplants", 1).setScale(2);
@@ -745,8 +734,14 @@ this.input.keyboard.on('keyup-P', (event) =>{
         this.countArray[i] = this.add.text(this.inventory[i].x + 64,this.inventory[i].y - 16,"0",{ fontFamily: 'Arial', fontSize: 32, color: '#C9BE29 ' })  
     
       }
-
   }
+
+/**
+ * Generates tilemaps, layers, and corresponding collisions 
+ * for the world 
+ * @return {void} Nothing
+ */
+
   worldGen(){
     this.groundLayer.weightedRandomize(0,0,16,16,[
 
@@ -808,17 +803,11 @@ this.input.keyboard.on('keyup-P', (event) =>{
     this.plantLayer.setCollision([33,34,35]);
     this.plantLayer.setTileIndexCallback([33,34,35],this.harvestCrop,this);
     
-
-
-    
     this.mountainLayer.setCollision(27);
     this.mountainLayer.setTileIndexCallback(27,this.harvestMountain,this);
-    
-    //this.mountainLayer.setTileIndexCallback(40,this.destroyEnemy,this);
 
-    //this.forrestLayer.setTileIndexCallback()
-  
 }
+
 /*
 0: Corn Seeds
 1: Hemp Seeds
@@ -829,6 +818,12 @@ this.input.keyboard.on('keyup-P', (event) =>{
 6: Plastic
 */
  
+/**
+ * Updates inventory quantity based on 
+ * specific item added
+ * @param {string} type the type of item
+ * @return {void}  nothing
+ */
   addInvItem(type: string){
     if(type == "corn"){
      
@@ -859,19 +854,13 @@ this.input.keyboard.on('keyup-P', (event) =>{
       this.plasticCount += 1;
       this.countArray[6].text = this.plasticCount;
     }
-
-    
-    
-
-
-
-
-
   }
 
-testPlantLayer(){
-  alert('WORKS');
-  }
+/**
+ * Swaps out farm tile with seed tile to simulate 
+ * planting a seed.
+ * @return {void} Nothing
+ */
 
   plantSeed(){
     if(this.mode == "Plant"){
@@ -904,6 +893,11 @@ testPlantLayer(){
     
      }
   
+/**
+ * Replaces tubing tiles in farm area 
+ * to simulate automated watering
+ * @return {void} Nothing
+ */
 
   tubing(){
     this.plantLayer.replaceByIndex(14,13,8,2,6,6);
@@ -933,15 +927,23 @@ testPlantLayer(){
 
 
   
-
-
-
+/**
+ * Replaces tree sprite on collision with AE
+ * and updates investory 
+ * @return {void} Nothing
+ */
   harvestTree(){
     if(this.mode == "Collect"){
     this.forrestLayer.replaceByIndex(0,1,Math.floor(this.AE.x/64),Math.floor(this.AE.y/64),1,1);
     this.addInvItem("wood");
     }
   }
+
+/**
+ * Replaces pond sprite on collision with AE
+ * and updates inventory 
+ * @return {void} Nothing
+ */
     
     harvestPond(){
       if(this.mode == "Collect"){
@@ -952,7 +954,11 @@ testPlantLayer(){
     
 }
 
-
+/**
+ * Replaces mountain sprite on collision with AE
+ * and updates inventory 
+ * @return {void} Nothing
+ */
 harvestMountain(){
   if(this.mode == "Collect"){
   this.mountainLayer.replaceByIndex(27,28,Math.floor(this.AE.x/192),Math.floor(this.AE.y/192),1,1);
@@ -962,6 +968,12 @@ harvestMountain(){
 
   
 }
+
+/**
+ * Swaps farm area tile and updates score and inventory 
+ * on collision with AE only if seed has been watered
+ * @return {void} Nothing
+ */
 harvestCrop(){
   if(this.mode == "Collect"){
     var tile = this.plantLayer.getTileAtWorldXY(this.AE.x,this.AE.y);
@@ -988,6 +1000,12 @@ harvestCrop(){
   }
 }
 
+/**
+ * Removes enemy from screen if it collides with bomb/mine
+ * @param {sprite} enemy the current enenmy 
+ * @param {sprite} bomb the bomb the CS has set 
+ * @return {void} Nothing
+ */
 destroyEnemy(enemy,bomb){
   this.mineLayer.replaceByIndex(39,-1,Math.floor(enemy.x/64),Math.floor(enemy.y/64),1,1);
   enemy.destroy();
@@ -998,7 +1016,11 @@ destroyEnemy(enemy,bomb){
 
 
 
-
+/**
+ * Assigns player to correct sprite and mode functions
+ * @param {string} player the current character 
+ * @return {void} Nothing
+ */
   playerSwitch(player: string){
     if(player == "CS"){
       this.mode1 = "Filter";
@@ -1009,7 +1031,6 @@ destroyEnemy(enemy,bomb){
       this.current.index = 5;
       this.currentItemIndex = 5;
       this.modeChange(1);
-      this.status[14].text = "Press A: Agricultural Engineer"
     }
     else if(player == "AE"){
       this.mode1 = "Collect";
@@ -1018,14 +1039,16 @@ destroyEnemy(enemy,bomb){
       this.mode = this.mode1;
       this.player = "AE";
       this.current.index = 31;
-      this.modeChange(1);
-      this.status[14].text = "Press C: Computer Scientist"
-    
+      this.modeChange(1);  
   }
   this.setControls();
 }
 
-
+/**
+ * Swaps out the tilemap numbers dependant on direction 
+ * @param {string} direction where the character is facing
+ * @return {void} Nothing
+ */
   switchIndex(direction:string){
 
 
@@ -1069,175 +1092,4 @@ destroyEnemy(enemy,bomb){
 
     }
   }
- 
-
-
-  
-/*
-
-
-  movePlayerManager(){
-   if(this.state == "paused"){
-     if(this.Keys.space?.isDown){
-       this.state = "active";
-     }
-   }
-   
-   if(this.keyP.isDown){
-     if(!this.flipFlop){
-      var rand = Math.floor(Math.random()*3); 
-      this.plantSeed(this.randSeedArr[rand]); 
-      this.flipFlop = true;
-     }
-   }
-   
-
-   if (this.keyP.isUp) {
-     this.flipFlop = false;
-    }
-   
-    
-   if(this.Keys.shift?.isDown){
-     // alert('SHIFT PRESSED!');
-     if(this.char == "AE"){
-       this.char = "CS";
-       this.charText.setText("CS");
-     }
-     else if(this.char == "CS"){
-      this.char = "AE";
-      this.charText.setText("AE");
-     }
-   }
-   
-   
-   else if(this.state == "active"){
-     console.log('WHATS HAPPENING');
-    if(this.char == "AE"){
-      if(this.Keys.left?.isDown){
-        this.AE.x-=32;
-        this.AE.play('walk_left');
-        this.state = "paused";
-      }
-    
-      else if(this.Keys.right?.isDown) {
-        this.AE.x+=32;
-        this.AE.play('walk_down');
-        
-        this.state = "paused";
-      }
-      
-    
-    
-      if(this.Keys.up?.isDown){
-        this.AE.y-=32;
-        this.AE.play('walk_up');
-        this.state = "paused";
-      }
-      else if(this.Keys.down?.isDown){
-        console.log('WALKING');
-        this.AE.y+=32;
-        this.AE.play('walk_right');
-        this.state = "paused";
-  
-      }
-    }
-    else if(this.char == "CS"){
-      // alert('SWITCHED OCCURED');
-      if(this.Keys.left?.isDown){
-        this.CS.x-=32;
-        this.CS.play('Cwalk_left');
-        this.state = "paused";
-      }
-    
-      else if(this.Keys.right?.isDown) {
-        this.CS.x+=32;
-        this.CS.play('Cwalk_down');
-        
-        this.state = "paused";
-      }
-      
-    
-    
-      if(this.Keys.up?.isDown){
-        this.CS.y-=32;
-        this.CS.play('Cwalk_up');
-        this.state = "paused";
-      }
-      else if(this.Keys.down?.isDown){
-        this.CS.y+=32;
-        this.CS.play('Cwalk_right');
-        this.state = "paused";
-      }
->>>>>>> ccfff98c288ca6ebe38dcdf4288fae37f9d0a9c1
-
-  movePlayerManager(){
-   /*
-      
-      if(this.Keys.shift?.isDown && this.player == "AE"){
-        
-          if(this.state == "active"){
-            this.state = "paused";
-          }
-          else{
-            this.playerSwitch("CS");
-
-          }
-          
-        }
-        else if(this.Keys.shift?.isDown && this.player == "CS"){
-          if(this.state == "active"){
-            this.state = "paused";
-        }
-        else{
-          this.playerSwitch("AE");
-
-        }
-      }
-      else if(this.Keys.right?.isDown&& this.player == "AE"){
-        if(this.state == "active"){
-          this.AE.x +=32;
-          this.lookDirection = "right";
-          this.state = "paused";
-      }
-      else if(this.state == "paused" ){
-       this.switchIndex();
-      }
-      else if(this.Keys.left?.isDown){
-        this.AE.x -= 32;
-        this.lookDirection = "left";
-      }
-      else if(this.Keys.up?.isDown){
-        this.AE.y -= 32;
-        this.lookDirection = "up";
-      }
-      else if(this.Keys.down?.isDown){
-        this.AE.y += 32;
-        this.lookDirection = "down";
-      }
-    }
-*/
-
-      
-      
-    
-  
-  }
-   
-     
-       //this.state = "active";
-      // var seedStringArr = ["corn", "hemp", "wheat"];
-       //var rand = Math.floor(Math.random() * 3);
-       //this.plantSeed(this.AE.x,this.AE.y, seedStringArr[rand]);
-       
-     
-
-  
-    
-
-  
-    
-    
-  
-
-
-
+}
