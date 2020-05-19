@@ -14,4 +14,4 @@ Pay attention to your farm area and protect it from invading wildlife.
 
 ![Screenshot of Game](https://github.com/UD-CISC374/educational-game-project-team-11-david-and-kevin/blob/master/src/assets/screenshots/large.png)
 
-![YouTube Video of Game](https://www.youtube.com/watch?v=ulELUqmNLmc&feature=youtu.be)
+[link to YouTube Video!](https://www.youtube.com/watch?v=ulELUqmNLmc&feature=youtu.be)
